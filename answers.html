@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Answers | The Seattle Avalanche</title>
+  <meta name="description" content="Public replies to reader questions, find yours by the nickname you left in the drop box." />
+  <meta name="referrer" content="no-referrer" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0e14'/%3E%3Cpath d='M4 26 L13 9 L18 18 L21 13 L28 26 Z' fill='%237dd7ff'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..800;1,6..72,400..800&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <script src="js/script.js" defer></script>
+  <script src="js/content.js" defer></script>
+  <script src="js/site.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header>
+    <div class="topbar">
+      <div class="container topbar-inner">
+        <span data-date>Friday, August 21, 2026</span>
+        <span class="tagline">Independent · Anonymous · <em>Unstoppable</em></span>
+        <nav class="topbar-links" aria-label="Utility">
+          <a href="#" title="Onion service coming soon">Tor Mirror</a>
+          <a href="#">RSS</a>
+        </nav>
+      </div>
+    </div>
+
+    <div class="masthead">
+      <canvas id="snow-canvas" aria-hidden="true"></canvas>
+      <div class="container masthead-inner">
+        <svg class="logo-mark" width="56" height="46" viewBox="0 0 56 46" fill="none" aria-hidden="true">
+          <path d="M2 43 L21 7 L31 26 L39 13 L54 43 Z" fill="#141b27" stroke="#7dd7ff" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M16 15 L21 7 L26 14 L23.5 17.5 L21 13.5 L18.5 17.5 Z" fill="#7dd7ff"/>
+          <path d="M36.5 17 L39 13 L41.8 17.4 L40 19.5 Z" fill="#7dd7ff"/>
+        </svg>
+        <div class="masthead-title">
+          <a href="index.html"><span>The Seattle Avalanche</span></a>
+          <p class="motto">Truth falls like snow and accumulates</p>
+        </div>
+      </div>
+    </div>
+
+    <nav class="navbar" aria-label="Primary">
+      <div class="container navbar-inner">
+        <button class="nav-toggle" aria-expanded="false" aria-controls="primary-nav">MENU ☰</button>
+        <ul class="nav-list" id="primary-nav">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="network.html">Network</a></li>
+          <li><a href="library.html">Media Library</a></li>
+          <li><a href="mirror.html">Mirror</a></li>
+          <li><a href="answers.html" aria-current="page">Answers</a></li>
+          <li><a href="download.html">Download</a></li>
+        </ul>
+        <a href="submit.html" class="btn btn--primary btn--small nav-cta">Send Info</a>
+      </div>
+    </nav>
+  </header>
+
+  <div class="ticker" role="region" aria-label="Site notices">
+    <span class="ticker-label"><span class="dot"></span>Answers</span>
+    <div class="ticker-track">
+      <div class="ticker-content" id="ticker-items">
+        <a href="#answers-list">Public replies, find yours by nickname</a>
+        <a href="submit.html">Ask anonymously through the drop box</a>
+        <a href="about.html#faq">How answers protect anonymity</a>
+      </div>
+    </div>
+  </div>
+
+  <main id="main" class="container">
+
+    <section class="page-hero" data-reveal>
+      <h1>Answers board</h1>
+      <p class="lede">
+        Every question and correction sent through the drop box gets read. When an answer can be public without risking anyone, it lands here, keyed to the nickname you left so you can recognize it. No names, no metadata, just words.
+      </p>
+    </section>
+
+    <section data-reveal>
+      <div class="info-banner">
+        <span class="icon">◈</span>
+        <div>
+          <strong>How to check:</strong> if you included a reply address (email, Signal handle, etc.) you’ll hear back directly as well. If you left only a nickname and question, scan below for that nickname. New replies appear after the next site rebuild.
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="answers-h" data-reveal>
+      <div class="section-head">
+        <h2 id="answers-h">Published replies</h2>
+        <span class="mono" id="answers-count" style="color:var(--muted);font-size:0.8rem;"></span>
+      </div>
+      <div id="answers-list" style="display:grid;gap:18px;margin-top:14px;">
+        <div class="module" style="padding:28px;">
+          <p style="color:var(--muted);font-size:0.92rem;">No public answers yet, be the first to <a href="submit.html">ask something</a>.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta-trio" data-reveal>
+      <a href="submit.html" class="cta-card">
+        <span class="cta-icon">✉</span>
+        <h3>Ask or send files</h3>
+        <p>The drop box takes text and attachments, no account needed.</p>
+        <span class="cta-arrow">→</span>
+      </a>
+      <a href="about.html" class="cta-card">
+        <span class="cta-icon">🛡</span>
+        <h3>Source protection</h3>
+        <p>What’s stripped, what’s kept, why anonymity is structural.</p>
+        <span class="cta-arrow">→</span>
+      </a>
+      <a href="download.html" class="cta-card">
+        <span class="cta-icon">⤓</span>
+        <h3>Mirror the paper</h3>
+        <p>Keep an offline copy. Host it if the domain goes dark.</p>
+        <span class="cta-arrow">→</span>
+      </a>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="foot-logo">The Seattle <span>Avalanche</span></div>
+          <p>The Avalanche is an independent network. Seattle is the only official outlet right now. If it is not on the <a href="network.html">Network</a> page, it is not verified.</p>
+          <div class="privacy-badges">
+            <span class="badge">No cookies</span>
+            <span class="badge">No trackers</span>
+            <span class="badge">No ads</span>
+            <span class="badge">Reader funded</span>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Navigate</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+          <li><a href="network.html">Network</a></li>
+            <li><a href="submit.html">Contact / send info</a></li>
+            <li><a href="answers.html">Answers board</a></li>
+            <li><a href="library.html">Media library</a></li>
+            <li><a href="mirror.html">Mirror this site</a></li>
+            <li><a href="download.html">Download site &amp; source</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Policies</h4>
+          <ul>
+            <li><a href="about.html#faq">Source protection</a></li>
+            <li><a href="about.html#faq">Privacy (we collect nothing)</a></li>
+            <li><a href="#">Corrections</a></li>
+            <li><a href="#">Republishing (credit required)</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Elsewhere</h4>
+          <ul>
+            <li><a href="#">RSS feed</a></li>
+            <li><a href="#">Tor mirror (.onion)</a></li>
+            <li><a href="#">Mastodon</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span class="mono" id="ver-stamp"></span>
+        <span>© 2026 The Avalanche · Seattle is the sole official outlet · If it is not on the Network page, it is not verified</span> · <a href="admin.html" style="color:var(--faint);text-decoration:none;" title="Staff login">Admin</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Seattle Avalanche | Independent. Anonymous. Unstoppable.</title>
+  <meta name="description" content="The Seattle Avalanche is a one-person, reader-funded newsroom. No ads, no trackers, no bylines. Few stories, each one earned." />
+  <meta name="referrer" content="no-referrer" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0e14'/%3E%3Cpath d='M4 26 L13 9 L18 18 L21 13 L28 26 Z' fill='%237dd7ff'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..800;1,6..72,400..800&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <script src="js/script.js" defer></script>
+  <script src="js/content.js" defer></script>
+  <script src="js/site.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- ================= Header ================= -->
+  <header>
+    <div class="topbar">
+      <div class="container topbar-inner">
+        <span data-date>Friday, August 21, 2026</span>
+        <span class="tagline">Independent · Anonymous · <em>Unstoppable</em></span>
+        <nav class="topbar-links" aria-label="Utility">
+          <a href="#" title="Onion service coming soon">Tor Mirror</a>
+          <a href="#">RSS</a>
+        </nav>
+      </div>
+    </div>
+
+    <div class="masthead">
+      <canvas id="snow-canvas" aria-hidden="true"></canvas>
+      <div class="container masthead-inner">
+        <svg class="logo-mark" width="56" height="46" viewBox="0 0 56 46" fill="none" aria-hidden="true">
+          <path d="M2 43 L21 7 L31 26 L39 13 L54 43 Z" fill="#141b27" stroke="#7dd7ff" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M16 15 L21 7 L26 14 L23.5 17.5 L21 13.5 L18.5 17.5 Z" fill="#7dd7ff"/>
+          <path d="M36.5 17 L39 13 L41.8 17.4 L40 19.5 Z" fill="#7dd7ff"/>
+        </svg>
+        <div class="masthead-title">
+          <a href="index.html"><span>The Seattle Avalanche</span></a>
+          <p class="motto">Truth falls like snow and accumulates</p>
+        </div>
+      </div>
+    </div>
+
+    <nav class="navbar" aria-label="Primary">
+      <div class="container navbar-inner">
+        <button class="nav-toggle" aria-expanded="false" aria-controls="primary-nav">MENU ☰</button>
+        <ul class="nav-list" id="primary-nav">
+          <li><a href="index.html" aria-current="page">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="network.html">Network</a></li>
+          <li><a href="library.html">Media Library</a></li>
+          <li><a href="mirror.html">Mirror</a></li>
+          <li><a href="answers.html">Answers</a></li>
+          <li><a href="download.html">Download</a></li>
+        </ul>
+        <a href="submit.html" class="btn btn--primary btn--small nav-cta">Send Info</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- ================= Site notices ticker ================= -->
+  <div class="ticker" role="region" aria-label="Site notices">
+    <span class="ticker-label"><span class="dot"></span>Status</span>
+    <div class="ticker-track">
+      <div class="ticker-content" id="ticker-items">
+        <a href="#investigation">Investigation №001 is underway. It publishes when it’s ready</a>
+        <a href="about.html">This site collects nothing: no cookies, no analytics, no server logs</a>
+        <a href="submit.html">Questions welcome. Ask anonymously through the drop box</a>
+        <a href="answers.html">Public answers board is open. Read replies to past questions</a>
+        <a href="download.html">Download this entire website, source code included</a>
+      </div>
+    </div>
+  </div>
+
+  <main id="main" class="container">
+
+    <!-- ================= Statement ================= -->
+    <section class="statement" data-reveal>
+      <h1>One journalist.<br />One story at a time.</h1>
+      <p class="lede">
+        The Seattle Avalanche is run by a single person. No editors, no board,
+        no advertisers, and no bylines, including mine. Every story here is
+        investigated for weeks before it sees daylight, which means there will
+        never be many of them. That’s the point. Seattle is the first official Avalanche in the network.
+      </p>
+    </section>
+
+    <!-- ================= Status board ================= -->
+    <section aria-label="Newsroom status">
+      <div class="status-grid">
+
+        <article class="status-card status-card--active" id="investigation" data-reveal>
+          <div class="status-head">
+            <span class="chip chip--surveil">● In progress</span>
+            <span class="mono-tag" id="case-num">CASE №001</span>
+          </div>
+          <h2 id="case-title">Title withheld until publication</h2>
+          <p id="case-blurb">
+            An investigation is currently underway. The subject stays secret on
+            purpose, announcing targets too early burns sources and evidence.
+            What can be said: it involves public institutions, documents already
+            in hand, and people who deserve answers.
+          </p>
+          <dl class="case-meta">
+            <div><dt>Opened</dt><dd id="case-opened">August 2026</dd></div>
+            <div><dt>Stage</dt><dd id="case-stage">Sourcing &amp; verification</dd></div>
+            <div><dt>Sources</dt><dd>Accepted via portal →</dd></div>
+          </dl>
+          <a href="submit.html" class="btn btn--primary btn--small" id="case-link">Know something? Send it securely</a>
+        </article>
+
+        <article class="status-card" id="pub-slot" data-reveal>
+          <div class="status-head">
+            <span class="chip chip--local">Published</span>
+          </div>
+          <h2>Nothing yet.</h2>
+          <p>
+            No apology here. That’s the standard. The first story lands when it’s done.
+            Expect silence between publications and depth within them.
+          </p>
+          <dl class="case-meta">
+            <div><dt>Stories</dt><dd>0</dd></div>
+            <div><dt>Weeks per story</dt><dd>All of them</dd></div>
+            <div><dt>Rushed takes</dt><dd>0, forever</dd></div>
+          </dl>
+        </article>
+
+        <article class="status-card" data-reveal>
+          <div class="status-head">
+            <span class="chip chip--politics">Ask anything</span>
+          </div>
+          <h2>Questions are free.</h2>
+          <p>
+            Want to know why a story took so long? Dispute something? Curious
+            how protection actually works? Drop a question in the box, real
+            questions get real answers, publicly where possible.
+          </p>
+          <dl class="case-meta">
+            <div><dt>Cost</dt><dd>Free</dd></div>
+            <div><dt>Anonymity</dt><dd>Total</dd></div>
+            <div><dt>Stupid questions</dt><dd>Don’t exist</dd></div>
+          </dl>
+          <a href="submit.html" class="btn btn--ghost btn--small">Open the box →</a>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ================= How this works ================= -->
+    <section aria-label="How this works">
+      <div class="section-head" data-reveal>
+        <h2>How this works</h2>
+        <a href="about.html" class="more">Read the manifesto →</a>
+      </div>
+      <div class="steps-row">
+        <div class="how-step" data-reveal>
+          <span class="num">01</span>
+          <h3>You send things</h3>
+          <p>Tips, documents, recordings, or plain questions. Everything comes through channels built to leave no trace. Most stories start this way.</p>
+        </div>
+        <div class="how-step" data-reveal>
+          <span class="num">02</span>
+          <h3>Verification begins</h3>
+          <p>Every claim gets documents, corroboration, or both. If it can’t be nailed down, it doesn’t run. No exceptions, no “sources say.”</p>
+        </div>
+        <div class="how-step" data-reveal>
+          <span class="num">03</span>
+          <h3>The slow part</h3>
+          <p>Weeks of digging, cross-checking, and legal review. All of it done alone, on purpose. One person answers for every word.</p>
+        </div>
+        <div class="how-step" data-reveal>
+          <span class="num">04</span>
+          <h3>Publication &amp; answers</h3>
+          <p>The story goes up with its receipts. Questions get answered on the public answers board or directly if you left a way to reply.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= Big CTAs ================= -->
+    <section class="cta-trio" aria-label="Explore">
+      <a href="submit.html" class="cta-card" data-reveal>
+        <span class="cta-icon">✉</span>
+        <h3>Send info or ask anything</h3>
+        <p>The website drop box takes tips, files, and questions, no account needed.</p>
+        <span class="cta-arrow">→</span>
+      </a>
+      <a href="library.html" class="cta-card" data-reveal>
+        <span class="cta-icon">❄</span>
+        <h3>Free media library</h3>
+        <p>Declassified files, suppressed books, privacy tools, information kept hard to reach, made easy again.</p>
+        <span class="cta-arrow">→</span>
+      </a>
+      <a href="download.html" class="cta-card" data-reveal>
+        <span class="cta-icon">⤓</span>
+        <h3>Download / mirror the site</h3>
+        <p>Steal the code, credit the stories. Checksummed, mirrorable, unkillable.</p>
+        <span class="cta-arrow">→</span>
+      </a>
+    </section>
+
+    <!-- ================= Notify ================= -->
+    <section class="notify-band" data-reveal>
+      <div>
+        <h2>Get pinged when №001 drops.</h2>
+        <p>One email when the first story publishes. Nothing else, ever. Sent through a service that strips your IP, or grab the RSS feed and skip email entirely.</p>
+      </div>
+      <form class="notify-form" action="#" method="post" onsubmit="return false;">
+        <label for="nl-email" hidden>Your email</label>
+        <input id="nl-email" type="email" placeholder="you@anything.example" autocomplete="email" />
+        <button type="submit" class="btn btn--ghost">Notify me</button>
+      </form>
+    </section>
+
+  </main>
+
+  <!-- ================= Footer ================= -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="foot-logo">The Seattle <span>Avalanche</span></div>
+          <p>The Avalanche is an independent network. Seattle is the only official outlet right now. If it is not on the <a href="network.html">Network</a> page, it is not verified.</p>
+          <div class="privacy-badges">
+            <span class="badge">No cookies</span>
+            <span class="badge">No trackers</span>
+            <span class="badge">No ads</span>
+            <span class="badge">Reader funded</span>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Navigate</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+          <li><a href="network.html">Network</a></li>
+            <li><a href="submit.html">Contact / send info</a></li>
+            <li><a href="answers.html">Answers board</a></li>
+            <li><a href="library.html">Media library</a></li>
+            <li><a href="mirror.html">Mirror this site</a></li>
+            <li><a href="download.html">Download site &amp; source</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Policies</h4>
+          <ul>
+            <li><a href="about.html#faq">Source protection</a></li>
+            <li><a href="about.html#faq">Privacy (we collect nothing)</a></li>
+            <li><a href="#">Corrections</a></li>
+            <li><a href="#">Republishing (credit required)</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Elsewhere</h4>
+          <ul>
+            <li><a href="#">RSS feed</a></li>
+            <li><a href="#">Tor mirror (.onion)</a></li>
+            <li><a href="#">Mastodon</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span class="mono" id="ver-stamp"></span>
+        <span>© 2026 The Avalanche · Seattle is the sole official outlet · If it is not on the Network page, it is not verified</span> · <a href="admin.html" style="color:var(--faint);text-decoration:none;" title="Staff login">Admin</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

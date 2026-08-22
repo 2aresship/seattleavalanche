@@ -1,0 +1,11 @@
+﻿# Private / local only - never push
+panel-config.json
+data/tips.json
+data/tips_files/
+data/tips-dropbox.json
+tips-dropbox.json
+tips-files/
+__pycache__/
+*.log
+.DS_Store
+Thumbs.db

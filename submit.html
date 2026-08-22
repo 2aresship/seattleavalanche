@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Send Info / Ask Anything | The Seattle Avalanche</title>
+  <meta name="description" content="One drop box for everything: tips, documents, questions, corrections. No account needed. Leave a way to reply if you want an answer back." />
+  <meta name="referrer" content="no-referrer" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0e14'/%3E%3Cpath d='M4 26 L13 9 L18 18 L21 13 L28 26 Z' fill='%237dd7ff'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..800;1,6..72,400..800&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <script src="js/script.js" defer></script>
+  <script src="js/content.js" defer></script>
+  <script src="js/site.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- ================= Header ================= -->
+  <header>
+    <div class="topbar">
+      <div class="container topbar-inner">
+        <span data-date>Friday, August 21, 2026</span>
+        <span class="tagline">Independent · Anonymous · <em>Unstoppable</em></span>
+        <nav class="topbar-links" aria-label="Utility">
+          <a href="#" title="Onion service coming soon">Tor Mirror</a>
+          <a href="#">RSS</a>
+        </nav>
+      </div>
+    </div>
+
+    <div class="masthead">
+      <canvas id="snow-canvas" aria-hidden="true"></canvas>
+      <div class="container masthead-inner">
+        <svg class="logo-mark" width="56" height="46" viewBox="0 0 56 46" fill="none" aria-hidden="true">
+          <path d="M2 43 L21 7 L31 26 L39 13 L54 43 Z" fill="#141b27" stroke="#7dd7ff" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M16 15 L21 7 L26 14 L23.5 17.5 L21 13.5 L18.5 17.5 Z" fill="#7dd7ff"/>
+          <path d="M36.5 17 L39 13 L41.8 17.4 L40 19.5 Z" fill="#7dd7ff"/>
+        </svg>
+        <div class="masthead-title">
+          <a href="index.html"><span>The Seattle Avalanche</span></a>
+          <p class="motto">Truth falls like snow and accumulates</p>
+        </div>
+      </div>
+    </div>
+
+    <nav class="navbar" aria-label="Primary">
+      <div class="container navbar-inner">
+        <button class="nav-toggle" aria-expanded="false" aria-controls="primary-nav">MENU ☰</button>
+        <ul class="nav-list" id="primary-nav">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="network.html">Network</a></li>
+          <li><a href="library.html">Media Library</a></li>
+          <li><a href="mirror.html">Mirror</a></li>
+          <li><a href="answers.html">Answers</a></li>
+          <li><a href="download.html">Download</a></li>
+        </ul>
+        <a href="submit.html" class="btn btn--primary btn--small nav-cta" aria-current="page">Send Info</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- ================= Site notices ticker ================= -->
+  <div class="ticker" role="region" aria-label="Site notices">
+    <span class="ticker-label"><span class="dot"></span>Status</span>
+    <div class="ticker-track">
+      <div class="ticker-content">
+        <a href="#dropbox">The drop box takes tips, files, and questions, no account needed</a>
+        <a href="#contact-back">Leave a way to reply and you’ll get an answer back</a>
+        <a href="answers.html">Public answers board, replies to past questions</a>
+      </div>
+    </div>
+  </div>
+
+  <main id="main" class="container">
+
+    <section class="page-hero" data-reveal>
+      <h1>The drop box is open.</h1>
+      <p class="lede">
+        One box for everything: tips, documents, recordings, questions,
+        corrections. No account, no login, no tracking scripts, this page
+        collects nothing beyond what you type and attach.
+      </p>
+    </section>
+
+    <!-- ================= Drop box form ================= -->
+    <section id="dropbox" data-reveal>
+      <div class="form-shell">
+        <form id="tip-form" action="tip.php" method="post" enctype="multipart/form-data">
+          <input type="text" name="_gotcha" id="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" hidden />
+
+          <div class="form-row">
+            <div class="field">
+              <label for="topic">What is this?</label>
+              <select id="topic" name="topic" required>
+                <option value="tip">A tip / lead</option>
+                <option value="documents">Documents or evidence</option>
+                <option value="question">A question about the paper</option>
+                <option value="correction">A correction / dispute</option>
+                <option value="other">Something else</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="alias">Nickname <small>(optional)</small></label>
+              <input id="alias" name="alias" type="text" maxlength="60"
+                     placeholder="so you can recognize your answer on the board" autocomplete="off" />
+            </div>
+          </div>
+
+          <div class="field" id="contact-back">
+            <label for="contact">Reply address <small>(optional)</small></label>
+            <input id="contact" name="contact" type="text" maxlength="200"
+                   placeholder="email · Signal · Session ID · any handle, only if you want an answer back" autocomplete="off" />
+            <p class="hint">
+              Stored encrypted, used once to reply, never published, never shared.
+              Leave empty for total anonymity, then check the
+              <a href="answers.html">answers board</a> under your nickname.
+            </p>
+          </div>
+
+          <div class="field">
+            <label for="message">Your message <span class="req">*</span></label>
+            <textarea id="message" name="message" rows="9" required
+                      placeholder="Say as much or as little as you want. For tips: what happened, when, who was involved, and whether there are documents."></textarea>
+          </div>
+
+          <div class="field">
+            <label for="files">Attach files <small>(optional, up to 5 files, 8&nbsp;MB each)</small></label>
+            <input id="files" name="files[]" type="file" multiple
+                   accept=".pdf,.txt,.md,.csv,.xlsx,.docx,.zip,.jpg,.jpeg,.png,.webp,.gif,.mp3,.wav,.mp4,.mov,.eml,.msg" />
+            <p class="hint">Everything is privatized on arrival. We scrub metadata and randomize filenames internally, so what you send does not stay tied to you.</p>
+          </div>
+
+          <div class="field" style="border:1px solid var(--line);border-radius:10px;padding:14px 16px;background:rgba(255,255,255,0.02);">
+            <label for="allow_public" style="display:flex;gap:10px;align-items:flex-start;cursor:pointer;font-weight:700;">
+              <input type="checkbox" name="allow_public" id="allow_public" value="1" style="margin-top:4px;accent-color:var(--ice);" />
+              <span>Allow answer to be posted on the <a href="answers.html">answers board</a> <small style="font-weight:400;letter-spacing:0;text-transform:none;">(anonymized)</small></span>
+            </label>
+            <p class="hint" style="margin:8px 0 0 28px;">Tick this if this is a quick question and you are okay with an anonymized version being posted publicly. Anyone will be able to see the question and reply.</p>
+            <p class="hint" style="margin:4px 0 0 28px;">Questions are always anonymized. Only the nickname you add is shown. Contact info is never posted. The Seattle Avalanche will probably get around to it soon, but replies are not instant and depend on workload.</p>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn--primary btn--large" id="send-btn">Seal &amp; send</button>
+            <span id="tip-status" role="status" aria-live="polite"></span>
+          </div>
+
+          <p class="tiny-note">
+            Submission goes through a minimal PHP endpoint that writes your
+            message into a private inbox outside the public web root. The site
+            itself runs no analytics and sets no cookies.
+          </p>
+        </form>
+      </div>
+    </section>
+
+    <!-- ================= What happens next ================= -->
+    <section data-reveal aria-labelledby="next-h">
+      <div class="section-head">
+        <h2 id="next-h">What happens after you hit send</h2>
+      </div>
+      <ol class="steps-list">
+        <li>
+          <strong>Your message lands in a private inbox</strong> that lives
+          outside the website’s public directory. Visitors cannot read it.
+        </li>
+        <li>
+          <strong>It gets read by one person</strong>, usually within a day.
+          Tips about live harm are prioritized.
+        </li>
+        <li>
+          <strong>If verification starts,</strong> anything identifying you is
+          stripped before details enter working notes. Sources are never named,
+          hinted at, or contacted without permission.
+        </li>
+        <li>
+          <strong>You get your answer:</strong> directly through whatever
+          reply address you left, or publicly on the
+          <a href="answers.html">answers board</a> keyed to your nickname so
+          you can recognize it without ever being identified.
+        </li>
+      </ol>
+    </section>
+
+    <!-- ================= Privacy ================= -->
+    <section data-reveal aria-labelledby="safety-h">
+      <div class="section-head">
+        <h2 id="safety-h">Everything is privatized</h2>
+      </div>
+      <p style="color:var(--text-soft);max-width:760px;margin-bottom:14px;">Files and messages are scrubbed on arrival. Metadata is stripped, filenames are randomized internally, and identifying details never hit working notes in their original form.</p>
+      <ul class="checklist">
+        <li>We encourage you to keep sensitive personal data out of the box if you can.</li>
+        <li>If something sensitive does end up in there, it is no big deal. We scrub it anyway right after it lands.</li>
+        <li>Try not to use work devices or work networks to write in.</li>
+        <li>A fresh email made just for this beats your personal address.</li>
+      </ul>
+      <p class="legal-note">
+        Whistleblower protections vary by country and situation. This page cannot
+        give legal advice. The approach here is simple: send only what you are
+        comfortable sending, and we handle the scrubbing from there.
+      </p>
+    </section>
+
+    <!-- ================= Answers cross-link ================= -->
+    <section class="cta-trio" data-reveal>
+      <a href="answers.html" class="cta-card">
+        <span class="cta-icon">❓</span>
+        <h3>Answers board</h3>
+        <p>Replies to past questions, published publicly. Find yours by nickname.</p>
+        <span class="cta-arrow">→</span>
+      </a>
+      <a href="about.html#faq" class="cta-card">
+        <span class="cta-icon">🛡</span>
+        <h3>How sources are protected</h3>
+        <p>Structural anonymity explained, what’s kept, what’s stripped, why.</p>
+        <span class="cta-arrow">→</span>
+      </a>
+      <a href="library.html" class="cta-card">
+        <span class="cta-icon">❄</span>
+        <h3>While you’re here</h3>
+        <p>Banned books, declassified files, privacy tools, all free.</p>
+        <span class="cta-arrow">→</span>
+      </a>
+    </section>
+
+  </main>
+
+  <!-- ================= Footer ================= -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="foot-logo">The Seattle <span>Avalanche</span></div>
+          <p>The Avalanche is an independent network. Seattle is the only official outlet right now. If it is not on the <a href="network.html">Network</a> page, it is not verified.</p>
+          <div class="privacy-badges">
+            <span class="badge">No cookies</span>
+            <span class="badge">No trackers</span>
+            <span class="badge">No ads</span>
+            <span class="badge">Reader funded</span>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Navigate</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+          <li><a href="network.html">Network</a></li>
+            <li><a href="submit.html">Contact / send info</a></li>
+            <li><a href="answers.html">Answers board</a></li>
+            <li><a href="library.html">Media library</a></li>
+            <li><a href="mirror.html">Mirror this site</a></li>
+            <li><a href="download.html">Download site &amp; source</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Policies</h4>
+          <ul>
+            <li><a href="about.html#faq">Source protection</a></li>
+            <li><a href="about.html#faq">Privacy (we collect nothing)</a></li>
+            <li><a href="#">Corrections</a></li>
+            <li><a href="#">Republishing (credit required)</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Elsewhere</h4>
+          <ul>
+            <li><a href="#">RSS feed</a></li>
+            <li><a href="#">Tor mirror (.onion)</a></li>
+            <li><a href="#">Mastodon</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span class="mono" id="ver-stamp"></span>
+        <span>© 2026 The Avalanche · Seattle is the sole official outlet · If it is not on the Network page, it is not verified</span> · <a href="admin.html" style="color:var(--faint);text-decoration:none;" title="Staff login">Admin</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Drop box submit: AJAX with graceful fallback
+    document.addEventListener('DOMContentLoaded', function () {
+      var form = document.getElementById('tip-form');
+      var status = document.getElementById('tip-status');
+      var btn = document.getElementById('send-btn');
+      if (!form) return;
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var fd = new FormData(form);
+        btn.disabled = true;
+        status.textContent = 'Sealing…';
+        status.className = '';
+
+        fetch(form.action, { method: 'POST', body: fd })
+          .then(function (r) { return r.json(); })
+          .then(function (data) {
+            if (data.ok) {
+              status.innerHTML = 'Sent. Your reference code is <strong>' +
+                data.id + '</strong>' +
+                (data.files ? ' (' + data.files + ' file' + (data.files > 1 ? 's' : '') + ' attached)' : '') +
+                '. Keep it if you want follow-ups.';
+              status.className = 'ok-msg';
+              form.reset();
+            } else {
+              status.textContent = data.error || 'Could not send. Try again.';
+              status.className = 'bad-msg';
+            }
+          })
+          .catch(function () {
+            // network blocked? fall back to normal POST navigation
+            status.textContent = '';
+            form.removeEventListener('submit', arguments.callee);
+            form.submit();
+          })
+          .finally(function () { btn.disabled = false; });
+      });
+    });
+  </script>
+</body>
+</html>

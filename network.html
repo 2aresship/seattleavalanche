@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Network | The Avalanche</title>
+  <meta name="description" content="Official Avalanche outlets. Only outlets listed here are verified. Seattle is the only official Avalanche outlet right now." />
+  <meta name="referrer" content="no-referrer" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0e14'/%3E%3Cpath d='M4 26 L13 9 L18 18 L21 13 L28 26 Z' fill='%237dd7ff'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..800;1,6..72,400..800&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <script src="js/script.js" defer></script>
+  <script src="js/content.js" defer></script>
+  <script src="js/site.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- ================= Header ================= -->
+  <header>
+    <div class="topbar">
+      <div class="container topbar-inner">
+        <span data-date>Friday, August 21, 2026</span>
+        <span class="tagline">Independent · Anonymous · <em>Unstoppable</em></span>
+        <nav class="topbar-links" aria-label="Utility">
+          <a href="#" title="Onion service coming soon">Tor Mirror</a>
+          <a href="#">RSS</a>
+        </nav>
+      </div>
+    </div>
+
+    <div class="masthead">
+      <canvas id="snow-canvas" aria-hidden="true"></canvas>
+      <div class="container masthead-inner">
+        <svg class="logo-mark" width="56" height="46" viewBox="0 0 56 46" fill="none" aria-hidden="true">
+          <path d="M2 43 L21 7 L31 26 L39 13 L54 43 Z" fill="#141b27" stroke="#7dd7ff" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M16 15 L21 7 L26 14 L23.5 17.5 L21 13.5 L18.5 17.5 Z" fill="#7dd7ff"/>
+          <path d="M36.5 17 L39 13 L41.8 17.4 L40 19.5 Z" fill="#7dd7ff"/>
+        </svg>
+        <div class="masthead-title">
+          <a href="index.html"><span>The Seattle Avalanche</span></a>
+          <p class="motto">Truth falls like snow and accumulates</p>
+        </div>
+      </div>
+    </div>
+
+    <nav class="navbar" aria-label="Primary">
+      <div class="container navbar-inner">
+        <button class="nav-toggle" aria-expanded="false" aria-controls="primary-nav">MENU ☰</button>
+        <ul class="nav-list" id="primary-nav">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="network.html" aria-current="page">Network</a></li>
+          <li><a href="library.html">Media Library</a></li>
+          <li><a href="mirror.html">Mirror</a></li>
+          <li><a href="answers.html">Answers</a></li>
+          <li><a href="download.html">Download</a></li>
+        </ul>
+        <a href="submit.html" class="btn btn--primary btn--small nav-cta">Send Info</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- ================= Site notices ticker ================= -->
+  <div class="ticker" role="region" aria-label="Site notices">
+    <span class="ticker-label"><span class="dot"></span>Status</span>
+    <div class="ticker-track">
+      <div class="ticker-content">
+        <a href="#official">Only outlets listed on this page are verified</a>
+        <a href="#official">If it is not here, it is not an official Avalanche outlet</a>
+      </div>
+    </div>
+  </div>
+
+  <main id="main" class="container">
+
+    <section class="page-hero" data-reveal>
+      <h1>The Avalanche is a network.</h1>
+      <p class="lede">
+        Each Avalanche is a city-based newsroom. Same principles, same tech, same promise. Independent on the ground, verified through this registry. If a city is not listed here, it is not official.
+      </p>
+    </section>
+
+    <div class="info-banner" data-reveal style="border-color: rgba(255, 193, 7, 0.35); background: rgba(255, 193, 7, 0.07);">
+      <span class="icon">⚠</span>
+      <div>
+        <strong>Verification rule:</strong> Nothing not on this page is recognized as an official Avalanche outlet. No social account, no mirror, no domain is verified unless it appears in the table below. Seattle is the only official Avalanche right now.
+      </div>
+    </div>
+
+    <!-- ================= Official outlets ================= -->
+    <section id="official" aria-labelledby="official-h" data-reveal>
+      <div class="section-head">
+        <h2 id="official-h">Official outlets</h2>
+        <p class="section-sub">Live and verified. Everything else is unverified.</p>
+      </div>
+
+      <div class="file-table-wrap">
+        <table class="file-table">
+          <thead>
+            <tr><th scope="col">City / Outlet</th><th scope="col">Status</th><th scope="col">Domain</th><th scope="col">Since</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>The Seattle Avalanche</strong></td>
+              <td><span class="chip chip--local" style="color:#6fe0a8;border-color:#6fe0a8;">● Official - Active</span></td>
+              <td><span class="mono" style="font-family:var(--font-mono);font-size:0.78rem;">seattleavalanche.ct.ws</span></td>
+              <td>Aug 2026</td>
+            </tr>
+            <tr>
+              <td colspan="4" style="color:var(--muted);text-align:center;padding:22px 14px;">No other official Avalanche outlets yet. This table is the sole source of truth.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="hint" style="margin-top:12px;">Bookmark this page. Impersonators rely on people not checking.</p>
+    </section>
+
+    <!-- ================= How this works ================= -->
+    <section aria-labelledby="how-h" data-reveal>
+      <div class="section-head">
+        <h2 id="how-h">How verification works</h2>
+      </div>
+      <div class="lib-grid">
+        <div class="lib-card">
+          <span class="chip chip--local">Registry first</span>
+          <h3>This page is the registry</h3>
+          <p class="desc">An outlet is official only if it is listed above. No exceptions. If someone claims to be an Avalanche and they are not here, treat them as unverified.</p>
+        </div>
+        <div class="lib-card">
+          <span class="chip chip--politics">No silent launches</span>
+          <h3>Launches are announced here</h3>
+          <p class="desc">When a new city launches, it is added to this table and announced from Seattle. There are no official Avalanches operating off-registry.</p>
+        </div>
+        <div class="lib-card">
+          <span class="chip chip--surveil">Mirrors are not outlets</span>
+          <h3>Mirrors vs. outlets</h3>
+          <p class="desc"><a href="mirror.html">Mirrors</a> are copies of Seattle’s pages. They are not editorial outlets. Only the outlets table confers official status.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= Structure ================= -->
+    <section aria-labelledby="org-h" data-reveal>
+      <div class="section-head">
+        <h2 id="org-h">What The Avalanche is</h2>
+      </div>
+      <div class="manifesto-grid">
+        <div class="manifesto-col">
+          <h3>One city, one person</h3>
+          <p>Each Avalanche outlet is run by a single person in that city. No team, no office. That keeps the surface area small and the accountability clear. Seattle follows that model. Every future city will too.</p>
+        </div>
+        <div class="manifesto-col">
+          <h3>Shared core, local reporting</h3>
+          <p>Outlets share the same stack, privacy model, and ethics: no ads, no trackers, privatized drop box, scrubbed on arrival, slow verification, no bylines. Reporting itself is strictly local to the city.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= Future cities ================= -->
+    <section data-reveal>
+      <div class="info-banner">
+        <span class="icon">◈</span>
+        <div>
+          <strong>Thinking about starting an Avalanche in your city?</strong> The network will open to new cities selectively. For now, Seattle is the pilot. Watch this page for the application process. Do not launch under the Avalanche name until you are listed here.
+        </div>
+      </div>
+    </section>
+
+    <section class="cta-trio" data-reveal>
+      <a href="index.html" class="cta-card">
+        <span class="cta-icon">❄</span>
+        <h3>Seattle - the live outlet</h3>
+        <p>The only official Avalanche right now. Read the work.</p>
+        <span class="cta-arrow">→</span>
+      </a>
+      <a href="submit.html" class="cta-card">
+        <span class="cta-icon">✉</span>
+        <h3>Tip Seattle</h3>
+        <p>Everything is privatized on arrival. Use the drop box.</p>
+        <span class="cta-arrow">→</span>
+      </a>
+      <a href="about.html" class="cta-card">
+        <span class="cta-icon">🛡</span>
+        <h3>Why it works this way</h3>
+        <p>Principles, privacy model, and ethics behind every outlet.</p>
+        <span class="cta-arrow">→</span>
+      </a>
+    </section>
+
+  </main>
+
+  <!-- ================= Footer ================= -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="foot-logo">The <span>Avalanche</span></div>
+          <p>The Avalanche is an independent network. Seattle is the only official outlet right now. If it is not on the <a href="network.html">Network</a> page, it is not verified.</p>
+          <div class="privacy-badges">
+            <span class="badge">No cookies</span>
+            <span class="badge">No trackers</span>
+            <span class="badge">No ads</span>
+            <span class="badge">Reader funded</span>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Navigate</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="network.html">Network</a></li>
+            <li><a href="submit.html">Contact / send info</a></li>
+            <li><a href="answers.html">Answers board</a></li>
+            <li><a href="library.html">Media library</a></li>
+            <li><a href="mirror.html">Mirror this site</a></li>
+            <li><a href="download.html">Download site &amp; source</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Policies</h4>
+          <ul>
+            <li><a href="about.html#faq">Source protection</a></li>
+            <li><a href="about.html#faq">Privacy (we collect nothing)</a></li>
+            <li><a href="network.html">Verified outlets only</a></li>
+            <li><a href="#">Republishing (credit required)</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Elsewhere</h4>
+          <ul>
+            <li><a href="#">RSS feed</a></li>
+            <li><a href="#">Tor mirror (.onion)</a></li>
+            <li><a href="#">Mastodon</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span class="mono" id="ver-stamp"></span>
+        <span>© 2026 The Avalanche · Seattle is the sole official outlet · If it is not on the Network page, it is not verified</span> · <a href="admin.html" style="color:var(--faint);text-decoration:none;" title="Staff login">Admin</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

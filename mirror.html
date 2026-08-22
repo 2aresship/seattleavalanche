@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mirror This Site | The Seattle Avalanche</title>
+  <meta name="description" content="How to mirror The Seattle Avalanche so the paper survives takedowns. Static files, checksums, live content layer, zero permission needed." />
+  <meta name="referrer" content="no-referrer" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0e14'/%3E%3Cpath d='M4 26 L13 9 L18 18 L21 13 L28 26 Z' fill='%237dd7ff'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..800;1,6..72,400..800&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <script src="js/script.js" defer></script>
+  <script src="js/content.js" defer></script>
+  <script src="js/site.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- ================= Header ================= -->
+  <header>
+    <div class="topbar">
+      <div class="container topbar-inner">
+        <span data-date>Friday, August 21, 2026</span>
+        <span class="tagline">Independent · Anonymous · <em>Unstoppable</em></span>
+        <nav class="topbar-links" aria-label="Utility">
+          <a href="#" title="Onion service coming soon">Tor Mirror</a>
+          <a href="#">RSS</a>
+        </nav>
+      </div>
+    </div>
+
+    <div class="masthead">
+      <canvas id="snow-canvas" aria-hidden="true"></canvas>
+      <div class="container masthead-inner">
+        <svg class="logo-mark" width="56" height="46" viewBox="0 0 56 46" fill="none" aria-hidden="true">
+          <path d="M2 43 L21 7 L31 26 L39 13 L54 43 Z" fill="#141b27" stroke="#7dd7ff" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M16 15 L21 7 L26 14 L23.5 17.5 L21 13.5 L18.5 17.5 Z" fill="#7dd7ff"/>
+          <path d="M36.5 17 L39 13 L41.8 17.4 L40 19.5 Z" fill="#7dd7ff"/>
+        </svg>
+        <div class="masthead-title">
+          <a href="index.html"><span>The Seattle Avalanche</span></a>
+          <p class="motto">Truth falls like snow and accumulates</p>
+        </div>
+      </div>
+    </div>
+
+    <nav class="navbar" aria-label="Primary">
+      <div class="container navbar-inner">
+        <button class="nav-toggle" aria-expanded="false" aria-controls="primary-nav">MENU ☰</button>
+        <ul class="nav-list" id="primary-nav">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="network.html">Network</a></li>
+          <li><a href="library.html">Media Library</a></li>
+          <li><a href="mirror.html" aria-current="page">Mirror</a></li>
+          <li><a href="answers.html">Answers</a></li>
+          <li><a href="download.html">Download</a></li>
+        </ul>
+        <a href="submit.html" class="btn btn--primary btn--small nav-cta">Send Info</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main" class="container">
+
+    <!-- ================= Hero ================= -->
+    <section class="page-hero" data-reveal>
+      <h1>Mirror this site.<br />Keep it unkillable.</h1>
+      <p class="lede">
+        This paper is built to survive the domain going dark. Everything is
+        static files, no database, no server code, nothing to “move.” If you
+        can host a folder, you can run a full mirror of this publication,
+        legally, under CC0. Here’s the whole process.
+      </p>
+    </section>
+
+    <div class="info-banner" data-reveal>
+      <span class="icon">◈</span>
+      <div>
+        <strong>The deal:</strong> the code is CC0 (public domain), copy it freely.
+        The stories are CC BY, republish anywhere, but credit
+        <em>The Seattle Avalanche</em> with a link. That’s the only price of admission.
+      </div>
+    </div>
+
+    <!-- ================= How mirrors stay fresh ================= -->
+    <section aria-labelledby="h-fresh">
+      <div class="section-head" data-reveal><h2 id="h-fresh">How freshness works (no stale copies)</h2></div>
+
+      <div class="lib-grid">
+        <div class="lib-card" data-reveal>
+          <span class="chip chip--local">Layer 1 · the shell</span>
+          <p class="desc">The HTML/CSS/JS you download rarely changes. When it does, a new ZIP appears on the <a href="download.html">download page</a> with fresh SHA-256 checksums. Re-download occasionally and re-upload. That’s the entire maintenance burden.</p>
+        </div>
+        <div class="lib-card" data-reveal>
+          <span class="chip chip--politics">Layer 2 · the living content</span>
+          <p class="desc">Every page loads <code style="font-family:var(--font-mono);font-size:.78rem;">js/content.js</code> first, then checks for <code style="font-family:var(--font-mono);font-size:.78rem;">content.remote.json</code> in the site root, whichever is newer wins. Drop an updated <code style="font-family:var(--font-mono);font-size:.78rem;">avalanche-content.json</code> (renamed to <b>content.remote.json</b>) into your mirror’s root and your mirror instantly serves the newest stories without touching anything else.</p>
+        </div>
+        <div class="lib-card" data-reveal>
+          <span class="chip chip--environ">Proof of freshness</span>
+          <p class="desc">Every page footer carries a version stamp (e.g. <i>v2026-08-21 14:02</i>). Readers compare stamps across mirrors at a glance; a stale mirror is visible instantly and fixable in one file drop.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= Steps ================= -->
+    <section aria-labelledby="h-steps">
+      <div class="section-head" data-reveal><h2 id="h-steps">The three steps</h2></div>
+      <div class="steps-row" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr));">
+        <div class="how-step" data-reveal>
+          <span class="num">01</span>
+          <h3>Take the package</h3>
+          <p>Grab the ZIP from the <a href="download.html">download page</a>. Verify SHA-256 checksums against the manifest there, if they match, you hold exactly what we publish.</p>
+        </div>
+        <div class="how-step" data-reveal>
+          <span class="num">02</span>
+          <h3>Host the folder</h3>
+          <p>Any static host works. Fastest options: <b>Netlify Drop</b> (drag the unzipped folder onto app.netlify.com/drop, live in seconds), <b>Cloudflare Pages</b>, or <b>GitHub Pages</b>. No build settings needed, it’s plain HTML.</p>
+        </div>
+        <div class="how-step" data-reveal>
+          <span class="num">03</span>
+          <h3>Register your mirror</h3>
+          <p>Send your URL through the <a href="submit.html">source portal</a>. Verified mirrors get added to the public registry below and ship inside future packages, every reader sees your copy listed.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= Advanced ================= -->
+    <section aria-labelledby="h-adv">
+      <div class="section-head" data-reveal><h2 id="h-adv">For the paranoid &amp; the dedicated</h2></div>
+      <div class="lib-grid">
+        <div class="lib-card" data-reveal>
+          <span class="chip chip--surveil">Tor onion mirror</span>
+          <p class="desc">Run Tor on a small box, point a hidden service at the folder, done, a .onion mirror no registrar can seize. The paper will list verified onion addresses alongside clearnet ones.</p>
+        </div>
+        <div class="lib-card" data-reveal>
+          <span class="chip chip--housing">IPFS / BitTorrent</span>
+          <p class="desc">The package is just files, pin it with IPFS Desktop or seed the ZIP as a torrent. Content-addressed hosting means tampering breaks the hash chain visibly.</p>
+        </div>
+        <div class="lib-card" data-reveal>
+          <span class="chip chip--culture">Watchdog duty</span>
+          <p class="desc">If the main domain dies, mirrors are the continuity plan. Bookmark several. If you notice a mirror serving an old version stamp for weeks, nudge its operator or host the newer package yourself.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= Registry ================= -->
+    <section aria-labelledby="h-reg">
+      <div class="section-head" data-reveal><h2 id="h-reg">Known mirrors</h2></div>
+      <div class="file-table-wrap" data-reveal>
+        <table class="file-table" id="mirror-table">
+          <thead><tr><th scope="col">Mirror</th><th scope="col">Notes</th></tr></thead>
+          <tbody>
+            <tr><td>local copy</td><td>Canonical home</td></tr>
+            <tr><td colspan="2" style="color:var(--faint);">Your mirror could be here, see step 03.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="hint" style="margin-top:12px;" data-reveal>This table renders from the live content file, so newly registered mirrors appear on every up-to-date mirror automatically.</p>
+    </section>
+
+    <!-- ================= CTA ================= -->
+    <section class="notify-band" data-reveal style="margin-top:56px;">
+      <div>
+        <h2>Ready? The whole paper fits in one download.</h2>
+        <p>Static pages, one stylesheet, one script, checksums included. Take it, host it, keep it alive when we can’t.</p>
+      </div>
+      <div class="dl-actions">
+        <a href="download.html" class="btn btn--primary">Get the package →</a>
+        <a href="submit.html" class="btn btn--ghost">Register a mirror</a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= Footer ================= -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="foot-logo">The Seattle <span>Avalanche</span></div>
+          <p>The Avalanche is an independent network. Seattle is the only official outlet right now. If it is not on the <a href="network.html">Network</a> page, it is not verified.</p>
+          <div class="privacy-badges">
+            <span class="badge">No cookies</span>
+            <span class="badge">No trackers</span>
+            <span class="badge">No ads</span>
+            <span class="badge">Reader funded</span>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Navigate</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+          <li><a href="network.html">Network</a></li>
+            <li><a href="submit.html">Contact / send info</a></li>
+            <li><a href="answers.html">Answers board</a></li>
+            <li><a href="library.html">Media library</a></li>
+            <li><a href="mirror.html">Mirror this site</a></li>
+            <li><a href="download.html">Download site &amp; source</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Policies</h4>
+          <ul>
+            <li><a href="about.html#faq">Source protection</a></li>
+            <li><a href="about.html#faq">Privacy (we collect nothing)</a></li>
+            <li><a href="#">Corrections</a></li>
+            <li><a href="#">Republishing (credit required)</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Elsewhere</h4>
+          <ul>
+            <li><a href="#">RSS feed</a></li>
+            <li><a href="#">Tor mirror (.onion)</a></li>
+            <li><a href="#">Mastodon</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span class="mono" id="ver-stamp"></span>
+        <span>© 2026 The Avalanche · Seattle is the sole official outlet · If it is not on the Network page, it is not verified</span> · <a href="admin.html" style="color:var(--faint);text-decoration:none;" title="Staff login">Admin</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About | The Seattle Avalanche</title>
+  <meta name="description" content="Why this newsroom exists, how it protects sources, and why there is no byline anywhere on it." />
+  <meta name="referrer" content="no-referrer" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0e14'/%3E%3Cpath d='M4 26 L13 9 L18 18 L21 13 L28 26 Z' fill='%237dd7ff'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..800;1,6..72,400..800&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <script src="js/script.js" defer></script>
+  <script src="js/content.js" defer></script>
+  <script src="js/site.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- ================= Header ================= -->
+  <header>
+    <div class="topbar">
+      <div class="container topbar-inner">
+        <span data-date>Friday, August 21, 2026</span>
+        <span class="tagline">Independent · Anonymous · <em>Unstoppable</em></span>
+        <nav class="topbar-links" aria-label="Utility">
+          <a href="#" title="Onion service coming soon">Tor Mirror</a>
+          <a href="#">RSS</a>
+        </nav>
+      </div>
+    </div>
+
+    <div class="masthead">
+      <canvas id="snow-canvas" aria-hidden="true"></canvas>
+      <div class="container masthead-inner">
+        <svg class="logo-mark" width="56" height="46" viewBox="0 0 56 46" fill="none" aria-hidden="true">
+          <path d="M2 43 L21 7 L31 26 L39 13 L54 43 Z" fill="#141b27" stroke="#7dd7ff" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M16 15 L21 7 L26 14 L23.5 17.5 L21 13.5 L18.5 17.5 Z" fill="#7dd7ff"/>
+          <path d="M36.5 17 L39 13 L41.8 17.4 L40 19.5 Z" fill="#7dd7ff"/>
+        </svg>
+        <div class="masthead-title">
+          <a href="index.html"><span>The Seattle Avalanche</span></a>
+          <p class="motto">Truth falls like snow and accumulates</p>
+        </div>
+      </div>
+    </div>
+
+    <nav class="navbar" aria-label="Primary">
+      <div class="container navbar-inner">
+        <button class="nav-toggle" aria-expanded="false" aria-controls="primary-nav">MENU ☰</button>
+        <ul class="nav-list" id="primary-nav">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html" aria-current="page">About</a></li>
+          <li><a href="network.html">Network</a></li>
+          <li><a href="library.html">Media Library</a></li>
+          <li><a href="mirror.html">Mirror</a></li>
+          <li><a href="answers.html">Answers</a></li>
+          <li><a href="download.html">Download</a></li>
+        </ul>
+        <a href="submit.html" class="btn btn--primary btn--small nav-cta">Send Info</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- ================= Site notices ticker ================= -->
+  <div class="ticker" role="region" aria-label="Site notices">
+    <span class="ticker-label"><span class="dot"></span>Status</span>
+    <div class="ticker-track">
+      <div class="ticker-content">
+        <a href="#faq">Source protection is built in</a>
+        <a href="#faq">We collect nothing: no cookies, no analytics, no server logs</a>
+        <a href="submit.html">Questions answered publicly on the answers board</a>
+      </div>
+    </div>
+  </div>
+
+  <main id="main" class="container">
+
+    <section class="page-hero" data-reveal>
+      <h1>About this newsroom</h1>
+      <p class="lede">
+        No newsroom. No staff page. No “our team of veteran journalists.”
+        One person does the entire job: sourcing, verifying, writing,
+        coding, and answering for it.
+      </p>
+    </section>
+
+    <section class="manifesto-grid" data-reveal>
+      <div class="manifesto-col">
+        <h2>The short manifesto</h2>
+        <p>
+          Local news died because the money ran out. City hall meetings now
+          happen in empty rooms while decisions that shape decades get made
+          unwatched. This site exists because one person decided an empty
+          room was unacceptable, and because a laptop, public records laws,
+          and stubbornness cost almost nothing.
+        </p>
+        <p>
+          The Avalanche publishes rarely on purpose. Each story takes weeks:
+          records requests, document cross-checks, conversations verified
+          against evidence. There will never be a feed to doomscroll. There
+          will be work you can trust when it appears.
+        </p>
+      </div>
+      <div class="manifesto-col">
+        <h2>Why anonymous?</h2>
+        <p>
+          Not for mystique. Anonymity is armor: it keeps pressure, lawsuits,
+          and worse aimed at the <em>work</em> instead of one person’s mailbox.
+          It also removes the incentive to soften coverage of friends, employers,
+          or anyone who might retaliate against a named human being.
+        </p>
+        <p>
+          Accountability doesn’t require a face. It requires standards. Every
+          claim here must trace to documents or verified sources, corrections
+          are published promptly, and the entire operation can be audited by
+          anyone: the site code itself is downloadable and inspectable.
+        </p>
+      </div>
+    </section>
+
+    <section data-reveal aria-labelledby="principles-h">
+      <div class="section-head">
+        <h2 id="principles-h">Non-negotiables</h2>
+      </div>
+      <ol class="rules-list">
+        <li><strong>Documents first.</strong> Stories run on records.</li>
+        <li><strong>Corroboration always.</strong> Two independent confirmations minimum.</li>
+        <li><strong>Right of reply.</strong> Subjects get real time to respond before publication.</li>
+        <li><strong>Public corrections.</strong> Errors get fixed loudly at the top, never quietly at the bottom.</li>
+        <li><strong>No ads, no sponsors.</strong> Reader-funded only; conflicts can’t be bought.</li>
+        <li><strong>Collect nothing.</strong> No cookies, no trackers, no analytics, no server-side visitor logs.</li>
+      </ol>
+    </section>
+
+    <section id="faq" data-reveal aria-labelledby="faq-h">
+      <div class="section-head">
+        <h2 id="faq-h">Questions people actually ask</h2>
+      </div>
+
+      <details class="faq-item" open>
+        <summary>Are you safe? Are your sources safe?</summary>
+        <div class="faq-body">
+          <p>
+            Source protection here is built into how it works: tips arrive
+            through channels designed so that even this newsroom cannot identify
+            senders, messages are stored encrypted, and identifying details are
+            stripped during verification and never published. If a story
+            couldn’t run without burning someone, it doesn’t run.
+          </p>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary>How do I know any of this is real?</summary>
+        <div class="faq-body">
+          <p>
+            Trust is earned per-story, and receipts are part of the format:
+            documents are quoted precisely, methods are described, and where
+            legal, source material is published alongside reporting. You are
+            also free to download the whole site, mirror it, and hold these
+            words hostage against revisionism.
+          </p>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary>Can I republish stories?</summary>
+        <div class="faq-body">
+          <p>
+            Yes. Stories carry a Creative Commons BY license, republish freely
+            with attribution to The Seattle Avalanche and a link. The website
+            code itself is CC0: steal it, fork it, start your own avalanche in
+            your own city. That’s the point.
+          </p>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary>Why hasn’t Investigation №001 published yet?</summary>
+        <div class="faq-body">
+          <p>
+            Because publishing early burns sources and hands targets time to
+            destroy records. The story goes up when the evidence is nailed
+            down and subjects have had their right of reply. Silence between
+            publications is what diligence looks like from the outside.
+          </p>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary>I sent a question. When do I get an answer?</summary>
+        <div class="faq-body">
+          <p>
+            Every question is read. Answers go up on the public
+            <a href="answers.html">answers board</a>; if you included a way to
+            reply, you’ll hear back directly. Nothing you sent identifies you
+            unless you chose to sign it.
+          </p>
+        </div>
+      </details>
+    </section>
+
+    <section class="notify-band" data-reveal>
+      <div>
+        <h2>Hold this newsroom accountable too.</h2>
+        <p>Dispute a fact, demand a correction, or challenge the methods, anonymously if you prefer. Scrutiny makes the work better.</p>
+      </div>
+      <div class="notify-actions">
+        <a href="submit.html" class="btn btn--ghost">Open the drop box</a>
+        <a href="answers.html" class="btn btn--ghost">Read past answers</a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= Footer ================= -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="foot-logo">The Seattle <span>Avalanche</span></div>
+          <p>The Avalanche is an independent network. Seattle is the only official outlet right now. If it is not on the <a href="network.html">Network</a> page, it is not verified.</p>
+          <div class="privacy-badges">
+            <span class="badge">No cookies</span>
+            <span class="badge">No trackers</span>
+            <span class="badge">No ads</span>
+            <span class="badge">Reader funded</span>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Navigate</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+          <li><a href="network.html">Network</a></li>
+            <li><a href="submit.html">Contact / send info</a></li>
+            <li><a href="answers.html">Answers board</a></li>
+            <li><a href="library.html">Media library</a></li>
+            <li><a href="mirror.html">Mirror this site</a></li>
+            <li><a href="download.html">Download site &amp; source</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Policies</h4>
+          <ul>
+            <li><a href="about.html#faq">Source protection</a></li>
+            <li><a href="about.html#faq">Privacy (we collect nothing)</a></li>
+            <li><a href="#">Corrections</a></li>
+            <li><a href="#">Republishing (credit required)</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Elsewhere</h4>
+          <ul>
+            <li><a href="#">RSS feed</a></li>
+            <li><a href="#">Tor mirror (.onion)</a></li>
+            <li><a href="#">Mastodon</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span class="mono" id="ver-stamp"></span>
+        <span>© 2026 The Avalanche · Seattle is the sole official outlet · If it is not on the Network page, it is not verified</span> · <a href="admin.html" style="color:var(--faint);text-decoration:none;" title="Staff login">Admin</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

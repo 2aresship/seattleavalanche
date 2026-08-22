@@ -1,0 +1,36 @@
+{
+  "generated": "2026-08-21 17:00",
+  "site": {
+    "motto": "Truth falls like snow and accumulates",
+    "tagline": "Independent · Anonymous · Unstoppable",
+    "investigation": {
+      "number": "001",
+      "title": "",
+      "stage": "Sourcing & verification",
+      "opened": "August 2026",
+      "blurb": "An investigation is currently underway. The subject stays secret on purpose. Announcing targets too early burns sources and evidence."
+    },
+    "notices": [
+      "Investigation №001 is underway. It publishes when it’s ready",
+      "This site collects nothing: no cookies, no analytics, no server logs",
+      "Questions welcome. Ask anonymously through the drop box"
+    ],
+    "mirrors": [
+      "https://seattleavalanche.ct.ws"
+    ]
+  },
+  "posts": [
+    {
+      "slug": "test",
+      "title": "Test",
+      "dek": "Test",
+      "date": "2026-08-21",
+      "status": "published",
+      "tags": [
+        "Test"
+      ],
+      "body_html": "<p>Test</p>"
+    }
+  ],
+  "answers": []
+}
