@@ -62,20 +62,14 @@
       </p>
       <p style="font-size:0.78rem;color:var(--faint);margin-top:8px;"><a href="index.html" style="color:var(--muted)">Back to site</a> · Footer > Admin</p>
 
-      <div id="setup-box">
-        <label class="f-label">First time on this device, choose a passphrase</label>
-        <input class="f-input" type="password" id="pw-new1" placeholder="at least 8 characters" autocomplete="new-password" />
-        <label class="f-label">Repeat it</label>
-        <input class="f-input" type="password" id="pw-new2" autocomplete="new-password" />
-        <button class="btn btn--primary" style="width:100%;justify-content:center;margin-top:16px;" onclick="doSetup()">Create passphrase and enter</button>
-        <p class="hint">The passphrase guards drafts on this browser. Your publishing token in the Publish tab is what actually pushes live to mirrors.</p>
-      </div>
-
-      <div id="unlock-box" style="display:none;">
-        <label class="f-label">Passphrase</label>
+      <div>
+        <label class="f-label">Admin key</label>
         <input class="f-input" type="password" id="pw-in" autocomplete="current-password" onkeydown="if(event.key==='Enter')doUnlock()" />
+        <label style="display:flex;gap:8px;align-items:center;margin-top:10px;font-size:0.82rem;color:var(--text-soft);">
+          <input type="checkbox" id="remember-key" /> Remember key on this device (unchecked = forgotten when you close the tab)
+        </label>
         <button class="btn btn--primary" style="width:100%;justify-content:center;margin-top:16px;" onclick="doUnlock()">Unlock</button>
-        <p class="hint"><a href="#" onclick="wipeDevice(event)" style="color:var(--alert)">Forgot / reset this device</a> (clears local drafts, published content stays safe in the vault).</p>
+        <p class="hint">The admin key is the ADMIN_KEY secret you set on the Cloudflare worker (Workers > silent-queen-3bd2 > Settings > Variables > Secrets). It unlocks the inbox and email list. Nothing about it is stored in this site's code.</p>
       </div>
       <div class="bad-msg" id="lock-err"></div>
     </div>
@@ -253,7 +247,7 @@
         <label class="f-label">GitHub token (repo scope)</label>
         <input class="f-input" id="gh-repo-token" type="password" placeholder="ghp_..." autocomplete="off" />
         <label style="display:flex;gap:8px;align-items:center;margin-top:12px;font-size:0.82rem;color:var(--text-soft);">
-          <input type="checkbox" id="gh-repo-remember" checked /> Remember repo token on this device
+          <input type="checkbox" id="gh-repo-remember" /> Remember repo token on this device
         </label>
         <div class="btnrow">
           <button class="btn btn--primary" onclick="pushToRepo()">Push stories live</button>
@@ -268,23 +262,9 @@
 <script>
 "use strict";
 const $ = id => document.getElementById(id);
-const LS_LOCK = "av_lock_v1", LS_DATA = "av_data_v1", LS_TOKEN = "av_gh_token";
-const UNIVERSAL_HASH = "cb6114c518ae449a2f840c2d5a009c4d4c109c4c39c9833a7038e79879553eb6";
+const LS_DATA = "av_data_v1", LS_TOKEN = "av_gh_token", LS_KEY = "av_key_s", LS_KEY2 = "av_key_p";
 async function sha256hex(s){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(s));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("");}
-async function verifyPanelConfigPassword(pw){
-  try{
-    const r = await fetch("panel-config.json", {cache:"no-store"});
-    if(!r.ok) return false;
-    const cfg = await r.json();
-    if(!cfg.salt || !cfg.hash || !cfg.iterations) return false;
-    const enc = new TextEncoder();
-    const key = await crypto.subtle.importKey("raw", enc.encode(pw), "PBKDF2", false, ["deriveBits"]);
-    const saltBytes = Uint8Array.from(cfg.salt.match(/.{2}/g).map(b=>parseInt(b,16)));
-    const bits = await crypto.subtle.deriveBits({name:"PBKDF2", salt: saltBytes, iterations: cfg.iterations, hash:"SHA-256"}, key, 256);
-    const hex = [...new Uint8Array(bits)].map(b=>b.toString(16).padStart(2,"0")).join("");
-    return hex === cfg.hash;
-  }catch(e){ return false; }
-}
+
 function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
 function today(){return new Date().toISOString().slice(0,10);}
 function msg(ok,text){const el=$(ok?"msg-ok":"msg-bad");$(ok?"msg-bad":"msg-ok").style.display="none";el.textContent=text;el.style.display="block";setTimeout(()=>el.style.display="none",4000);}
@@ -313,34 +293,29 @@ function blankState(){
 function touch(){S.generated=new Date().toISOString().slice(0,16).replace("T"," ");}
 
 /* ================= lock screen ================= */
-(async function initLock(){
-  let lock=localStorage.getItem(LS_LOCK);
-  if(!lock){
-    localStorage.setItem(LS_LOCK, UNIVERSAL_HASH);
-    lock = UNIVERSAL_HASH;
-  }
-  if(lock){$("setup-box").style.display="none";$("unlock-box").style.display="block";}
+(function initLock(){
+  const k = sessionStorage.getItem(LS_KEY) || localStorage.getItem(LS_KEY2) || "";
+  $("pw-in").value = k;
 })();
-async function doSetup(){
-  const a=$("pw-new1").value,b=$("pw-new2").value;
-  if(a.length<8)return lockErr("Use at least 8 characters.");
-  if(a!==b)return lockErr("Passphrases do not match.");
-  localStorage.setItem(LS_LOCK,await sha256hex(a));
-  await enter();
-}
+
 async function doUnlock(){
-  const pw = $("pw-in").value;
-  const h = await sha256hex(pw);
-  const lock = localStorage.getItem(LS_LOCK);
-  if(h === UNIVERSAL_HASH || h === lock){
-    await enter();
-    return;
+  const key = ($("pw-in").value || "").trim();
+  if (!key) return lockErr("Enter your admin key.");
+  if ($("remember-key").checked) localStorage.setItem(LS_KEY2, key);
+  else localStorage.removeItem(LS_KEY2);
+  sessionStorage.setItem(LS_KEY, key);
+  // verify against the worker before opening
+  try{
+    const r = await fetch("/api/tips", { cache: "no-store", headers: { Authorization: "Bearer " + key } });
+    if (r.status === 401) return lockErr("Wrong key - rejected by the server.");
+    if (r.status === 501) {
+      // worker missing ADMIN_KEY secret or KV; let them in for drafts/publishing but warn
+      msg(false, "Server not configured yet: set ADMIN_KEY secret + TIPS_KV binding on the worker. Drafts and publishing still work.");
+    }
+  } catch(e) {
+    msg(false, "Could not reach the server API (offline or non-worker mirror). Drafts and publishing still work.");
   }
-  if(await verifyPanelConfigPassword(pw)){
-    await enter();
-    return;
-  }
-  return lockErr("Wrong passphrase.");
+  await enter();
 }
 function lockErr(t){$("lock-err").textContent=t;$("lock-err").style.display="block";}
 async function enter(){
@@ -352,7 +327,7 @@ async function enter(){
   if(localStorage.getItem("av_repo_token")){$("gh-repo-token").value=localStorage.getItem("av_repo_token");$("gh-repo-remember").checked=true;}
   msg(true,"Unlocked. Admin loaded. Click through from the site footer anytime.");
 }
-function wipeDevice(e){e.preventDefault();localStorage.removeItem(LS_LOCK);localStorage.removeItem(LS_DATA);location.reload();}
+function wipeDevice(e){e.preventDefault();sessionStorage.removeItem(LS_KEY);localStorage.removeItem(LS_KEY2);localStorage.removeItem(LS_DATA);location.reload();}
 function loadState(){
   try{const d=JSON.parse(localStorage.getItem(LS_DATA));if(d&&d.site)return d;}catch(e){}
   if(window.AVALANCHE_CONTENT&&window.AVALANCHE_CONTENT.site){
@@ -402,7 +377,7 @@ function saveMirrors(){
 async function loadTipsFromServer(){
   // Try to load from data/tips.json (PHP host or local file server) - merge into S.tips
   try{
-    const r = await fetch("data/tips.json", {cache:"no-store"});
+    const r = await fetch("/api/tips", {cache:"no-store", headers:{Authorization:"Bearer "+(sessionStorage.getItem(LS_KEY)||localStorage.getItem(LS_KEY2)||"")}});
     if(r.ok){
       const arr = await r.json();
       if(Array.isArray(arr) && arr.length){
@@ -410,7 +385,7 @@ async function loadTipsFromServer(){
         const byId = {};
         (S.tips||[]).forEach(t=>byId[t.id]=t);
         let added=0;
-        arr.forEach(t=>{
+        arr.filter(x=>/^AV-[A-Za-z0-9-]+$/.test(String(x.id||''))).forEach(t=>{
           if(!byId[t.id]){
             // Ensure allow_public flag exists
             if(t.allow_public===undefined) t.allow_public=0;
@@ -672,12 +647,16 @@ async function testRepoConnection(){
 let SUBS = [];
 async function loadSubs(){
   try{
-    const r = await fetch("/api/subs", {cache:"no-store"});
-    const j = await r.json();
+    const r = await fetch("/api/subs", {cache:"no-store", headers:{Authorization:"Bearer "+(sessionStorage.getItem(LS_KEY)||localStorage.getItem(LS_KEY2)||"")}});
+    const j = await r.json().catch(()=>({ok:false}));
     if(j.ok && Array.isArray(j.subs)){
-      SUBS = j.subs.map(x=>x.email||x).filter(Boolean);
-    } else { SUBS = []; }
-  }catch(e){ SUBS = []; }
+      SUBS = j.subs.map(x=>typeof x==="string"?x:x.email).filter(Boolean);
+      msg(true, SUBS.length + " subscriber" + (SUBS.length===1?"":"s") + " loaded.");
+    } else {
+      SUBS = [];
+      if(j.error) msg(false, j.error);
+    }
+  }catch(e){ SUBS = []; msg(false, "Could not reach /api/subs on this host."); }
   const box = $("subs-list"), c = $("subs-count");
   if(c) c.textContent = SUBS.length ? "(" + SUBS.length + ")" : "";
   if(box) box.value = SUBS.join("\n");

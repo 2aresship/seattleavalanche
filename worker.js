@@ -1,14 +1,25 @@
 /**
- * Avalanche Worker - serves static assets + handles tip submissions.
- * POST /tip.php and /api/tip  -> store tip (KV if bound, GitHub issue backup, always logged)
- * GET  /api/tips             -> list tips (KV)
- * Everything else            -> static asset
+ * Avalanche Worker - static assets + public tip/subscribe endpoints.
  *
- * One-time setup (dashboard or wrangler):
- *   1. KV: create namespace "TIPS_KV" (Workers & Pages > KV) and bind it to this worker as TIPS_KV.
- *      Without KV, tips still work via GitHub issues + logs but the admin Inbox cannot list them.
- *   2. Optional backup: `wrangler secret put GITHUB_TOKEN` with a repo-scope token.
+ * SECURITY MODEL
+ * - Public POSTs (/tip.php, /api/tip, /api/subscribe): honeypot + rate limit + size caps.
+ * - Private GETs (/api/tips, /api/subs): require `Authorization: Bearer $ADMIN_KEY`.
+ *   Set once: dashboard > Workers > silent-queen-3bd2 > Settings > Variables > Secrets
+ *   -> add secret ADMIN_KEY. Or: npx wrangler secret put ADMIN_KEY
+ * - Sensitive local files are never served (denylist below).
+ *
+ * Optional secrets:
+ *   GITHUB_TOKEN  repo-scope token; files tips/subscribers as issues for backup.
  */
+const DENY = [
+  "/panel-config.json",
+  "/panel.py",
+  "/wrangler.toml",
+  "/.gitignore",
+  "/data/tips.json",
+  "/data/posts/",
+];
+
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
@@ -18,37 +29,103 @@ export default {
       return new Response(null, { status: 204, headers: cors() });
     }
 
+    // never serve private/local files, whatever the method
+    const low = path.toLowerCase();
+    if (DENY.some((d) => low === d || low.startsWith(d)) || low.startsWith("/.git") || low.includes("tips_files")) {
+      return new Response("Not found", { status: 404 });
+    }
+
     if (request.method === "POST" && (path === "/api/tip" || path === "/tip.php")) {
-      return handleTip(request, env, ctx).then(r => { r.headers.set("Access-Control-Allow-Origin", "*"); return r; });
+      return guarded(handleTip, request, env, ctx, 1_000_000);
     }
 
     if (request.method === "POST" && path === "/api/subscribe") {
-      return handleSubscribe(request, env).then(r => r.headers.set("Access-Control-Allow-Origin", "*") || r);
+      return guarded(handleSubscribe, request, env, ctx, 64_000);
     }
 
-    if (request.method === "GET" && path === "/api/subs") {
-      return handleSubsList(env);
-    }
-
-    if (request.method === "GET" && path === "/api/tips") {
-      return handleList(env).then(r => { r.headers.set("Access-Control-Allow-Origin", "*"); return r; });
+    if (request.method === "GET" && (path === "/api/tips" || path === "/api/subs")) {
+      return authed(request, env, () => (path === "/api/subs" ? handleSubsList(env) : handleList(env)));
     }
 
     // static assets
     if (env.ASSETS) {
       const asset = await env.ASSETS.fetch(request);
-      if (asset.status !== 404) return asset;
+      if (asset.status !== 404) return withSecurityHeaders(asset);
       // pretty URLs: /page -> /page.html
       if (!path.endsWith("/") && !path.includes(".")) {
         const alt = new URL(path + ".html", url);
         const a2 = await env.ASSETS.fetch(new Request(alt, request));
-        if (a2.status !== 404) return a2;
+        if (a2.status !== 404) return withSecurityHeaders(a2);
       }
       return asset;
     }
     return new Response("Not found", { status: 404 });
-  }
+  },
 };
+
+/* ---------- auth ---------- */
+
+function safeEqual(a, b) {
+  if (typeof a !== "string" || typeof b !== "string" || a.length !== b.length) return false;
+  let diff = 0;
+  for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  return diff === 0;
+}
+
+async function authed(request, env, fn) {
+  if (!env.ADMIN_KEY) {
+    return json({ ok: false, error: "Server not configured: set the ADMIN_KEY secret first." }, 501);
+  }
+  const m = /^Bearer\s+(.+)$/i.exec(request.headers.get("Authorization") || "");
+  if (!m || !safeEqual(m[1].trim(), env.ADMIN_KEY)) {
+    return json({ ok: false, error: "Unauthorized." }, 401);
+  }
+  try {
+    return await fn();
+  } catch (err) {
+    console.error(err);
+    return json({ ok: false, error: "Server error." }, 500);
+  }
+}
+
+/* ---------- body-size guard wrapper ---------- */
+
+async function guarded(fn, request, env, ctx, maxBytes) {
+  const len = parseInt(request.headers.get("content-length") || "0", 10);
+  if (len > maxBytes) {
+    return json({ ok: false, error: "Too large." }, 413);
+  }
+  const r = await fn(request, env, ctx);
+  r.headers.set("Access-Control-Allow-Origin", "*");
+  return r;
+}
+
+/* ---------- headers ---------- */
+
+function withSecurityHeaders(res) {
+  const ct = res.headers.get("Content-Type") || "";
+  const out = new Response(res.body, res);
+  out.headers.set("X-Content-Type-Options", "nosniff");
+  out.headers.set("Referrer-Policy", "no-referrer");
+  out.headers.set("X-Frame-Options", "DENY");
+  if (ct.includes("text/html")) {
+    out.headers.set(
+      "Content-Security-Policy",
+      [
+        "default-src 'self'",
+        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+        "font-src https://fonts.gstatic.com",
+        "script-src 'self' 'unsafe-inline'",
+        "img-src 'self' data:",
+        "connect-src 'self'",
+        "frame-ancestors 'none'",
+        "base-uri 'self'",
+        "form-action 'self' https://github.com",
+      ].join("; ")
+    );
+  }
+  return out;
+}
 
 function cors() {
   return {
@@ -65,6 +142,8 @@ function json(obj, status = 200) {
   });
 }
 
+/* ---------- public: submit a tip ---------- */
+
 async function handleTip(request, env, ctx) {
   try {
     let data = {};
@@ -75,19 +154,18 @@ async function handleTip(request, env, ctx) {
     } else {
       const form = await request.formData();
       for (const [k, v] of form.entries()) {
-        if (v instanceof File) continue; // file contents need R2; names recorded below when present
+        if (v instanceof File) continue; // file contents need R2; not stored
         data[k] = v;
       }
     }
 
-    if ((data._gotcha || "").trim() || (data.website || "").trim()) {
+    if ((String(data._gotcha || "")).trim() || (String(data.website || "")).trim()) {
       return json({ ok: true, id: "filtered", msg: "Thanks." });
     }
 
     const message = String(data.message || "").trim();
     if (!message) return json({ ok: false, error: "Message was empty." }, 400);
 
-    // rate limit per IP: 1 / 30s (KV-backed when available)
     const ip = request.headers.get("cf-connecting-ip") || "unknown";
     if (env.TIPS_KV) {
       const last = parseInt((await env.TIPS_KV.get("rate:" + ip)) || "0", 10);
@@ -132,6 +210,8 @@ async function handleTip(request, env, ctx) {
   }
 }
 
+/* ---------- public: join mailing list ---------- */
+
 async function handleSubscribe(request, env) {
   try {
     let email = "";
@@ -145,7 +225,7 @@ async function handleSubscribe(request, env) {
       if ((form.get("_gotcha") || "").toString().trim()) return json({ ok: true });
       email = String(form.get("email") || "").trim().toLowerCase();
     }
-    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email) || email.length > 254) {
       return json({ ok: false, error: "That address does not look right." }, 400);
     }
 
@@ -184,6 +264,8 @@ async function handleSubscribe(request, env) {
   }
 }
 
+/* ---------- private: lists ---------- */
+
 async function handleSubsList(env) {
   if (!env.TIPS_KV) {
     return json({ ok: false, error: "KV not bound yet." }, 501);
@@ -211,7 +293,7 @@ async function handleList(env) {
 }
 
 async function fileIssue(tip, env) {
-  const repo = (env.GITHUB_REPO || "2aresship/seattleavalanche");
+  const repo = env.GITHUB_REPO || "2aresship/seattleavalanche";
   const title = `[tip] ${tip.id} ${tip.topic}${tip.alias ? " from " + tip.alias : ""}`.slice(0, 90);
   const body =
     `ID: ${tip.id}\nReceived: ${tip.received}\nTopic: ${tip.topic}\n` +
