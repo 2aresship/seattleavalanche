@@ -245,6 +245,7 @@
         <div class="btnrow">
           <button class="btn btn--primary" onclick="pushToRepo()">Push stories live</button>
           <button class="btn btn--ghost" onclick="pullFromRepo()">Pull from repo</button>
+          <button class="btn btn--ghost" onclick="testRepoConnection()">Test connection</button>
         </div>
         <p class="hint">Token needs the classic <b>repo</b> scope: GitHub > Settings > Developer settings > Personal access tokens > Generate (classic). The gist vault above is optional; this repo push is what publishes.</p>
       </div>
@@ -614,7 +615,12 @@ async function pushToRepo(){
       try{const g=await fetch(url,{headers:{Authorization:"Bearer "+token,Accept:"application/vnd.github+json"}});if(g.ok)sha=(await g.json()).sha;}catch(e){}
       const put=await fetch(url,{method:"PUT",headers:{Authorization:"Bearer "+token,Accept:"application/vnd.github+json","Content-Type":"application/json"},
         body:JSON.stringify({message:`Publish ${S.generated} via admin`,content:btoa(unescape(encodeURIComponent(f.content))),sha:sha||undefined,branch:"main"})});
-      if(!put.ok){const e=await put.text();throw new Error(f.path+" -> "+put.status+" "+e.slice(0,160));}
+      if(!put.ok){
+        if(put.status===404) throw new Error("404 from GitHub. Your token cannot write this repo. Use a CLASSIC token with the 'repo' scope (Settings > Developer settings > Tokens classic). Fine-grained tokens must have this repo selected with Contents: Read and write.");
+        if(put.status===401) throw new Error("401: token rejected - expired, revoked, or typo.");
+        if(put.status===403) throw new Error("403: token valid but forbidden - missing repo scope.");
+        const e=await put.text();throw new Error(f.path+" -> "+put.status+" "+e.slice(0,160));
+      }
     }
     msg(true,"LIVE. Pushed to repo v"+S.generated+" - Cloudflare redeploys in ~60s.");
   }catch(e){msg(false,e.message);}
@@ -625,13 +631,29 @@ async function pullFromRepo(){
     const token=$("gh-repo-token").value.trim();
     if(!token)throw new Error("Paste your token first.");
     const res=await fetch(`https://api.github.com/repos/${repo}/contents/js/content.js`,{headers:{Authorization:"Bearer "+token,Accept:"application/vnd.github+json"}});
-    if(!res.ok)throw new Error("Fetch failed "+res.status);
+    if(!res.ok){ if(res.status===404) throw new Error("404: token cannot read this repo - check scope/repo name."); throw new Error("Fetch failed "+res.status); }
     const j=await res.json();
     const content=decodeURIComponent(escape(atob(j.content)));
     const incoming=JSON.parse(content.replace(/^[\s\S]*window\.AVALANCHE_CONTENT\s*=\s*/,"").replace(/;\s*$/,""));
     if(!incoming.generated)throw new Error("Invalid content.js in repo.");
     S=incoming;if(!S.tips)S.tips=[];if(!S.answers)S.answers=[];
     touch();persist();fillForms();renderInbox();msg(true,"Pulled repo v"+incoming.generated+".");
+  }catch(e){msg(false,e.message);}
+}
+async function testRepoConnection(){
+  try{
+    const repo=($("gh-repo").value.trim()||"2aresship/seattleavalanche");
+    const token=$("gh-repo-token").value.trim();
+    if(!token)throw new Error("Paste your token first.");
+    const res=await fetch(`https://api.github.com/repos/${repo}`,{headers:{Authorization:"Bearer "+token,Accept:"application/vnd.github+json"}});
+    if(!res.ok){
+      if(res.status===401)throw new Error("401: token invalid/expired.");
+      if(res.status===404)throw new Error("404: token has no access to "+repo+". Classic token needs 'repo' scope; fine-grained needs this repo checked with Contents write.");
+      throw new Error("GitHub says "+res.status);
+    }
+    const j=await res.json();
+    if(!j.permissions||!j.permissions.push)throw new Error("Token can SEE the repo but not PUSH. Regenerate as classic token with 'repo' scope.");
+    msg(true,"Connected to "+j.full_name+" - token can push. You are clear.");
   }catch(e){msg(false,e.message);}
 }
 function downloadTips(){
