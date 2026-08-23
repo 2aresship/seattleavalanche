@@ -7,25 +7,20 @@ directory = "./"
 binding = "ASSETS"
 
 # ============================================================
-# TIPS STORAGE - do these two steps to activate the tip inbox:
+# WHY YOUR BINDING KEPT DISAPPEARING:
+# This worker builds from GitHub. wrangler.toml is the source of
+# truth - anything you add in the dashboard gets wiped on the next
+# deploy unless it is declared HERE.
 #
-# STEP 1: Create the namespace (one time):
-#   Cloudflare dashboard > Storage & Databases > KV > Create a namespace
-#   Name it: avalanche-tips
-#   Copy the ID it shows (a 32-char hex string)
-#
-# STEP 2: Uncomment the two lines below and paste your ID:
-#
-# [[kv_namespaces]]
-# binding = "TIPS_KV"
-# id = "PASTE_YOUR_NAMESPACE_ID_HERE"
-#
-# Then commit + push. Cloudflare binds it on the next deploy.
-#
-# ALTERNATIVE (no code): dashboard > Workers & Pages > silent-queen-3bd2
-#   > Settings > Bindings > + Add > KV Namespace
-#   Variable name: TIPS_KV   |   Namespace: avalanche-tips > Deploy
+# FIX (one paste):
+#   1. Dashboard > Storage & Databases > KV > avalanche-tips
+#   2. Copy the "Namespace ID" (32 hex characters)
+#   3. Replace PASTE_ID_HERE below with it, save, commit+push.
 # ============================================================
+
+[[kv_namespaces]]
+binding = "TIPS_KV"
+id = "PASTE_ID_HERE"
 
 [vars]
 GITHUB_REPO = "2aresship/seattleavalanche"
