@@ -231,6 +231,23 @@
           <button class="btn btn--ghost" onclick="downloadTips()">Download tips.json</button>
         </div>
       </div>
+
+      <div class="module">
+        <h3 class="module-title">Publish to live site (GitHub repo)</h3>
+        <p style="font-size:0.88rem;color:var(--text-soft);">This is the button that actually makes stories live. It writes js/content.js and data/site.json straight to your GitHub repo, and Cloudflare redeploys seattleavalanche.online in about a minute.</p>
+        <label class="f-label">Repo (owner/repo)</label>
+        <input class="f-input" id="gh-repo" value="2aresship/seattleavalanche" />
+        <label class="f-label">GitHub token (repo scope)</label>
+        <input class="f-input" id="gh-repo-token" type="password" placeholder="ghp_..." autocomplete="off" />
+        <label style="display:flex;gap:8px;align-items:center;margin-top:12px;font-size:0.82rem;color:var(--text-soft);">
+          <input type="checkbox" id="gh-repo-remember" checked /> Remember repo token on this device
+        </label>
+        <div class="btnrow">
+          <button class="btn btn--primary" onclick="pushToRepo()">Push stories live</button>
+          <button class="btn btn--ghost" onclick="pullFromRepo()">Pull from repo</button>
+        </div>
+        <p class="hint">Token needs the classic <b>repo</b> scope: GitHub > Settings > Developer settings > Personal access tokens > Generate (classic). The gist vault above is optional; this repo push is what publishes.</p>
+      </div>
     </section>
   </div>
 
@@ -318,6 +335,7 @@ async function enter(){
   await loadTipsFromServer();
   renderInbox();
   if(localStorage.getItem(LS_TOKEN)){$("gh-token").value=localStorage.getItem(LS_TOKEN);$("gh-remember").checked=true;}
+  if(localStorage.getItem("av_repo_token")){$("gh-repo-token").value=localStorage.getItem("av_repo_token");$("gh-repo-remember").checked=true;}
   msg(true,"Unlocked. Admin loaded. Click through from the site footer anytime.");
 }
 function wipeDevice(e){e.preventDefault();localStorage.removeItem(LS_LOCK);localStorage.removeItem(LS_DATA);location.reload();}
@@ -388,6 +406,26 @@ async function loadTipsFromServer(){
           }
         });
         if(added>0){ persist(); }
+      }
+    }
+  }catch(e){}
+  // Also try Cloudflare Worker KV inbox
+  try{
+    const r2 = await fetch("/api/tips", {cache:"no-store"});
+    if(r2.ok){
+      const j = await r2.json();
+      if(j.ok && Array.isArray(j.tips) && j.tips.length){
+        const byId = {};
+        (S.tips||[]).forEach(x=>byId[x.id]=x);
+        let added=0;
+        j.tips.forEach(w=>{
+          if(!byId[w.id]){
+            if(w.allow_public===undefined) w.allow_public=0;
+            if(w.read===undefined) w.read=false;
+            S.tips.push(w); added++;
+          }
+        });
+        if(added>0) persist();
       }
     }
   }catch(e){}
@@ -560,6 +598,41 @@ function downloadContentJs(){
   const a=document.createElement("a");
   a.href=URL.createObjectURL(new Blob([plainContentJs()],{type:"application/json"}));
   a.download="content.js";a.click();URL.revokeObjectURL(a.href);
+}
+async function pushToRepo(){
+  try{
+    const repo=($("gh-repo").value.trim()||"2aresship/seattleavalanche");
+    const token=$("gh-repo-token").value.trim();
+    if(!token)throw new Error("Paste your GitHub token (repo scope) first.");
+    if($("gh-repo-remember").checked)localStorage.setItem("av_repo_token",token);
+    else localStorage.removeItem("av_repo_token");
+    syncAnswers();touch();persist();
+    const files=[{path:"js/content.js",content:plainContentJs()},{path:"data/site.json",content:JSON.stringify(S.site,null,2)}];
+    for(const f of files){
+      const url=`https://api.github.com/repos/${repo}/contents/${f.path}`;
+      let sha=null;
+      try{const g=await fetch(url,{headers:{Authorization:"Bearer "+token,Accept:"application/vnd.github+json"}});if(g.ok)sha=(await g.json()).sha;}catch(e){}
+      const put=await fetch(url,{method:"PUT",headers:{Authorization:"Bearer "+token,Accept:"application/vnd.github+json","Content-Type":"application/json"},
+        body:JSON.stringify({message:`Publish ${S.generated} via admin`,content:btoa(unescape(encodeURIComponent(f.content))),sha:sha||undefined,branch:"main"})});
+      if(!put.ok){const e=await put.text();throw new Error(f.path+" -> "+put.status+" "+e.slice(0,160));}
+    }
+    msg(true,"LIVE. Pushed to repo v"+S.generated+" - Cloudflare redeploys in ~60s.");
+  }catch(e){msg(false,e.message);}
+}
+async function pullFromRepo(){
+  try{
+    const repo=($("gh-repo").value.trim()||"2aresship/seattleavalanche");
+    const token=$("gh-repo-token").value.trim();
+    if(!token)throw new Error("Paste your token first.");
+    const res=await fetch(`https://api.github.com/repos/${repo}/contents/js/content.js`,{headers:{Authorization:"Bearer "+token,Accept:"application/vnd.github+json"}});
+    if(!res.ok)throw new Error("Fetch failed "+res.status);
+    const j=await res.json();
+    const content=decodeURIComponent(escape(atob(j.content)));
+    const incoming=JSON.parse(content.replace(/^[\s\S]*window\.AVALANCHE_CONTENT\s*=\s*/,"").replace(/;\s*$/,""));
+    if(!incoming.generated)throw new Error("Invalid content.js in repo.");
+    S=incoming;if(!S.tips)S.tips=[];if(!S.answers)S.answers=[];
+    touch();persist();fillForms();renderInbox();msg(true,"Pulled repo v"+incoming.generated+".");
+  }catch(e){msg(false,e.message);}
 }
 function downloadTips(){
   const a=document.createElement("a");

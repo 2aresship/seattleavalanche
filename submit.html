@@ -23,7 +23,7 @@
     <div class="topbar">
       <div class="container topbar-inner">
         <span data-date>Friday, August 21, 2026</span>
-        <span class="tagline">Independent Â· Anonymous Â· <em></em></span>
+        <span class="tagline">Independent · Anonymous</span>
         <nav class="topbar-links" aria-label="Utility">
           <a href="#" title="Onion service coming soon">Tor Mirror</a>
           <a href="#">RSS</a>
@@ -48,7 +48,7 @@
 
     <nav class="navbar" aria-label="Primary">
       <div class="container navbar-inner">
-        <button class="nav-toggle" aria-expanded="false" aria-controls="primary-nav">MENU â˜°</button>
+        <button class="nav-toggle" aria-expanded="false" aria-controls="primary-nav">MENU ☰</button>
         <ul class="nav-list" id="primary-nav">
           <li><a href="index.html">Home</a></li>
           <li><a href="about.html">About</a></li>
@@ -70,7 +70,7 @@
     <div class="ticker-track">
       <div class="ticker-content">
         <a href="#dropbox">The drop box takes tips, files, and questions, no account needed</a>
-        <a href="#contact-back">Leave a way to reply and youâ€™ll get an answer back</a>
+        <a href="#contact-back">Leave a way to reply and you’ll get an answer back</a>
         <a href="answers.html">Public answers board, replies to past questions</a>
       </div>
     </div>
@@ -114,7 +114,7 @@
           <div class="field" id="contact-back">
             <label for="contact">Reply address <small>(optional)</small></label>
             <input id="contact" name="contact" type="text" maxlength="200"
-                   placeholder="email Â· Signal Â· Session ID Â· any handle, only if you want an answer back" autocomplete="off" />
+                   placeholder="email · Signal · Session ID · any handle, only if you want an answer back" autocomplete="off" />
             <p class="hint">
               Stored encrypted, used once to reply, never published, never shared.
               Leave empty for total anonymity, then check the
@@ -166,7 +166,7 @@
       <ol class="steps-list">
         <li>
           <strong>Your message lands in a private inbox</strong> that lives
-          outside the websiteâ€™s public directory. Visitors cannot read it.
+          outside the website’s public directory. Visitors cannot read it.
         </li>
         <li>
           <strong>It gets read by one person</strong>, usually within a day.
@@ -208,22 +208,22 @@
     <!-- ================= Answers cross-link ================= -->
     <section class="cta-trio" data-reveal>
       <a href="answers.html" class="cta-card">
-        <span class="cta-icon">â“</span>
+        <span class="cta-icon">❓</span>
         <h3>Answers board</h3>
         <p>Replies to past questions, published publicly. Find yours by nickname.</p>
-        <span class="cta-arrow">â†’</span>
+        <span class="cta-arrow">→</span>
       </a>
       <a href="about.html#faq" class="cta-card">
         <span class="cta-icon">ðŸ›¡</span>
         <h3>How sources are protected</h3>
-        <p>Structural anonymity explained, whatâ€™s kept, whatâ€™s stripped, why.</p>
-        <span class="cta-arrow">â†’</span>
+        <p>Structural anonymity explained, what’s kept, what’s stripped, why.</p>
+        <span class="cta-arrow">→</span>
       </a>
       <a href="library.html" class="cta-card">
-        <span class="cta-icon">â„</span>
-        <h3>While youâ€™re here</h3>
+        <span class="cta-icon">❄</span>
+        <h3>While you’re here</h3>
         <p>Banned books, declassified files, privacy tools, all free.</p>
-        <span class="cta-arrow">â†’</span>
+        <span class="cta-arrow">→</span>
       </a>
     </section>
 
@@ -281,7 +281,7 @@
 
       <div class="footer-bottom">
         <span class="mono" id="ver-stamp"></span>
-        <span>Â© 2026 The Avalanche Â· Seattle is the sole official outlet Â· If it is not on the Network page, it is not verified</span> Â· <a href="admin.html" style="color:var(--faint);text-decoration:none;" title="Staff login">Admin</a>
+        <span>© 2026 The Avalanche · Seattle is the sole official outlet · If it is not on the Network page, it is not verified</span> · <a href="admin.html" style="color:var(--faint);text-decoration:none;" title="Staff login">Admin</a>
       </div>
     </div>
   </footer>
@@ -298,11 +298,25 @@
         e.preventDefault();
         var fd = new FormData(form);
         btn.disabled = true;
-        status.textContent = 'Sealingâ€¦';
+        status.textContent = 'Sealing…';
         status.className = '';
 
         fetch(form.action, { method: 'POST', body: fd })
-          .then(function (r) { return r.json(); })
+          .then(function (r) { return r.text(); })
+          .then(function (txt) {
+            try { return JSON.parse(txt); }
+            catch (e) { return { ok: false, error: 'bad' }; }
+          })
+          .catch(function () { return { ok: false, error: 'net' }; })
+          .then(function (data) {
+            if (!data.ok && window.location.protocol.startsWith('http')) {
+              return fetch('/api/tip', { method: 'POST', body: fd })
+                .then(function (r2) { return r2.text(); })
+                .then(function (t2) { try { return JSON.parse(t2); } catch (e2) { return data; } })
+                .catch(function () { return data; });
+            }
+            return data;
+          })
           .then(function (data) {
             if (data.ok) {
               status.innerHTML = 'Sent. Your reference code is <strong>' +
@@ -315,12 +329,6 @@
               status.textContent = data.error || 'Could not send. Try again.';
               status.className = 'bad-msg';
             }
-          })
-          .catch(function () {
-            // network blocked? fall back to normal POST navigation
-            status.textContent = '';
-            form.removeEventListener('submit', arguments.callee);
-            form.submit();
           })
           .finally(function () { btn.disabled = false; });
       });

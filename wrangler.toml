@@ -1,0 +1,17 @@
+name = "silent-queen-3bd2"
+main = "worker.js"
+compatibility_date = "2024-09-01"
+
+[assets]
+directory = "./"
+binding = "ASSETS"
+
+# Bind a KV namespace as TIPS_KV (Workers > Settings > Variables > KV namespace bindings)
+# so tips persist and the admin Inbox can list them:
+#
+# [[kv_namespaces]]
+# binding = "TIPS_KV"
+# id = "<your-kv-namespace-id>"
+
+[vars]
+GITHUB_REPO = "2aresship/seattleavalanche"
