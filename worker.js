@@ -22,6 +22,14 @@ export default {
       return handleTip(request, env, ctx).then(r => { r.headers.set("Access-Control-Allow-Origin", "*"); return r; });
     }
 
+    if (request.method === "POST" && path === "/api/subscribe") {
+      return handleSubscribe(request, env).then(r => r.headers.set("Access-Control-Allow-Origin", "*") || r);
+    }
+
+    if (request.method === "GET" && path === "/api/subs") {
+      return handleSubsList(env);
+    }
+
     if (request.method === "GET" && path === "/api/tips") {
       return handleList(env).then(r => { r.headers.set("Access-Control-Allow-Origin", "*"); return r; });
     }
@@ -122,6 +130,71 @@ async function handleTip(request, env, ctx) {
     console.error(err);
     return json({ ok: false, error: "Server error." }, 500);
   }
+}
+
+async function handleSubscribe(request, env) {
+  try {
+    let email = "";
+    const ct = request.headers.get("content-type") || "";
+    if (ct.includes("application/json")) {
+      const j = await request.json().catch(() => ({}));
+      email = String(j.email || "").trim().toLowerCase();
+      if (j._gotcha || j.website) return json({ ok: true });
+    } else {
+      const form = await request.formData();
+      if ((form.get("_gotcha") || "").toString().trim()) return json({ ok: true });
+      email = String(form.get("email") || "").trim().toLowerCase();
+    }
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+      return json({ ok: false, error: "That address does not look right." }, 400);
+    }
+
+    const ip = request.headers.get("cf-connecting-ip") || "unknown";
+    if (env.TIPS_KV) {
+      const last = parseInt((await env.TIPS_KV.get("rate-s:" + ip)) || "0", 10);
+      if (Date.now() - last < 15_000) {
+        return json({ ok: false, error: "One moment - too many requests." }, 429);
+      }
+      await env.TIPS_KV.put("rate-s:" + ip, String(Date.now()));
+
+      const existing = await env.TIPS_KV.get("sub:" + email);
+      if (existing) return json({ ok: true, already: true });
+
+      await env.TIPS_KV.put("sub:" + email, JSON.stringify({ email, date: new Date().toISOString().slice(0, 16) + " UTC" }));
+      const idx = (await env.TIPS_KV.get("subs:index", { type: "json" })) || [];
+      if (!idx.includes(email)) idx.push(email);
+      await env.TIPS_KV.put("subs:index", JSON.stringify(idx.slice(-10000)));
+    } else {
+      console.log("SUBSCRIBER (no KV bound):", email);
+    }
+
+    if (env.GITHUB_TOKEN) {
+      const repo = env.GITHUB_REPO || "2aresship/seattleavalanche";
+      fetch(`https://api.github.com/repos/${repo}/issues`, {
+        method: "POST",
+        headers: { Authorization: "Bearer " + env.GITHUB_TOKEN, Accept: "application/vnd.github+json", "User-Agent": "avalanche-worker" },
+        body: JSON.stringify({ title: `[list] new subscriber`, body: "Email: " + email + "\nDate: " + new Date().toISOString(), labels: ["mailing-list"] }),
+      }).catch(() => {});
+    }
+
+    return json({ ok: true });
+  } catch (err) {
+    console.error(err);
+    return json({ ok: false, error: "Server error." }, 500);
+  }
+}
+
+async function handleSubsList(env) {
+  if (!env.TIPS_KV) {
+    return json({ ok: false, error: "KV not bound yet." }, 501);
+  }
+  const idx = (await env.TIPS_KV.get("subs:index", { type: "json" })) || [];
+  const subs = [];
+  for (const email of idx.slice(-5000)) {
+    const raw = await env.TIPS_KV.get("sub:" + email, { type: "json" });
+    subs.push(raw ? raw : { email, date: "" });
+  }
+  return json({ ok: true, subs });
 }
 
 async function handleList(env) {

@@ -210,10 +210,12 @@
         <h2>Get pinged when №001 drops.</h2>
         <p>One email when the first story publishes. Nothing else, ever. Sent through a service that strips your IP, or grab the RSS feed and skip email entirely.</p>
       </div>
-      <form class="notify-form" action="#" method="post" onsubmit="return false;">
+      <form class="notify-form" id="nl-form" action="/api/subscribe" method="post">
         <label for="nl-email" hidden>Your email</label>
-        <input id="nl-email" type="email" placeholder="you@anything.example" autocomplete="email" />
-        <button type="submit" class="btn btn--ghost">Notify me</button>
+        <input id="nl-email" name="email" type="email" placeholder="you@anything.example" autocomplete="email" required />
+        <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" hidden />
+        <button type="submit" class="btn btn--ghost" id="nl-btn">Notify me</button>
+        <span id="nl-status" role="status" aria-live="polite" style="flex-basis:100%;font-size:0.85rem;"></span>
       </form>
     </section>
 
@@ -275,6 +277,57 @@
       </div>
     </div>
   </footer>
+
+<script>
+  // Notify list signup
+  document.addEventListener('DOMContentLoaded', function () {
+    var form = document.getElementById('nl-form');
+    if (!form) return;
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var btn = document.getElementById('nl-btn');
+      var st = document.getElementById('nl-status');
+      var email = (document.getElementById('nl-email').value || '').trim();
+      st.textContent = '';
+      st.style.color = '';
+      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+        st.textContent = 'That address does not look right.';
+        st.style.color = '#ff5d5d';
+        return;
+      }
+      btn.disabled = true;
+      var fd = new FormData(form);
+      var go = function (url) {
+        return fetch(url, { method: 'POST', body: fd })
+          .then(function (r) { return r.text(); })
+          .then(function (txt) { try { return JSON.parse(txt); } catch (e2) { return { ok: false }; } });
+      };
+      go('/api/subscribe')
+        .catch(function () { return { ok: false }; })
+        .then(function (data) {
+          if (data && data.ok) {
+            st.textContent = data.already
+              ? "You are already on the list. We will not double-ping you."
+              : "You are on the list. One ping when it drops, then silence.";
+            st.style.color = '#6fe0a8';
+            form.reset();
+          } else {
+            return go(form.action).then(function (data2) {
+              if (data2 && data2.ok) {
+                st.textContent = 'You are on the list. One ping when it drops.';
+                st.style.color = '#6fe0a8';
+                form.reset();
+              } else {
+                st.textContent = (data2 && data2.error) ? data2.error : 'Could not sign you up right now. Try again later.';
+                st.style.color = '#ff5d5d';
+              }
+            });
+          }
+        })
+        .finally(function () { btn.disabled = false; });
+    });
+  });
+</script>
 </body>
 </html>
 

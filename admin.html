@@ -187,6 +187,19 @@
         <p class="hint" style="margin:6px 0 0 0;">Private. Tips and questions land here. Check <span style="color:var(--ice)">allows public anonymized post</span> to see who consented to an anonymized answers board post. Reply anonymized, contact info is never posted. The board disclaimer says replies are not instant.</p>
         <div id="inbox-list" style="margin-top:14px;"></div>
       </div>
+
+      <div class="module">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
+          <h3 class="module-title" style="margin:0;">Email list <span id="subs-count" style="font-weight:400;color:var(--muted)"></span></h3>
+          <div style="display:flex;gap:8px;">
+            <button class="btn btn--ghost btn--small" onclick="loadSubs()">Reload</button>
+            <button class="btn btn--ghost btn--small" onclick="copySubs()">Copy all</button>
+            <button class="btn btn--ghost btn--small" onclick="downloadSubs()">Download CSV</button>
+          </div>
+        </div>
+        <p class="hint" style="margin:6px 0 0 0;">Everyone who signed up for the drop-day ping on the homepage. Stored in KV. Send from your own mail client or a provider like Resend - paste the list as BCC.</p>
+        <textarea class="f-area short" id="subs-list" readonly style="margin-top:10px;" placeholder="Signups appear here once KV is bound..."></textarea>
+      </div>
     </section>
 
     <!-- ===== PUBLISH ===== -->
@@ -359,7 +372,7 @@ function lockNow(){persist();location.reload();}
 function showTab(name){
   document.querySelectorAll(".tab-btn").forEach(b=>b.classList.toggle("active",b.dataset.tab===name));
   document.querySelectorAll(".pane").forEach(p=>p.classList.toggle("active",p.id==="pane-"+name));
-  if(name==="inbox") renderInbox();
+  if(name==="inbox"){ renderInbox(); loadSubs(); }
 }
 
 /* ================= forms ================= */
@@ -655,6 +668,29 @@ async function testRepoConnection(){
     if(!j.permissions||!j.permissions.push)throw new Error("Token can SEE the repo but not PUSH. Regenerate as classic token with 'repo' scope.");
     msg(true,"Connected to "+j.full_name+" - token can push. You are clear.");
   }catch(e){msg(false,e.message);}
+}
+let SUBS = [];
+async function loadSubs(){
+  try{
+    const r = await fetch("/api/subs", {cache:"no-store"});
+    const j = await r.json();
+    if(j.ok && Array.isArray(j.subs)){
+      SUBS = j.subs.map(x=>x.email||x).filter(Boolean);
+    } else { SUBS = []; }
+  }catch(e){ SUBS = []; }
+  const box = $("subs-list"), c = $("subs-count");
+  if(c) c.textContent = SUBS.length ? "(" + SUBS.length + ")" : "";
+  if(box) box.value = SUBS.join("\n");
+}
+async function copySubs(){
+  try{ await navigator.clipboard.writeText(SUBS.join(", ")); msg(true, SUBS.length + " addresses copied - paste into BCC."); }
+  catch(e){ msg(false, "Clipboard blocked - use Download CSV."); }
+}
+function downloadSubs(){
+  const csv = "email,date\n" + SUBS.map(s=>s).join("\n");
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"}));
+  a.download="avalanche-subscribers.csv";a.click();URL.revokeObjectURL(a.href);
 }
 function downloadTips(){
   const a=document.createElement("a");
