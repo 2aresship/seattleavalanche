@@ -1,5 +1,5 @@
-﻿# Private / local only - never push
-panel-config.json
+﻿# Private / local only - never push (panel-config is intentionally committed as universal hash)
+# panel-config.json is now tracked universally - do not re-ignore
 data/tips.json
 data/tips_files/
 data/tips-dropbox.json
