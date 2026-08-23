@@ -295,11 +295,11 @@ function touch(){S.generated=new Date().toISOString().slice(0,16).replace("T"," 
 /* ================= lock screen ================= */
 (function initLock(){
   const k = sessionStorage.getItem(LS_KEY) || localStorage.getItem(LS_KEY2) || "";
-  $("pw-in").value = k;
+  $("pw-in").value = String(k || "").replace(/[^\x21-\x7E]/g, "");
 })();
 
 async function doUnlock(){
-  const key = ($("pw-in").value || "").trim();
+  const key = ($("pw-in").value || "").replace(/[^\x21-\x7E]/g, "").trim();
   if (!key) return lockErr("Enter your admin key.");
   if ($("remember-key").checked) localStorage.setItem(LS_KEY2, key);
   else localStorage.removeItem(LS_KEY2);
