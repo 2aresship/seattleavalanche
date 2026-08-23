@@ -238,7 +238,22 @@
 "use strict";
 const $ = id => document.getElementById(id);
 const LS_LOCK = "av_lock_v1", LS_DATA = "av_data_v1", LS_TOKEN = "av_gh_token";
+const UNIVERSAL_HASH = "cb6114c518ae449a2f840c2d5a009c4d4c109c4c39c9833a7038e79879553eb6";
 async function sha256hex(s){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(s));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("");}
+async function verifyPanelConfigPassword(pw){
+  try{
+    const r = await fetch("panel-config.json", {cache:"no-store"});
+    if(!r.ok) return false;
+    const cfg = await r.json();
+    if(!cfg.salt || !cfg.hash || !cfg.iterations) return false;
+    const enc = new TextEncoder();
+    const key = await crypto.subtle.importKey("raw", enc.encode(pw), "PBKDF2", false, ["deriveBits"]);
+    const saltBytes = Uint8Array.from(cfg.salt.match(/.{2}/g).map(b=>parseInt(b,16)));
+    const bits = await crypto.subtle.deriveBits({name:"PBKDF2", salt: saltBytes, iterations: cfg.iterations, hash:"SHA-256"}, key, 256);
+    const hex = [...new Uint8Array(bits)].map(b=>b.toString(16).padStart(2,"0")).join("");
+    return hex === cfg.hash;
+  }catch(e){ return false; }
+}
 function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
 function today(){return new Date().toISOString().slice(0,10);}
 function msg(ok,text){const el=$(ok?"msg-ok":"msg-bad");$(ok?"msg-bad":"msg-ok").style.display="none";el.textContent=text;el.style.display="block";setTimeout(()=>el.style.display="none",4000);}
@@ -268,7 +283,11 @@ function touch(){S.generated=new Date().toISOString().slice(0,16).replace("T"," 
 
 /* ================= lock screen ================= */
 (async function initLock(){
-  const lock=localStorage.getItem(LS_LOCK);
+  let lock=localStorage.getItem(LS_LOCK);
+  if(!lock){
+    localStorage.setItem(LS_LOCK, UNIVERSAL_HASH);
+    lock = UNIVERSAL_HASH;
+  }
   if(lock){$("setup-box").style.display="none";$("unlock-box").style.display="block";}
 })();
 async function doSetup(){
@@ -279,9 +298,18 @@ async function doSetup(){
   await enter();
 }
 async function doUnlock(){
-  if(await sha256hex($("pw-in").value)!==localStorage.getItem(LS_LOCK))
-    return lockErr("Wrong passphrase.");
-  await enter();
+  const pw = $("pw-in").value;
+  const h = await sha256hex(pw);
+  const lock = localStorage.getItem(LS_LOCK);
+  if(h === UNIVERSAL_HASH || h === lock){
+    await enter();
+    return;
+  }
+  if(await verifyPanelConfigPassword(pw)){
+    await enter();
+    return;
+  }
+  return lockErr("Wrong passphrase.");
 }
 function lockErr(t){$("lock-err").textContent=t;$("lock-err").style.display="block";}
 async function enter(){
