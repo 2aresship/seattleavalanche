@@ -6,12 +6,26 @@ compatibility_date = "2024-09-01"
 directory = "./"
 binding = "ASSETS"
 
-# Bind a KV namespace as TIPS_KV (Workers > Settings > Variables > KV namespace bindings)
-# so tips persist and the admin Inbox can list them:
+# ============================================================
+# TIPS STORAGE - do these two steps to activate the tip inbox:
+#
+# STEP 1: Create the namespace (one time):
+#   Cloudflare dashboard > Storage & Databases > KV > Create a namespace
+#   Name it: avalanche-tips
+#   Copy the ID it shows (a 32-char hex string)
+#
+# STEP 2: Uncomment the two lines below and paste your ID:
 #
 # [[kv_namespaces]]
 # binding = "TIPS_KV"
-# id = "<your-kv-namespace-id>"
+# id = "PASTE_YOUR_NAMESPACE_ID_HERE"
+#
+# Then commit + push. Cloudflare binds it on the next deploy.
+#
+# ALTERNATIVE (no code): dashboard > Workers & Pages > silent-queen-3bd2
+#   > Settings > Bindings > + Add > KV Namespace
+#   Variable name: TIPS_KV   |   Namespace: avalanche-tips > Deploy
+# ============================================================
 
 [vars]
 GITHUB_REPO = "2aresship/seattleavalanche"
