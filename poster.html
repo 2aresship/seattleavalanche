@@ -3,73 +3,163 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Poster — The Seattle Avalanche</title>
-<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,6..72,700;0,6..72,800;1,6..72,700&family=Inter:wght@500;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+<title>Poster — The Seattle Avalanche — Tear-Off</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Newsreader:ital,opsz,wght@0,6..72,700;0,6..72,800;1,6..72,700&family=Inter:wght@700;800;900&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
 <style>
   *{margin:0;padding:0;box-sizing:border-box}
-  body{background:#0a0e14;color:#e9edf4;font-family:Inter,system-ui,sans-serif;display:grid;place-items:center;min-height:100vh;padding:24px}
-  .sheet{width:min(720px,100%);background:#0f141e;border:1px solid rgba(125,215,255,0.14);border-radius:14px;overflow:hidden;box-shadow:0 20px 80px rgba(0,0,0,0.55);position:relative}
-  .sheet::before{content:"";position:absolute;inset:0;background:radial-gradient(600px 320px at 50% -10%, rgba(125,215,255,0.08), transparent 60%);pointer-events:none}
-  .top{position:relative;display:flex;justify-content:space-between;align-items:center;padding:10px 18px;font-family:JetBrains Mono,monospace;font-size:0.62rem;letter-spacing:0.14em;text-transform:uppercase;color:#5c6b82;border-bottom:1px solid rgba(125,215,255,0.1)}
-  .hero{position:relative;text-align:center;padding:42px 28px 18px}
-  .mark{width:72px;height:58px;margin:0 auto 14px;filter:drop-shadow(0 0 16px rgba(125,215,255,0.35))}
-  h1{font-family:Newsreader,Georgia,serif;font-weight:800;font-size:clamp(2.6rem,7vw,3.8rem);line-height:0.95;letter-spacing:-0.03em}
-  h1 span{color:#7dd7ff}
-  .motto{margin-top:8px;font-size:0.64rem;letter-spacing:0.32em;text-transform:uppercase;color:#8494ab;font-weight:700}
-  .rule{height:1px;background:linear-gradient(90deg, transparent, rgba(125,215,255,0.35), transparent);margin:18px auto;width:68%}
-  .kicker{font-family:Newsreader,Georgia,serif;font-style:italic;color:#b7c1d1;font-size:1.05rem;max-width:32em;margin:0 auto;line-height:1.45}
-  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:18px 18px 14px;position:relative}
-  .card{border:1px solid rgba(125,215,255,0.11);background:rgba(20,27,39,0.9);border-radius:10px;padding:14px 12px}
-  .card b{font-family:Newsreader,serif;font-size:1.02rem;display:block;margin-bottom:4px}
-  .card p{font-size:0.82rem;color:#b7c1d1;line-height:1.4}
-  .card small{font-family:JetBrains Mono,monospace;font-size:0.62rem;color:#5c6b82;letter-spacing:0.06em}
-  .cta{margin:14px 18px;display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;border:1px solid rgba(125,215,255,0.18);border-radius:12px;padding:14px;background:linear-gradient(180deg, rgba(125,215,255,0.06), transparent 60%), #141b27;position:relative}
-  .cta h2{font-family:Newsreader,serif;font-size:1.35rem}
-  .cta p{font-size:0.84rem;color:#b7c1d1;margin-top:4px}
-  .qr{width:92px;height:92px;background:#fff;border-radius:8px;padding:6px;display:grid;place-items:center;overflow:hidden}
-  .qr img{width:80px;height:80px;display:block}
-  .foot{display:flex;justify-content:space-between;gap:12px;padding:10px 18px 14px;font-family:JetBrains Mono,monospace;font-size:0.58rem;letter-spacing:0.08em;text-transform:uppercase;color:#5c6b82;border-top:1px solid rgba(125,215,255,0.08);position:relative}
+  body{background:#0b0d0f;color:#e9edf4;font-family:Inter,system-ui,sans-serif;display:grid;place-items:center;min-height:100vh;padding:18px}
+  .sheet{width:min(680px,100%);background:#fefefe;color:#0a0e14;position:relative;overflow:hidden;box-shadow:0 24px 90px rgba(0,0,0,0.6);border:1px solid #111}
+  /* halftone + diagonal */
+  .sheet::before{content:"";position:absolute;inset:0;background:
+    radial-gradient(circle at 1px 1px, rgba(0,0,0,0.055) 1px, transparent 0);
+    background-size:12px 12px;opacity:0.45;pointer-events:none}
+  .topbar{background:#0a0e14;color:#7dd7ff;display:flex;justify-content:space-between;align-items:center;padding:7px 14px;font-family:JetBrains Mono,monospace;font-size:0.58rem;letter-spacing:0.16em;text-transform:uppercase}
+  .topbar b{color:#fff}
+  .hero{position:relative;padding:18px 18px 0 18px;display:grid;grid-template-columns:1.15fr 0.85fr;gap:14px;align-items:end}
+  .hero-left h1{font-family:Anton,Impact,sans-serif;font-size:clamp(3.2rem, 9vw, 5.4rem);line-height:0.85;letter-spacing:-0.04em;text-transform:uppercase}
+  .hero-left h1 span{display:block}
+  .hero-left h1 .line1{font-size:0.42em;letter-spacing:0.18em;font-family:JetBrains Mono,monospace;font-weight:700;color:#5c6b82}
+  .hero-left h1 .line2{color:#0a0e14}
+  .hero-left h1 .line3{color:#0a0e14;-webkit-text-stroke:1.6px #0a0e14;paint-order:stroke}
+  .hero-left h1 .line3 em{font-style:normal;color:#7dd7ff;-webkit-text-stroke:0;position:relative}
+  .hero-left h1 .line3 em::after{content:"";position:absolute;left:-2px;right:-2px;bottom:6px;height:10px;background:rgba(125,215,255,0.18);z-index:-1}
+  .motto{display:inline-block;margin-top:8px;background:#0a0e14;color:#7dd7ff;font-family:JetBrains Mono,monospace;font-size:0.62rem;letter-spacing:0.24em;text-transform:uppercase;padding:4px 8px}
+  .kicker{margin-top:10px;font-family:Newsreader,Georgia,serif;font-style:italic;font-size:0.98rem;color:#334155;line-height:1.35;max-width:30em}
+  .hero-right{position:relative;height:100%;display:grid;place-items:center}
+  .mountain{width:100%;height:220px;position:relative;overflow:hidden;background:linear-gradient(180deg, #e0f2fe 0%, #f0f9ff 45%, #fefefe 100%);border:1px solid #111;display:grid;place-items:center}
+  .mountain svg{width:92%;height:auto;display:block;filter:drop-shadow(0 8px 18px rgba(0,0,0,0.12))}
+  .mountain .snow{position:absolute;inset:0;background:
+    radial-gradient(2px 2px at 20% 30%, #fff 50%, transparent 60%),
+    radial-gradient(1.5px 1.5px at 60% 18%, #fff 50%, transparent 60%),
+    radial-gradient(1.2px 1.2px at 78% 42%, #0a0e14 50%, transparent 60%),
+    radial-gradient(1.8px 1.8px at 35% 72%, #0a0e14 50%, transparent 60%);
+    opacity:0.35;pointer-events:none}
+  .diag{position:absolute;bottom:-18px;left:-10%;width:120%;height:22px;background:repeating-linear-gradient(-14deg, #0a0e14 0 8px, #7dd7ff 8px 10px);transform:rotate(-1.2deg);opacity:0.95}
+  .strip{margin-top:14px;background:#0a0e14;color:#fff;display:flex;align-items:center;gap:12px;padding:8px 14px;font-family:JetBrains Mono,monospace;font-size:0.62rem;letter-spacing:0.12em;text-transform:uppercase;position:relative}
+  .strip b{color:#7dd7ff}
+  .strip::after{content:"✺";position:absolute;right:14px;opacity:0.9}
+  .body{padding:14px 18px 12px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .card{border:1.6px solid #0a0e14;background:#fff;padding:12px 11px;position:relative}
+  .card::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:#0a0e14}
+  .card:nth-child(2)::before{background:#7dd7ff}
+  .card:nth-child(3)::before{background:#0a0e14}
+  .card:nth-child(4)::before{background:#7dd7ff}
+  .card .n{font-family:JetBrains Mono,monospace;font-size:0.58rem;letter-spacing:0.12em;color:#5c6b82}
+  .card h3{font-family:Anton,sans-serif;font-size:1.25rem;line-height:0.95;text-transform:uppercase;letter-spacing:-0.02em;margin:4px 0 4px}
+  .card p{font-size:0.82rem;color:#334155;line-height:1.35}
+  .card .url{margin-top:6px;font-family:JetBrains Mono,monospace;font-size:0.60rem;color:#0a0e14;background:rgba(125,215,255,0.16);display:inline-block;padding:2px 6px;border-radius:999px}
+  .big-cta{margin:12px 18px;border:2.2px solid #0a0e14;background:#fefefe;display:grid;grid-template-columns:1fr 110px;gap:12px;align-items:center;padding:12px;position:relative}
+  .big-cta h2{font-family:Anton,sans-serif;font-size:1.9rem;line-height:0.9;text-transform:uppercase}
+  .big-cta h2 em{color:#0a0e14;background:linear-gradient(180deg, transparent 62%, rgba(125,215,255,0.38) 62% 82%, transparent 82%)}
+  .big-cta p{font-size:0.82rem;color:#334155;margin-top:6px;line-height:1.35}
+  .qr{width:110px;height:110px;background:#fff;border:1.6px solid #0a0e14;display:grid;place-items:center;padding:6px;position:relative}
+  .qr::before{content:"SCAN →";position:absolute;top:-8px;right:6px;background:#7dd7ff;color:#0a0e14;font-family:JetBrains Mono,monospace;font-size:0.52rem;letter-spacing:0.12em;padding:2px 6px;border:1px solid #0a0e14}
+  .qr img{width:96px;height:96px;display:block}
+  .foot{padding:8px 18px;display:flex;justify-content:space-between;gap:12px;font-family:JetBrains Mono,monospace;font-size:0.52rem;letter-spacing:0.08em;text-transform:uppercase;color:#5c6b82;border-top:1px solid #111}
+  /* tear-offs */
+  .tear{border-top:2px dashed #0a0e14;margin-top:6px;background:#fefefe;display:flex;overflow:hidden;position:relative}
+  .tear::before{content:"✂ cut here";position:absolute;top:2px;left:50%;transform:translateX(-50%);background:#fefefe;padding:0 8px;font-family:JetBrains Mono,monospace;font-size:0.52rem;letter-spacing:0.14em;color:#5c6b82}
+  .tab{flex:1;border-right:1px dashed #0a0e14;padding:10px 6px 8px;display:flex;flex-direction:column;align-items:center;gap:6px;min-width:0;background:linear-gradient(180deg, #fefefe, #f1f5f9)}
+  .tab:last-child{border-right:none}
+  .tab b{writing-mode:vertical-rl;text-orientation:mixed;transform:rotate(180deg);font-family:JetBrains Mono,monospace;font-size:0.58rem;letter-spacing:0.08em;line-height:1;color:#0a0e14;white-space:nowrap}
+  .tab small{font-family:JetBrains Mono,monospace;font-size:0.48rem;color:#5c6b82;writing-mode:vertical-rl;transform:rotate(180deg);letter-spacing:0.06em}
+  .tab .mini-qr{width:38px;height:38px;background:#fff;border:1px solid #0a0e14;padding:2px}
+  .tab .mini-qr img{width:100%;height:100%;display:block}
   .actions{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:10px;z-index:10}
-  .btn{border:1px solid rgba(125,215,255,0.25);background:rgba(15,20,30,0.9);color:#e9edf4;border-radius:999px;padding:10px 16px;font-weight:800;font-size:0.82rem;cursor:pointer;backdrop-filter:blur(10px)}
-  .btn.primary{background:#7dd7ff;color:#04121b;border-color:transparent}
+  .btn{border:1px solid #0a0e14;background:#fefefe;color:#0a0e14;border-radius:999px;padding:10px 16px;font-weight:800;font-size:0.82rem;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,0.22)}
+  .btn.primary{background:#0a0e14;color:#7dd7ff;border-color:#0a0e14}
   @media print{
     body{background:#fff;padding:0}
-    .sheet{border:none;box-shadow:none;border-radius:0;width:100%}
+    .sheet{box-shadow:none;border:none;width:100%}
     .actions{display:none}
-    @page{margin:0.4in}
+    @page{margin:0.2in}
   }
-  @media(max-width:560px){.grid{grid-template-columns:1fr}.cta{grid-template-columns:1fr}.qr{justify-self:start}}
+  @media(max-width:560px){
+    .hero{grid-template-columns:1fr}
+    .mountain{height:180px}
+    .body{grid-template-columns:1fr}
+    .big-cta{grid-template-columns:1fr}
+    .qr{justify-self:start}
+    .tear{flex-wrap:wrap}
+    .tab{flex:1 1 18%;border-bottom:1px dashed #0a0e14}
+  }
 </style>
 </head>
 <body>
 <div class="sheet" id="poster">
-  <div class="top"><span>Seattle · Est. Aug 2026</span><span>Independent · Anonymous</span><span>seattleavalanche.online</span></div>
+  <div class="topbar"><span><b>Seattle</b> · Aug 2026</span><span>Independent · Anonymous · Reader-funded</span><span>seattleavalanche.online</span></div>
   <div class="hero">
-    <svg class="mark" viewBox="0 0 56 46" fill="none" aria-hidden="true"><path d="M2 43 L21 7 L31 26 L39 13 L54 43 Z" fill="#141b27" stroke="#7dd7ff" stroke-width="2" stroke-linejoin="round"/><path d="M16 15 L21 7 L26 14 L23.5 17.5 L21 13.5 L18.5 17.5 Z" fill="#7dd7ff"/><path d="M36.5 17 L39 13 L41.8 17.4 L40 19.5 Z" fill="#7dd7ff"/></svg>
-    <h1>The Seattle <span>Avalanche</span></h1>
-    <div class="motto">Truth falls like snow</div>
-    <div class="rule"></div>
-    <p class="kicker">One journalist. One story at a time. No editors, no board, no advertisers — and no bylines, including mine. Every story is investigated for weeks before it sees daylight.</p>
-  </div>
-  <div class="grid">
-    <div class="card"><small>01 · Send</small><b>Drop the tip</b><p>Documents, photos, or a question. No account, no trackers — just the box at <b>submit.html</b>.</p></div>
-    <div class="card"><small>02 · Verify</small><b>We do the slow part</b><p>Every claim gets documents or corroboration. If it can’t be nailed down, it doesn’t run.</p></div>
-    <div class="card"><small>03 · Read</small><b>Free media library</b><p>80+ trusted archives: FOIA vaults, court records, open data, privacy tools. Zero paywalls.</p></div>
-    <div class="card"><small>04 · Mirror</small><b>Keep it alive</b><p>Download the whole site at <b>download.html</b>. Host a mirror — unkillable.</p></div>
-  </div>
-  <div class="cta">
-    <div>
-      <h2>Read. Send. Mirror.</h2>
-      <p>One email when №001 drops — then silence. Or grab the RSS and skip email entirely.</p>
-      <p style="margin-top:8px;font-family:JetBrains Mono,monospace;font-size:0.62rem;color:#7dd7ff;letter-spacing:0.08em">seattleavalanche.online &nbsp;·&nbsp; /submit &nbsp;·&nbsp; /library &nbsp;·&nbsp; /download</p>
+    <div class="hero-left">
+      <h1><span class="line1">The Seattle</span><span class="line2">Avalanche</span><span class="line3">is <em>watching</em></span></h1>
+      <div class="motto">Truth falls like snow — and accumulates</div>
+      <p class="kicker">One reporter, no board, no ads. Weeks of verification for every story. If it can’t be proven, it doesn’t run. That’s the whole pitch.</p>
     </div>
-    <div class="qr"><img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://seattleavalanche.online" alt="QR to seattleavalanche.online"></div>
+    <div class="hero-right">
+      <div class="mountain">
+        <svg viewBox="0 0 260 170" fill="none" aria-hidden="true">
+          <path d="M12 150 L78 18 L118 82 L148 42 L248 150 Z" fill="#0a0e14" stroke="#0a0e14" stroke-width="3" stroke-linejoin="round"/>
+          <path d="M12 150 L78 18 L118 82 L148 42 L248 150 Z" fill="none" stroke="#7dd7ff" stroke-width="1.2" stroke-linejoin="round" opacity="0.35"/>
+          <path d="M66 36 L78 18 L92 34 L84 44 L78 34 L70 44 Z" fill="#fefefe" stroke="#0a0e14" stroke-width="1.4"/>
+          <path d="M136 54 L148 42 L162 56 L154 66 Z" fill="#fefefe" stroke="#0a0e14" stroke-width="1.2"/>
+          <path d="M48 122 L88 92 L112 112 L98 130 Z" fill="rgba(125,215,255,0.18)" stroke="#0a0e14" stroke-width="1"/>
+          <g fill="#0a0e14" font-family="JetBrains Mono, monospace" font-size="7" font-weight="700">
+            <text x="18" y="162">EST. 2026</text>
+            <text x="170" y="162">SEATTLE · ONLY OUTLET</text>
+          </g>
+        </svg>
+        <div class="snow"></div>
+        <div class="diag"></div>
+      </div>
+    </div>
   </div>
-  <div class="foot"><span>No cookies · No trackers · No ads</span><span>© 2026 The Avalanche · Seattle is the sole official outlet</span></div>
+  <div class="strip"><span><b>READ</b> → seattleavalanche.online &nbsp; <b>SEND</b> → /submit &nbsp; <b>MIRROR</b> → /download</span></div>
+  <div class="body">
+    <div class="card">
+      <div class="n">01 — SEND</div>
+      <h3>Got something?</h3>
+      <p>Docs, photos, a tip, a correction. No account. No trackers. Scrubbed on arrival.</p>
+      <div class="url">seattleavalanche.online/submit</div>
+    </div>
+    <div class="card">
+      <div class="n">02 — TRUST</div>
+      <h3>We do the slow part</h3>
+      <p>Every claim needs a doc or a second source. No “sources say.” One person answers for every word.</p>
+      <div class="url">No cookies · No ads · No bylines</div>
+    </div>
+    <div class="card">
+      <div class="n">03 — READ FREE</div>
+      <h3>80+ archives, zero paywalls</h3>
+      <p>FOIA vaults, court records, Seattle open data, banned books, privacy tools. All lawful.</p>
+      <div class="url">seattleavalanche.online/library</div>
+    </div>
+    <div class="card">
+      <div class="n">04 — KEEP IT ALIVE</div>
+      <h3>Mirror it</h3>
+      <p>Download the whole site + source. Host a copy. If this domain goes dark, the story doesn’t.</p>
+      <div class="url">seattleavalanche.online/download</div>
+    </div>
+  </div>
+  <div class="big-cta">
+    <div>
+      <h2>Read. <em>Send.</em> Mirror.</h2>
+      <p><b>One email when №001 drops</b> — then silence. Or take the RSS and skip email entirely. Your call.</p>
+      <p style="margin-top:6px;font-family:JetBrains Mono,monospace;font-size:0.60rem;letter-spacing:0.06em;color:#5c6b82">SEATTLEAVALANCHE.ONLINE — IF IT’S NOT ON /NETWORK, IT’S NOT VERIFIED.</p>
+    </div>
+    <div class="qr"><img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https://seattleavalanche.online" alt="QR"></div>
+  </div>
+  <div class="foot"><span>Print more. Wheat-paste it. Leave one at the library.</span><span>© 2026 The Avalanche</span></div>
+  <div class="tear" aria-label="Tear-off tabs">
+    <div class="tab"><div class="mini-qr"><img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://seattleavalanche.online/submit" alt=""></div><b>seattleavalanche.online/submit</b><small>SEND INFO</small></div>
+    <div class="tab"><div class="mini-qr"><img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://seattleavalanche.online/library" alt=""></div><b>seattleavalanche.online/library</b><small>FREE LIBRARY</small></div>
+    <div class="tab"><div class="mini-qr"><img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://seattleavalanche.online" alt=""></div><b>seattleavalanche.online</b><small>READ</small></div>
+    <div class="tab"><div class="mini-qr"><img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://seattleavalanche.online/download" alt=""></div><b>seattleavalanche.online/download</b><small>MIRROR</small></div>
+    <div class="tab"><div class="mini-qr"><img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://seattleavalanche.online/answers" alt=""></div><b>seattleavalanche.online/answers</b><small>ANSWERS</small></div>
+    <div class="tab"><div class="mini-qr"><img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://seattleavalanche.online/submit" alt=""></div><b>seattleavalanche.online/submit</b><small>SEND INFO</small></div>
+  </div>
 </div>
 <div class="actions">
   <button class="btn primary" onclick="window.print()">Print / Save as PDF</button>
-  <button class="btn" onclick="navigator.clipboard.writeText(location.href)">Copy link</button>
+  <a class="btn" href="poster.html" onclick="event.preventDefault(); window.print()" style="text-decoration:none">A3 • Letter • Cut on dashes</a>
   <a class="btn" href="index.html" style="text-decoration:none">Back to site</a>
 </div>
 </body>
