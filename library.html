@@ -47,17 +47,17 @@
 <div class="masthead"><canvas id="snow-canvas" aria-hidden="true"></canvas><div class="container masthead-inner"><svg class="logo-mark" width="56" height="46" viewBox="0 0 56 46" fill="none" aria-hidden="true"><path d="M2 43 L21 7 L31 26 L39 13 L54 43 Z" fill="#141b27" stroke="#7dd7ff" stroke-width="2" stroke-linejoin="round"/><path d="M16 15 L21 7 L26 14 L23.5 17.5 L21 13.5 L18.5 17.5 Z" fill="#7dd7ff"/><path d="M36.5 17 L39 13 L41.8 17.4 L40 19.5 Z" fill="#7dd7ff"/></svg><div class="masthead-title"><a href="index.html"><span>The Seattle Avalanche</span></a><p class="motto">Truth falls like snow</p></div></div></div>
 <nav class="navbar" aria-label="Primary"><div class="container navbar-inner"><button class="nav-toggle" aria-expanded="false" aria-controls="primary-nav">MENU ☰</button><ul class="nav-list" id="primary-nav"><li><a href="index.html">Home</a></li><li><a href="about.html">About</a></li><li><a href="founders.html">Founders</a></li><li><a href="network.html">Network</a></li><li><a href="library.html" aria-current="page">Media Library</a></li><li><a href="mirror.html">Mirror</a></li><li><a href="answers.html">Answers</a></li><li><a href="download.html">Download</a></li></ul><a href="submit.html" class="btn btn--primary btn--small nav-cta">Send Info</a></div></nav>
 </header>
-<div class="ticker" role="region" aria-label="Site notices"><span class="ticker-label"><span class="dot"></span>Library</span><div class="ticker-track"><div class="ticker-content" id="ticker-items"><a href="#local">TOP LOCAL: 10 Seattle watchdogs live</a><a href="#declassified">80+ trusted sources — zero pirated links</a><a href="#download-all">Download the whole library as JSON</a></div></div></div>
+<div class="ticker" role="region" aria-label="Site notices"><span class="ticker-label"><span class="dot"></span>Library</span><div class="ticker-track"><div class="ticker-content" id="ticker-items"><a href="#local">TOP LOCAL: 10 Seattle watchdogs live</a><a href="#openaccess">Open Access: Unpaywall, Open Library, arXiv — paywalls are optional</a><a href="#download-all">Download the whole library as JSON</a></div></div></div>
 <main id="main" class="container">
 <section class="lib-hero" data-reveal>
 <h1>The <span>Free Media Library</span></h1>
 <p class="lede" style="margin-top:14px;font-family:var(--font-serif);font-style:italic;font-size:1.18rem;color:var(--text-soft);max-width:62ch">A ridiculous amount of lawful information the government, corporations, and paywalls hoped you wouldn’t look up — in one place, free forever, from sources you can actually trust.</p>
-<div class="lib-stats"><span class="lib-stat"><b id="stat-total">80+</b> sources</span><span class="lib-stat"><b>9</b> categories</span><span class="lib-stat"><b>0</b> pirated</span><span class="lib-stat">Only <b>official</b> archives</span></div>
+<div class="lib-stats"><span class="lib-stat"><b id="stat-total">90+</b> sources</span><span class="lib-stat"><b>10</b> categories</span><span class="lib-stat"><b>90+</b> trusted links</span><span class="lib-stat">Paywalls <b>are a choice</b></span></div>
 <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:18px"><a href="#local" class="btn btn--primary btn--small">Start with local →</a><button class="btn btn--ghost btn--small" onclick="downloadLibrary()">⤓ Download whole library (JSON)</button><button class="btn btn--ghost btn--small" onclick="copyLibraryLinks()">Copy all links</button></div>
-<div class="info-banner" style="margin-top:18px"><span class="icon">◈</span><div><strong>Trusted only:</strong> every link goes to an official reading room, public-domain archive, or author who freed it on purpose. Nothing pirated. Breaks get fixed in days.</div></div>
+<div class="info-banner" style="margin-top:18px"><span class="icon">◈</span><div><strong>Our philosophy:</strong> literature is knowledge, and hiding knowledge behind money is immoral. Everything here is gathered from sources that are already free and lawful to share — official archives, public domain, and authors who chose to set their work free. No paywall should decide who gets to know the truth.</div></div>
 </section>
 <div class="lib-toolbar" data-reveal>
-<div style="display:flex;gap:10px;flex:1;align-items:center;flex-wrap:wrap"><div style="position:relative;flex:1;min-width:220px;max-width:420px"><span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--faint)">⌕</span><input type="search" id="lib-search" placeholder="Search — try ‘FOIA’, ‘Seattle’, ‘Signal’…" oninput="filterLib()" style="width:100%;padding-left:36px" /></div><select id="lib-cat" onchange="filterLib()"><option value="all">All categories</option><option value="local">Top Local</option><option value="declassified">Declassified & FOIA</option><option value="banned">Banned Books</option><option value="records">Public Records</option><option value="corporate">Corporate & Money</option><option value="surveillance">Privacy Tools</option><option value="osint">OSINT & Verification</option><option value="legal">Legal & Whistleblower</option><option value="history">History & Primary Sources</option></select></div>
+<div style="display:flex;gap:10px;flex:1;align-items:center;flex-wrap:wrap"><div style="position:relative;flex:1;min-width:220px;max-width:420px"><span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--faint)">⌕</span><input type="search" id="lib-search" placeholder="Search — try ‘FOIA’, ‘Seattle’, ‘Signal’…" oninput="filterLib()" style="width:100%;padding-left:36px" /></div><select id="lib-cat" onchange="filterLib()"><option value="all">All categories</option><option value="local">Top Local</option><option value="declassified">Declassified & FOIA</option><option value="banned">Banned Books</option><option value="openaccess">Open Access — Paywall-Free</option><option value="records">Public Records</option><option value="corporate">Corporate & Money</option><option value="surveillance">Privacy Tools</option><option value="osint">OSINT & Verification</option><option value="legal">Legal & Whistleblower</option><option value="history">History & Primary Sources</option></select></div>
 <div style="display:flex;gap:10px;align-items:center"><span class="lib-count" id="lib-count">80 sources</span><a href="#download-all" class="btn btn--ghost btn--small" style="white-space:nowrap">Download</a></div>
 </div>
 
@@ -288,6 +288,62 @@
 <p class="desc">50M+ items from U.S. libraries.</p>
 <div class="meta">dp.la</div>
 <div class="lib-actions"><a class="primary" href="https://dp.la/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+</div>
+</section>
+
+<section id="openaccess" aria-labelledby="openaccess-h" data-reveal>
+<div class="lib-section-head"><h2 id="openaccess-h">Open Access — bypass paywalls legally</h2><span class="count">7 sources</span></div>
+<p style="color:var(--text-soft);font-size:.92rem;max-width:70ch;margin-bottom:6px">The paywall is often just a middleman. These tools find the free, legal copy the author already made available.</p>
+<div class="lib-grid">
+<article class="lib-card" data-cat="openaccess" data-text="unpaywall paywall bypass legal">
+<span class="chip chip--culture">Unpaywall</span>
+<h3>Unpaywall</h3>
+<p class="desc">Browser add-on that checks 50M open-access articles and gives you the legal free PDF when it exists — one click, no login.</p>
+<div class="meta">unpaywall.org</div>
+<div class="lib-actions"><a class="primary" href="https://unpaywall.org/" target="_blank" rel="noopener noreferrer">Get Unpaywall →</a><a href="https://unpaywall.org/products/extension" target="_blank" rel="noopener noreferrer">Extension</a></div>
+</article>
+<article class="lib-card" data-cat="openaccess" data-text="open access button legal request">
+<span class="chip chip--culture">Open Access Button</span>
+<h3>Open Access Button</h3>
+<p class="desc">If no free copy exists, it requests one from the author and searches institutional repositories. Free, legal, and built by researchers.</p>
+<div class="meta">openaccessbutton.org</div>
+<div class="lib-actions"><a class="primary" href="https://openaccessbutton.org/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="openaccess" data-text="doaj directory open access journals">
+<span class="chip chip--culture">DOAJ</span>
+<h3>Directory of Open Access Journals</h3>
+<p class="desc">20k peer-reviewed journals that are free from day one — no embargo, no fee to read.</p>
+<div class="meta">doaj.org</div>
+<div class="lib-actions"><a class="primary" href="https://doaj.org/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="openaccess" data-text="core research aggregator">
+<span class="chip chip--culture">CORE</span>
+<h3>CORE — 300M open papers</h3>
+<p class="desc">Aggregator of repositories worldwide. When a paper hides behind a paywall, CORE usually has the author’s manuscript.</p>
+<div class="meta">core.ac.uk</div>
+<div class="lib-actions"><a class="primary" href="https://core.ac.uk/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="openaccess" data-text="open library archive.org lending">
+<span class="chip chip--culture">Open Library</span>
+<h3>Open Library — 5M borrowable books</h3>
+<p class="desc">Internet Archive’s controlled lending library. Borrow full, modern books for free with a free account — legal lending, not a scan dump.</p>
+<div class="meta">openlibrary.org</div>
+<div class="lib-actions"><a class="primary" href="https://openlibrary.org/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="openaccess" data-text="arxiv preprints scientific">
+<span class="chip chip--culture">arXiv</span>
+<h3>arXiv</h3>
+<p class="desc">2.4M preprints — physics, math, CS, and more — free before and often after peer review. Authors post here on purpose.</p>
+<div class="meta">arxiv.org</div>
+<div class="lib-actions"><a class="primary" href="https://arxiv.org/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="openaccess" data-text="library genesis alternative legal interlibrary loan">
+<span class="chip chip--culture">Interlibrary Loan (ILL)</span>
+<h3>Your Library’s ILL — the free back door</h3>
+<p class="desc">Any SPL/King County card can request any book or paper for free via ILL. It arrives in days, legally. The paywall never needed to win.</p>
+<div class="meta">spl.org/using-the-library</div>
+<div class="lib-actions"><a class="primary" href="https://www.spl.org/using-the-library/get-help/ask-a-librarian" target="_blank" rel="noopener noreferrer">Ask SPL →</a></div>
 </article>
 </div>
 </section>
