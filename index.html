@@ -14,6 +14,33 @@
   <script src="js/script.js" defer></script>
   <script src="js/content.js" defer></script>
   <script src="js/site.js" defer></script>
+<style>
+.statement{position:relative}
+.statement::before{content:"";position:absolute;top:-20px;left:-20px;right:-20px;bottom:-10px;background:radial-gradient(600px 200px at 20% 0%, rgba(125,215,255,0.07), transparent 60%), radial-gradient(500px 200px at 90% 20%, rgba(157,78,221,0.06), transparent 60%);pointer-events:none;border-radius:18px}
+.statement h1{position:relative}
+.statement h1::after{content:"";display:block;width:72px;height:4px;margin-top:14px;background:var(--gradient-1);border-radius:999px}
+.status-card{transition:transform .2s, border-color .2s, box-shadow .2s}
+.status-card:hover{transform:translateY(-4px);border-color:rgba(125,215,255,0.3);box-shadow:0 18px 40px rgba(0,0,0,0.28)}
+.status-card--active:hover{box-shadow:0 18px 40px rgba(255,107,157,0.18)}
+.how-step{position:relative;transition:transform .2s, border-color .2s}
+.how-step:hover{transform:translateY(-3px);border-color:rgba(125,215,255,0.25)}
+.how-step::after{content:"→";position:absolute;right:-14px;top:50%;transform:translateY(-50%);color:var(--faint);font-weight:800;opacity:.5}
+.how-step:last-child::after{display:none}
+@media(max-width:860px){.how-step::after{display:none}}
+.cta-card{overflow:hidden}
+.cta-card::before{content:"";position:absolute;inset:0;background:radial-gradient(400px 120px at 90% -10%, rgba(125,215,255,0.08), transparent 60%);opacity:0;transition:opacity .2s;pointer-events:none}
+.cta-card:hover::before{opacity:1}
+.feature-strip{margin:56px 0 8px;background:linear-gradient(165deg, var(--surface), #0d1219);border:1px solid var(--line);border-radius:16px;padding:22px;display:grid;grid-template-columns:1.4fr 1fr;gap:22px;align-items:center;position:relative;overflow:hidden}
+.feature-strip::before{content:"";position:absolute;inset:0;background:radial-gradient(600px 200px at 85% -20%, rgba(163,255,18,0.07), transparent 60%);pointer-events:none}
+.feature-strip h2{font-family:var(--font-serif);font-size:clamp(1.3rem,2.5vw,1.8rem);position:relative}
+.feature-strip p{color:var(--text-soft);font-size:.92rem;max-width:50ch;position:relative}
+.feature-links{display:grid;gap:8px;position:relative}
+.feature-links a{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg-raise);color:var(--text-soft);font-weight:600;font-size:.88rem}
+.feature-links a:hover{border-color:var(--ice);color:var(--ice)}
+.feature-links .src{font-family:var(--font-mono);font-size:.64rem;color:var(--faint)}
+[data-theme="light"] .feature-strip{background:linear-gradient(165deg, #ffffff, #f8fafc);border-color:var(--line)}
+[data-theme="light"] .feature-links a{background:#f8fafc}
+</style>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -203,6 +230,26 @@
         <p>Steal the code, credit the stories. Checksummed, mirrorable, unkillable.</p>
         <span class="cta-arrow">→</span>
       </a>
+    </section>
+
+
+    <!-- ================= Featured Library (top local) ================= -->
+    <section class="feature-strip" data-reveal aria-labelledby="feat-h">
+      <div>
+        <span class="chip chip--local" style="margin-bottom:8px">★ Top local — new in library</span>
+        <h2 id="feat-h">Seattle’s own paper trail, unlocked</h2>
+        <p>10 local watchdogs added — from <b>data.seattle.gov</b> to the <b>PDC</b> and <b>Crosscut</b>. Start with the city’s spreadsheets, not its press releases.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px">
+          <a href="library.html#local" class="btn btn--primary btn--small">Open local library →</a>
+          <a href="library.html" class="btn btn--ghost btn--small">Browse all 80+ sources</a>
+        </div>
+      </div>
+      <div class="feature-links">
+        <a href="https://data.seattle.gov/" target="_blank" rel="noopener noreferrer">data.seattle.gov <span class="src">CITY OPEN DATA</span></a>
+        <a href="https://www.pdc.wa.gov/" target="_blank" rel="noopener noreferrer">PDC — campaign cash <span class="src">PDC.WA.GOV</span></a>
+        <a href="https://crosscut.com/" target="_blank" rel="noopener noreferrer">Crosscut / Cascade PBS <span class="src">CROSSCUT.COM</span></a>
+        <a href="library.html#local" style="justify-content:center;color:var(--ice);border-style:dashed">See all 10 local →</a>
+      </div>
     </section>
 
     <!-- ================= Notify ================= -->

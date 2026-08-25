@@ -1,275 +1,755 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Free Media Library | The Seattle Avalanche</title>
-  <meta name="description" content="A library of declassified documents, suppressed books, privacy tools, and public records, free to read, download, and share." />
-  <meta name="referrer" content="no-referrer" />
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0e14'/%3E%3Cpath d='M4 26 L13 9 L18 18 L21 13 L28 26 Z' fill='%237dd7ff'/%3E%3C/svg%3E" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..800;1,6..72,400..800&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/styles.css" />
-  <script src="js/script.js" defer></script>
-  <script src="js/content.js" defer></script>
-  <script src="js/site.js" defer></script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Free Media Library | The Seattle Avalanche</title>
+<meta name="description" content="A ridiculous trusted-only library: 80+ official archives, banned books, FOIA vaults, Seattle open data, privacy tools, OSINT guides. Download the whole thing." />
+<meta name="referrer" content="no-referrer" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0e14'/%3E%3Cpath d='M4 26 L13 9 L18 18 L21 13 L28 26 Z' fill='%237dd7ff'/%3E%3C/svg%3E" />
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..800&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/styles.css" />
+<script src="js/script.js" defer></script>
+<script src="js/content.js" defer></script>
+<script src="js/site.js" defer></script>
+<style>
+.lib-hero{padding:48px 0 10px;max-width:880px}
+.lib-hero h1{font-family:var(--font-serif);font-weight:800;font-size:clamp(2.4rem,5vw,3.7rem);line-height:1.02;letter-spacing:-0.02em}
+.lib-hero h1 span{background:var(--gradient-1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.lib-stats{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}
+.lib-stat{font-family:var(--font-mono);font-size:.78rem;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:6px 12px;color:var(--muted)}
+.lib-stat b{color:var(--ice)}
+.lib-toolbar{position:sticky;top:58px;z-index:9;background:rgba(13,18,26,.92);backdrop-filter:blur(12px);border:1px solid var(--line);border-radius:14px;padding:12px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin:22px 0 18px}
+.lib-toolbar input[type=search]{flex:1;min-width:220px;max-width:420px;background:var(--bg-raise);border:1px solid var(--line-strong);border-radius:999px;color:var(--text);font:inherit;font-size:.92rem;padding:11px 14px 11px 36px}
+.lib-toolbar select{background:var(--bg-raise);border:1px solid var(--line-strong);border-radius:999px;color:var(--text);padding:10px 14px;font-weight:600;font-size:.84rem}
+.lib-count{font-family:var(--font-mono);font-size:.78rem;color:var(--muted)}
+.lib-section-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin:44px 0 16px;border-bottom:1px solid var(--line-strong);padding-bottom:10px}
+.lib-section-head h2{font-family:var(--font-serif);font-weight:700;font-size:clamp(1.35rem,3vw,1.85rem)}
+.lib-section-head .count{font-family:var(--font-mono);font-size:.70rem;color:var(--faint);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.lib-card{position:relative;display:flex;flex-direction:column}
+.lib-card h3{font-family:var(--font-serif);font-size:1.12rem;line-height:1.25;margin:8px 0 6px}
+.lib-card p.desc{font-size:.88rem;color:var(--text-soft);flex:1}
+.lib-card .meta{font-family:var(--font-mono);font-size:.66rem;color:var(--faint);margin-top:8px}
+.lib-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.lib-actions a{font-size:.78rem;font-weight:700;padding:7px 12px;border-radius:999px;border:1px solid var(--line-strong);color:var(--text-soft);background:var(--bg-raise)}
+.lib-actions a.primary{background:linear-gradient(135deg,var(--ice),var(--ice-deep));color:#04121b;border-color:transparent}
+.lib-actions a:hover{border-color:var(--ice);color:var(--ice)}
+.lib-actions a.primary:hover{color:#04121b;filter:brightness(1.08)}
+.featured{border-color:rgba(255,107,157,.35)!important;background:linear-gradient(170deg,rgba(255,107,157,.06),transparent 45%),var(--surface)!important}
+.hide{display:none!important}
+@media(max-width:720px){.lib-toolbar{position:static}}
+</style>
 </head>
 <body>
-  <a class="skip-link" href="#main">Skip to content</a>
+<a class="skip-link" href="#main">Skip to content</a>
+<header>
+<div class="topbar"><div class="container topbar-inner"><span data-date>Friday, August 21, 2026</span><span class="tagline">Independent · Anonymous</span><button class="theme-toggle" aria-label="Toggle theme" title="Toggle theme"><span class="theme-toggle-knob">&#9789;</span></button><nav class="topbar-links" aria-label="Utility"><a href="#" title="Onion service coming soon">Tor Mirror</a><a href="#">RSS</a></nav></div></div>
+<div class="masthead"><canvas id="snow-canvas" aria-hidden="true"></canvas><div class="container masthead-inner"><svg class="logo-mark" width="56" height="46" viewBox="0 0 56 46" fill="none" aria-hidden="true"><path d="M2 43 L21 7 L31 26 L39 13 L54 43 Z" fill="#141b27" stroke="#7dd7ff" stroke-width="2" stroke-linejoin="round"/><path d="M16 15 L21 7 L26 14 L23.5 17.5 L21 13.5 L18.5 17.5 Z" fill="#7dd7ff"/><path d="M36.5 17 L39 13 L41.8 17.4 L40 19.5 Z" fill="#7dd7ff"/></svg><div class="masthead-title"><a href="index.html"><span>The Seattle Avalanche</span></a><p class="motto">Truth falls like snow</p></div></div></div>
+<nav class="navbar" aria-label="Primary"><div class="container navbar-inner"><button class="nav-toggle" aria-expanded="false" aria-controls="primary-nav">MENU ☰</button><ul class="nav-list" id="primary-nav"><li><a href="index.html">Home</a></li><li><a href="about.html">About</a></li><li><a href="founders.html">Founders</a></li><li><a href="network.html">Network</a></li><li><a href="library.html" aria-current="page">Media Library</a></li><li><a href="mirror.html">Mirror</a></li><li><a href="answers.html">Answers</a></li><li><a href="download.html">Download</a></li></ul><a href="submit.html" class="btn btn--primary btn--small nav-cta">Send Info</a></div></nav>
+</header>
+<div class="ticker" role="region" aria-label="Site notices"><span class="ticker-label"><span class="dot"></span>Library</span><div class="ticker-track"><div class="ticker-content" id="ticker-items"><a href="#local">TOP LOCAL: 10 Seattle watchdogs live</a><a href="#declassified">80+ trusted sources — zero pirated links</a><a href="#download-all">Download the whole library as JSON</a></div></div></div>
+<main id="main" class="container">
+<section class="lib-hero" data-reveal>
+<h1>The <span>Free Media Library</span></h1>
+<p class="lede" style="margin-top:14px;font-family:var(--font-serif);font-style:italic;font-size:1.18rem;color:var(--text-soft);max-width:62ch">A ridiculous amount of lawful information the government, corporations, and paywalls hoped you wouldn’t look up — in one place, free forever, from sources you can actually trust.</p>
+<div class="lib-stats"><span class="lib-stat"><b id="stat-total">80+</b> sources</span><span class="lib-stat"><b>9</b> categories</span><span class="lib-stat"><b>0</b> pirated</span><span class="lib-stat">Only <b>official</b> archives</span></div>
+<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:18px"><a href="#local" class="btn btn--primary btn--small">Start with local →</a><button class="btn btn--ghost btn--small" onclick="downloadLibrary()">⤓ Download whole library (JSON)</button><button class="btn btn--ghost btn--small" onclick="copyLibraryLinks()">Copy all links</button></div>
+<div class="info-banner" style="margin-top:18px"><span class="icon">◈</span><div><strong>Trusted only:</strong> every link goes to an official reading room, public-domain archive, or author who freed it on purpose. Nothing pirated. Breaks get fixed in days.</div></div>
+</section>
+<div class="lib-toolbar" data-reveal>
+<div style="display:flex;gap:10px;flex:1;align-items:center;flex-wrap:wrap"><div style="position:relative;flex:1;min-width:220px;max-width:420px"><span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--faint)">⌕</span><input type="search" id="lib-search" placeholder="Search — try ‘FOIA’, ‘Seattle’, ‘Signal’…" oninput="filterLib()" style="width:100%;padding-left:36px" /></div><select id="lib-cat" onchange="filterLib()"><option value="all">All categories</option><option value="local">Top Local</option><option value="declassified">Declassified & FOIA</option><option value="banned">Banned Books</option><option value="records">Public Records</option><option value="corporate">Corporate & Money</option><option value="surveillance">Privacy Tools</option><option value="osint">OSINT & Verification</option><option value="legal">Legal & Whistleblower</option><option value="history">History & Primary Sources</option></select></div>
+<div style="display:flex;gap:10px;align-items:center"><span class="lib-count" id="lib-count">80 sources</span><a href="#download-all" class="btn btn--ghost btn--small" style="white-space:nowrap">Download</a></div>
+</div>
 
-  <!-- ================= Header ================= -->
-  <header>
-    <div class="topbar">
-      <div class="container topbar-inner">
-        <span data-date>Friday, August 21, 2026</span>
-        <span class="tagline">Independent · Anonymous</span>
-        <button class="theme-toggle" aria-label="Toggle theme" title="Toggle theme"><span class="theme-toggle-knob">&#9789;</span></button>
-          <nav class="topbar-links" aria-label="Utility">
-          <a href="#" title="Onion service coming soon">Tor Mirror</a>
-          <a href="#">RSS</a>
-        </nav>
-      </div>
-    </div>
+<section id="local" aria-labelledby="local-h" data-reveal>
+<div class="lib-section-head"><h2 id="local-h">★ Top Local — Seattle & Puget Sound</h2><span class="count">10 sources</span></div>
+<p style="color:var(--text-soft);font-size:.92rem;max-width:70ch;margin-bottom:6px">Start here. These are the city’s own records and the newsrooms that watch it for real.</p>
+<div class="lib-grid">
+<article class="lib-card featured" data-cat="local" data-text="the seattle times — archive the city paper of record. use the archive to cross-check every press release. seattletimes.com · free via spl">
+<span class="chip chip--local">Staff pick · Seattle</span>
+<h3>The Seattle Times — Archive</h3>
+<p class="desc">The city paper of record. Use the archive to cross-check every press release.</p>
+<div class="meta">seattletimes.com · free via SPL</div>
+<div class="lib-actions"><a class="primary" href="https://www.seattletimes.com/" target="_blank" rel="noopener noreferrer">Open →</a><a href="https://www.spl.org/" target="_blank" rel="noopener noreferrer">Via SPL (free)</a></div>
+</article>
+<article class="lib-card featured" data-cat="local" data-text="crosscut / cascade pbs nonprofit newsroom covering city hall, transit, housing without paywall. crosscut.com">
+<span class="chip chip--local">Nonprofit · Seattle</span>
+<h3>Crosscut / Cascade PBS</h3>
+<p class="desc">Nonprofit newsroom covering City Hall, transit, housing without paywall.</p>
+<div class="meta">crosscut.com</div>
+<div class="lib-actions"><a class="primary" href="https://crosscut.com/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="local" data-text="kuow 94.9 — seattle now npr seattle. transcripts are searchable — matters for verification. kuow.org">
+<span class="chip chip--local">NPR · Seattle</span>
+<h3>KUOW 94.9 — Seattle Now</h3>
+<p class="desc">NPR Seattle. Transcripts are searchable — matters for verification.</p>
+<div class="meta">kuow.org</div>
+<div class="lib-actions"><a class="primary" href="https://www.kuow.org/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="local" data-text="data.seattle.gov — the city’s spreadsheets 911 calls, permits, 311, crime, spd beats, tree inventory — actual csvs. data.seattle.gov">
+<span class="chip chip--local">City of Seattle · Open Data</span>
+<h3>data.seattle.gov — The city’s spreadsheets</h3>
+<p class="desc">911 calls, permits, 311, crime, SPD beats, tree inventory — actual CSVs.</p>
+<div class="meta">data.seattle.gov</div>
+<div class="lib-actions"><a class="primary" href="https://data.seattle.gov/" target="_blank" rel="noopener noreferrer">Open →</a><a href="https://data.seattle.gov/browse?sortBy=newest" target="_blank" rel="noopener noreferrer">Newest</a></div>
+</article>
+<article class="lib-card" data-cat="local" data-text="king county open data & records parcel, elections, jail, assessor, metro data. kingcounty.gov">
+<span class="chip chip--local">King County</span>
+<h3>King County Open Data & Records</h3>
+<p class="desc">Parcel, elections, jail, assessor, Metro data.</p>
+<div class="meta">kingcounty.gov</div>
+<div class="lib-actions"><a class="primary" href="https://kingcounty.gov/" target="_blank" rel="noopener noreferrer">Open →</a><a href="https://data.kingcounty.gov/" target="_blank" rel="noopener noreferrer">Data portal</a></div>
+</article>
+<article class="lib-card" data-cat="local" data-text="washington state digital archives birth, marriage, corp filings, local gov records — searchable statewide. digitalarchives.wa.gov">
+<span class="chip chip--local">WA State Archives</span>
+<h3>Washington State Digital Archives</h3>
+<p class="desc">Birth, marriage, corp filings, local gov records — searchable statewide.</p>
+<div class="meta">digitalarchives.wa.gov</div>
+<div class="lib-actions"><a class="primary" href="https://www.digitalarchives.wa.gov/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="local" data-text="the urbanist transit, zoning, land-use obsessives who read rezone pdfs. theurbanist.org">
+<span class="chip chip--local">Seattle · Urbanism</span>
+<h3>The Urbanist</h3>
+<p class="desc">Transit, zoning, land-use obsessives who read rezone PDFs.</p>
+<div class="meta">theurbanist.org</div>
+<div class="lib-actions"><a class="primary" href="https://www.theurbanist.org/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="local" data-text="seattle opa & oig dashboards opa closed cases + oig dashboards — complaints, findings, discipline. seattle.gov/opa">
+<span class="chip chip--local">Oversight · Seattle</span>
+<h3>Seattle OPA & OIG Dashboards</h3>
+<p class="desc">OPA closed cases + OIG dashboards — complaints, findings, discipline.</p>
+<div class="meta">seattle.gov/opa</div>
+<div class="lib-actions"><a href="https://www.seattle.gov/opa" target="_blank" rel="noopener noreferrer">OPA →</a><a href="https://www.seattle.gov/oig" target="_blank" rel="noopener noreferrer">OIG →</a></div>
+</article>
+<article class="lib-card" data-cat="local" data-text="wa public disclosure commission every campaign dollar in wa, searchable by donor/candidate. pdc.wa.gov">
+<span class="chip chip--local">WA Politics · Money</span>
+<h3>WA Public Disclosure Commission</h3>
+<p class="desc">Every campaign dollar in WA, searchable by donor/candidate.</p>
+<div class="meta">pdc.wa.gov</div>
+<div class="lib-actions"><a class="primary" href="https://www.pdc.wa.gov/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="local" data-text="seattle public library — special collections historical photos, maps, proquest free with card. spl.org">
+<span class="chip chip--local">SPL</span>
+<h3>Seattle Public Library — Special Collections</h3>
+<p class="desc">Historical photos, maps, ProQuest free with card.</p>
+<div class="meta">spl.org</div>
+<div class="lib-actions"><a class="primary" href="https://www.spl.org/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+</div>
+</section>
 
-    <div class="masthead">
-      <canvas id="snow-canvas" aria-hidden="true"></canvas>
-      <div class="container masthead-inner">
-        <svg class="logo-mark" width="56" height="46" viewBox="0 0 56 46" fill="none" aria-hidden="true">
-          <path d="M2 43 L21 7 L31 26 L39 13 L54 43 Z" fill="#141b27" stroke="#7dd7ff" stroke-width="2" stroke-linejoin="round"/>
-          <path d="M16 15 L21 7 L26 14 L23.5 17.5 L21 13.5 L18.5 17.5 Z" fill="#7dd7ff"/>
-          <path d="M36.5 17 L39 13 L41.8 17.4 L40 19.5 Z" fill="#7dd7ff"/>
-        </svg>
-        <div class="masthead-title">
-          <a href="index.html"><span>The Seattle Avalanche</span></a>
-          <p class="motto">Truth falls like snow</p>
-        </div>
-      </div>
-    </div>
+<section id="declassified" aria-labelledby="declassified-h" data-reveal>
+<div class="lib-section-head"><h2 id="declassified-h">Declassified & FOIA — what they released when forced</h2><span class="count">12 sources</span></div>
+<p style="color:var(--text-soft);font-size:.92rem;max-width:70ch;margin-bottom:6px">Officially released, officially public, officially ignored.</p>
+<div class="lib-grid">
+<article class="lib-card" data-cat="declassified" data-text="fbi vault — cointelpro & more the bureau’s reading room: cointelpro, 6700+ cases. vault.fbi.gov">
+<span class="chip chip--surveil">FBI Vault</span>
+<h3>FBI Vault — COINTELPRO & more</h3>
+<p class="desc">The bureau’s reading room: COINTELPRO, 6700+ cases.</p>
+<div class="meta">vault.fbi.gov</div>
+<div class="lib-actions"><a href="https://vault.fbi.gov/cointelpro" target="_blank" rel="noopener noreferrer">COINTELPRO →</a><a href="https://vault.fbi.gov/" target="_blank" rel="noopener noreferrer">Vault home</a></div>
+</article>
+<article class="lib-card" data-cat="declassified" data-text="cia crest — 13m pages searchable archive. mkultra stubs next to u-2 manuals. cia.gov/readingroom">
+<span class="chip chip--surveil">CIA · Declassified</span>
+<h3>CIA CREST — 13M pages</h3>
+<p class="desc">Searchable archive. MKUltra stubs next to U-2 manuals.</p>
+<div class="meta">cia.gov/readingroom</div>
+<div class="lib-actions"><a class="primary" href="https://www.cia.gov/readingroom/collection/crest-25-year-program-archive" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="declassified" data-text="national security archive gold standard for curated declassifications. nsarchive.gwu.edu">
+<span class="chip chip--surveil">GWU · National Security Archive</span>
+<h3>National Security Archive</h3>
+<p class="desc">Gold standard for curated declassifications.</p>
+<div class="meta">nsarchive.gwu.edu</div>
+<div class="lib-actions"><a class="primary" href="https://nsarchive.gwu.edu/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="declassified" data-text="pentagon papers — complete gov secret history of vietnam, 48 volumes, declassified 2011. archives.gov/research/pentagon-papers">
+<span class="chip chip--surveil">NARA</span>
+<h3>Pentagon Papers — complete</h3>
+<p class="desc">Gov secret history of Vietnam, 48 volumes, declassified 2011.</p>
+<div class="meta">archives.gov/research/pentagon-papers</div>
+<div class="lib-actions"><a class="primary" href="https://www.archives.gov/research/pentagon-papers" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="declassified" data-text="jfk assassination records 5m+ pages under 1992 act. archives.gov/research/jfk">
+<span class="chip chip--surveil">NARA · JFK</span>
+<h3>JFK Assassination Records</h3>
+<p class="desc">5M+ pages under 1992 Act.</p>
+<div class="meta">archives.gov/research/jfk</div>
+<div class="lib-actions"><a class="primary" href="https://www.archives.gov/research/jfk" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="declassified" data-text="the snowden archive aclu/cjfe curated nsa docs. snowdenarchive.cjfe.org">
+<span class="chip chip--surveil">Snowden Archive</span>
+<h3>The Snowden Archive</h3>
+<p class="desc">ACLU/CJFE curated NSA docs.</p>
+<div class="meta">snowdenarchive.cjfe.org</div>
+<div class="lib-actions"><a class="primary" href="https://snowdenarchive.cjfe.org/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="declassified" data-text="muckrock file/track/publish foias. search 80k+ requests. muckrock.com">
+<span class="chip chip--surveil">FOIA Crowdsourced</span>
+<h3>MuckRock</h3>
+<p class="desc">File/track/publish FOIAs. Search 80k+ requests.</p>
+<div class="meta">muckrock.com</div>
+<div class="lib-actions"><a class="primary" href="https://www.muckrock.com/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="declassified" data-text="foiaonline & pal submit federal foias online. foiaonline.gov">
+<span class="chip chip--surveil">U.S. Government</span>
+<h3>FOIAonline & PAL</h3>
+<p class="desc">Submit federal FOIAs online.</p>
+<div class="meta">foiaonline.gov</div>
+<div class="lib-actions"><a class="primary" href="https://www.foia.gov/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="declassified" data-text="nsa declassified venona, cold war crypto, agency histories. nsa.gov">
+<span class="chip chip--surveil">NSA</span>
+<h3>NSA Declassified</h3>
+<p class="desc">Venona, Cold War crypto, agency histories.</p>
+<div class="meta">nsa.gov</div>
+<div class="lib-actions"><a class="primary" href="https://www.nsa.gov/Helpful-Links/NSA-FOIA/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="declassified" data-text="frus — foreign relations of the u.s. diplomatic record 1861-present. history.state.gov">
+<span class="chip chip--surveil">State Dept</span>
+<h3>FRUS — Foreign Relations of the U.S.</h3>
+<p class="desc">Diplomatic record 1861-present.</p>
+<div class="meta">history.state.gov</div>
+<div class="lib-actions"><a class="primary" href="https://history.state.gov/historicaldocuments" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="declassified" data-text="senate torture report 525-page summary of cia detention program. intelligence.senate.gov">
+<span class="chip chip--surveil">Senate · Declassified 2014</span>
+<h3>Senate Torture Report</h3>
+<p class="desc">525-page summary of CIA detention program.</p>
+<div class="meta">intelligence.senate.gov</div>
+<div class="lib-actions"><a class="primary" href="https://www.intelligence.senate.gov/publications/committee-study-central-intelligence-agencys-detention-and-interrogation-program" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="declassified" data-text="9/11 commission report + 28 pages public report + 2016 28 pages. govinfo.gov">
+<span class="chip chip--surveil">9/11</span>
+<h3>9/11 Commission Report + 28 Pages</h3>
+<p class="desc">Public report + 2016 28 pages.</p>
+<div class="meta">govinfo.gov</div>
+<div class="lib-actions"><a class="primary" href="https://www.govinfo.gov/features/9-11-commission-report" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+</div>
+</section>
 
-    <nav class="navbar" aria-label="Primary">
-      <div class="container navbar-inner">
-        <button class="nav-toggle" aria-expanded="false" aria-controls="primary-nav">MENU ☰</button>
-        <ul class="nav-list" id="primary-nav">
-          <li><a href="index.html">Home</a></li>
-          <li><a href="about.html">About</a></li>
-          <li><a href="founders.html">Founders</a></li>
-          <li><a href="network.html">Network</a></li>
-          <li><a href="library.html" aria-current="page">Media Library</a></li>
-          <li><a href="mirror.html">Mirror</a></li>
-          <li><a href="answers.html">Answers</a></li>
-          <li><a href="download.html">Download</a></li>
-        </ul>
-        <a href="submit.html" class="btn btn--primary btn--small nav-cta">Send Info</a>
-      </div>
-    </nav>
-  </header>
+<section id="banned" aria-labelledby="banned-h" data-reveal>
+<div class="lib-section-head"><h2 id="banned-h">Banned, burned, or sued — all legally free today</h2><span class="count">8 sources</span></div>
+<p style="color:var(--text-soft);font-size:.92rem;max-width:70ch;margin-bottom:6px">Banned, burned, sued, or seized — and all of them legally free today.</p>
+<div class="lib-grid">
+<article class="lib-card" data-cat="banned" data-text="project gutenberg — 70k+ free books orwell, joyce, expired copyrights. gutenberg.org">
+<span class="chip chip--culture">Project Gutenberg</span>
+<h3>Project Gutenberg — 70k+ free books</h3>
+<p class="desc">Orwell, Joyce, expired copyrights.</p>
+<div class="meta">gutenberg.org</div>
+<div class="lib-actions"><a class="primary" href="https://www.gutenberg.org/" target="_blank" rel="noopener noreferrer">Open →</a><a href="https://www.gutenberg.org/ebooks/author/37" target="_blank" rel="noopener noreferrer">Orwell</a></div>
+</article>
+<article class="lib-card" data-cat="banned" data-text="internet archive — texts 35m texts, lawful lending. archive.org/details/texts">
+<span class="chip chip--culture">Internet Archive</span>
+<h3>Internet Archive — Texts</h3>
+<p class="desc">35M texts, lawful lending.</p>
+<div class="meta">archive.org/details/texts</div>
+<div class="lib-actions"><a class="primary" href="https://archive.org/details/texts" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="banned" data-text="hathitrust digital library academic consortium, full-view public domain. hathitrust.org">
+<span class="chip chip--culture">HathiTrust</span>
+<h3>HathiTrust Digital Library</h3>
+<p class="desc">Academic consortium, full-view public domain.</p>
+<div class="meta">hathitrust.org</div>
+<div class="lib-actions"><a class="primary" href="https://www.hathitrust.org/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="banned" data-text="standard ebooks beautiful public-domain editions. standardebooks.org">
+<span class="chip chip--culture">Standard Ebooks</span>
+<h3>Standard Ebooks</h3>
+<p class="desc">Beautiful public-domain editions.</p>
+<div class="meta">standardebooks.org</div>
+<div class="lib-actions"><a class="primary" href="https://standardebooks.org/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="banned" data-text="marxists.org suppressed canon, searchable. marxists.org">
+<span class="chip chip--culture">Marxists Internet Archive</span>
+<h3>Marxists.org</h3>
+<p class="desc">Suppressed canon, searchable.</p>
+<div class="meta">marxists.org</div>
+<div class="lib-actions"><a class="primary" href="https://www.marxists.org/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="banned" data-text="the anarchist library anti-copyright, author-preserved. theanarchistlibrary.org">
+<span class="chip chip--culture">The Anarchist Library</span>
+<h3>The Anarchist Library</h3>
+<p class="desc">Anti-copyright, author-preserved.</p>
+<div class="meta">theanarchistlibrary.org</div>
+<div class="lib-actions"><a class="primary" href="https://theanarchistlibrary.org/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="banned" data-text="wikisource — free library proofread sources with scans. wikisource.org">
+<span class="chip chip--culture">Wikisource</span>
+<h3>Wikisource — Free Library</h3>
+<p class="desc">Proofread sources with scans.</p>
+<div class="meta">wikisource.org</div>
+<div class="lib-actions"><a class="primary" href="https://en.wikisource.org/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="banned" data-text="digital public library of america 50m+ items from u.s. libraries. dp.la">
+<span class="chip chip--culture">DPLA</span>
+<h3>Digital Public Library of America</h3>
+<p class="desc">50M+ items from U.S. libraries.</p>
+<div class="meta">dp.la</div>
+<div class="lib-actions"><a class="primary" href="https://dp.la/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+</div>
+</section>
 
-  <!-- ================= Site notices ticker ================= -->
-  <div class="ticker" role="region" aria-label="Site notices">
-    <span class="ticker-label"><span class="dot"></span>Status</span>
-    <div class="ticker-track">
-      <div class="ticker-content" id="ticker-items">
-        <a href="#banned">Books that got banned, read them free, legally</a>
-        <a href="#declassified">Declassified files the government would rather you skip</a>
-        <a href="#tools">Privacy tools used by this newsroom itself</a>
-      </div>
-    </div>
-  </div>
+<section id="records" aria-labelledby="records-h" data-reveal>
+<div class="lib-section-head"><h2 id="records-h">Public Records — the city on paper</h2><span class="count">9 sources</span></div>
+<p style="color:var(--text-soft);font-size:.92rem;max-width:70ch;margin-bottom:6px">The city and country on paper — no FOIA magic needed for these.</p>
+<div class="lib-grid">
+<article class="lib-card" data-cat="records" data-text="courtlistener / recap free pacer mirror, case alerts. courtlistener.com">
+<span class="chip chip--politics">Courts</span>
+<h3>CourtListener / RECAP</h3>
+<p class="desc">Free PACER mirror, case alerts.</p>
+<div class="meta">courtlistener.com</div>
+<div class="lib-actions"><a class="primary" href="https://www.courtlistener.com/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="records" data-text="usaspending.gov every federal contract/grant. usaspending.gov">
+<span class="chip chip--politics">Federal Money</span>
+<h3>USAspending.gov</h3>
+<p class="desc">Every federal contract/grant.</p>
+<div class="meta">usaspending.gov</div>
+<div class="lib-actions"><a class="primary" href="https://www.usaspending.gov/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="records" data-text="u.s. census & acs table, not press release. data.census.gov">
+<span class="chip chip--politics">Census</span>
+<h3>U.S. Census & ACS</h3>
+<p class="desc">Table, not press release.</p>
+<div class="meta">data.census.gov</div>
+<div class="lib-actions"><a class="primary" href="https://data.census.gov/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="records" data-text="congress.gov bills, votes, record. congress.gov">
+<span class="chip chip--politics">Congress</span>
+<h3>Congress.gov</h3>
+<p class="desc">Bills, votes, Record.</p>
+<div class="meta">congress.gov</div>
+<div class="lib-actions"><a class="primary" href="https://www.congress.gov/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="records" data-text="leg.wa.gov — washington bills state bills, fiscal notes. leg.wa.gov">
+<span class="chip chip--politics">WA Legislature</span>
+<h3>leg.wa.gov — Washington Bills</h3>
+<p class="desc">State bills, fiscal notes.</p>
+<div class="meta">leg.wa.gov</div>
+<div class="lib-actions"><a class="primary" href="https://app.leg.wa.gov/billinfo/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="records" data-text="seattle 911 / spd / sdot 911, use-of-force, traffic. data.seattle.gov">
+<span class="chip chip--politics">Seattle Open Data</span>
+<h3>Seattle 911 / SPD / SDOT</h3>
+<p class="desc">911, use-of-force, traffic.</p>
+<div class="meta">data.seattle.gov</div>
+<div class="lib-actions"><a href="https://data.seattle.gov/Public-Safety/SPD-Crime-Data-2008-Present/tazs-3rd5" target="_blank" rel="noopener noreferrer">Crime data →</a></div>
+</article>
+<article class="lib-card" data-cat="records" data-text="open states — all 50 states api for every legislature. openstates.org">
+<span class="chip chip--politics">Open States</span>
+<h3>Open States — all 50 states</h3>
+<p class="desc">API for every legislature.</p>
+<div class="meta">openstates.org</div>
+<div class="lib-actions"><a class="primary" href="https://openstates.org/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="records" data-text="seattle accountability archives opa manuals, oig reports. seattle.gov">
+<span class="chip chip--politics">Oversight</span>
+<h3>Seattle Accountability Archives</h3>
+<p class="desc">OPA manuals, OIG reports.</p>
+<div class="meta">seattle.gov</div>
+<div class="lib-actions"><a href="https://www.seattle.gov/police/accountability" target="_blank" rel="noopener noreferrer">Accountability →</a></div>
+</article>
+<article class="lib-card" data-cat="records" data-text="wayback machine 900b+ pages, proves edits. web.archive.org">
+<span class="chip chip--politics">Wayback Machine</span>
+<h3>Wayback Machine</h3>
+<p class="desc">900B+ pages, proves edits.</p>
+<div class="meta">web.archive.org</div>
+<div class="lib-actions"><a class="primary" href="https://web.archive.org/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+</div>
+</section>
 
-  <main id="main" class="container">
+<section id="corporate" aria-labelledby="corporate-h" data-reveal>
+<div class="lib-section-head"><h2 id="corporate-h">Corporate & Money — follow the incentives</h2><span class="count">9 sources</span></div>
+<p style="color:var(--text-soft);font-size:.92rem;max-width:70ch;margin-bottom:6px">Every contract, donation, and offshore hideaway has a database.</p>
+<div class="lib-grid">
+<article class="lib-card" data-cat="corporate" data-text="sec edgar — filings 10-ks, proxies, 8-ks. sec.gov/edgar">
+<span class="chip chip--environ">SEC EDGAR</span>
+<h3>SEC EDGAR — filings</h3>
+<p class="desc">10-Ks, proxies, 8-Ks.</p>
+<div class="meta">sec.gov/edgar</div>
+<div class="lib-actions"><a class="primary" href="https://www.sec.gov/edgar/searchedgar/companysearch" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="corporate" data-text="fec — campaign finance donor/pac filings. fec.gov">
+<span class="chip chip--environ">FEC</span>
+<h3>FEC — campaign finance</h3>
+<p class="desc">Donor/PAC filings.</p>
+<div class="meta">fec.gov</div>
+<div class="lib-actions"><a class="primary" href="https://www.fec.gov/data/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="corporate" data-text="opensecrets lobbying, revolving door. opensecrets.org">
+<span class="chip chip--environ">OpenSecrets</span>
+<h3>OpenSecrets</h3>
+<p class="desc">Lobbying, revolving door.</p>
+<div class="meta">opensecrets.org</div>
+<div class="lib-actions"><a class="primary" href="https://www.opensecrets.org/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="corporate" data-text="icij offshore leaks panama/pandora/fincen. offshoreleaks.icij.org">
+<span class="chip chip--environ">ICIJ</span>
+<h3>ICIJ Offshore Leaks</h3>
+<p class="desc">Panama/Pandora/FinCEN.</p>
+<div class="meta">offshoreleaks.icij.org</div>
+<div class="lib-actions"><a class="primary" href="https://offshoreleaks.icij.org/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="corporate" data-text="nonprofit explorer 990s for every nonprofit. projects.propublica.org/nonprofits">
+<span class="chip chip--environ">ProPublica</span>
+<h3>Nonprofit Explorer</h3>
+<p class="desc">990s for every nonprofit.</p>
+<div class="meta">projects.propublica.org/nonprofits</div>
+<div class="lib-actions"><a class="primary" href="https://projects.propublica.org/nonprofits/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="corporate" data-text="littlesis — power mapping who sits on whose board. littlesis.org">
+<span class="chip chip--environ">LittleSis</span>
+<h3>LittleSis — power mapping</h3>
+<p class="desc">Who sits on whose board.</p>
+<div class="meta">littlesis.org</div>
+<div class="lib-actions"><a class="primary" href="https://littlesis.org/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="corporate" data-text="ucsf truth tobacco docs 15m internal docs. industrydocuments.ucsf.edu/tobacco">
+<span class="chip chip--environ">UCSF Tobacco Papers</span>
+<h3>UCSF Truth Tobacco Docs</h3>
+<p class="desc">15M internal docs.</p>
+<div class="meta">industrydocuments.ucsf.edu/tobacco</div>
+<div class="lib-actions"><a class="primary" href="https://www.industrydocuments.ucsf.edu/tobacco/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="corporate" data-text="opencorporates 200m companies, 140 jurisdictions. opencorporates.com">
+<span class="chip chip--environ">OpenCorporates</span>
+<h3>OpenCorporates</h3>
+<p class="desc">200M companies, 140 jurisdictions.</p>
+<div class="meta">opencorporates.com</div>
+<div class="lib-actions"><a class="primary" href="https://opencorporates.com/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="corporate" data-text="dollars for docs pharma payments to doctors. projects.propublica.org/docdollars">
+<span class="chip chip--environ">ProPublica</span>
+<h3>Dollars for Docs</h3>
+<p class="desc">Pharma payments to doctors.</p>
+<div class="meta">projects.propublica.org/docdollars</div>
+<div class="lib-actions"><a class="primary" href="https://projects.propublica.org/docdollars/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+</div>
+</section>
 
-    <section class="page-hero" data-reveal>
-      <h1>The Free Media Library</h1>
-      <p class="lede">
-        Information that was priced, gated, classified, or quietly disappeared,
-        collected here, free forever. Everything links to lawful sources:
-        government reading rooms, public-domain archives, and works whose
-        authors set them loose on purpose.
-      </p>
-    </section>
+<section id="tools" aria-labelledby="surveillance-h" data-reveal>
+<div class="lib-section-head"><h2 id="surveillance-h">Privacy Tools — what this newsroom actually uses</h2><span class="count">8 sources</span></div>
+<p style="color:var(--text-soft);font-size:.92rem;max-width:70ch;margin-bottom:6px">Free, open-source, battle-tested. No affiliation, no referrals.</p>
+<div class="lib-grid">
+<article class="lib-card" data-cat="surveillance" data-text="tor browser volunteer relays. torproject.org">
+<span class="chip chip--surveil">Anonymity</span>
+<h3>Tor Browser</h3>
+<p class="desc">Volunteer relays.</p>
+<div class="meta">torproject.org</div>
+<div class="lib-actions"><a class="primary" href="https://www.torproject.org/download/" target="_blank" rel="noopener noreferrer">Download →</a></div>
+</article>
+<article class="lib-card" data-cat="surveillance" data-text="signal e2e by default. signal.org">
+<span class="chip chip--surveil">Messaging</span>
+<h3>Signal</h3>
+<p class="desc">E2E by default.</p>
+<div class="meta">signal.org</div>
+<div class="lib-actions"><a class="primary" href="https://signal.org/" target="_blank" rel="noopener noreferrer">Get Signal →</a></div>
+</article>
+<article class="lib-card" data-cat="surveillance" data-text="tails — amnesic os live usb that forgets. tails.net">
+<span class="chip chip--surveil">OS</span>
+<h3>Tails — amnesic OS</h3>
+<p class="desc">Live USB that forgets.</p>
+<div class="meta">tails.net</div>
+<div class="lib-actions"><a class="primary" href="https://tails.net/" target="_blank" rel="noopener noreferrer">Get Tails →</a></div>
+</article>
+<article class="lib-card" data-cat="surveillance" data-text="securedrop whistleblower system. securedrop.org">
+<span class="chip chip--surveil">Drop box software</span>
+<h3>SecureDrop</h3>
+<p class="desc">Whistleblower system.</p>
+<div class="meta">securedrop.org</div>
+<div class="lib-actions"><a class="primary" href="https://securedrop.org/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="surveillance" data-text="onionshare send over tor, no server copy. onionshare.org">
+<span class="chip chip--surveil">File share</span>
+<h3>OnionShare</h3>
+<p class="desc">Send over Tor, no server copy.</p>
+<div class="meta">onionshare.org</div>
+<div class="lib-actions"><a class="primary" href="https://onionshare.org/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="surveillance" data-text="dangerzone rebuild risky pdfs. dangerzone.rocks">
+<span class="chip chip--surveil">Sanitizer</span>
+<h3>Dangerzone</h3>
+<p class="desc">Rebuild risky PDFs.</p>
+<div class="meta">dangerzone.rocks</div>
+<div class="lib-actions"><a class="primary" href="https://dangerzone.rocks/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="surveillance" data-text="exiftool strip exif. exiftool.org">
+<span class="chip chip--surveil">Metadata</span>
+<h3>ExifTool</h3>
+<p class="desc">Strip EXIF.</p>
+<div class="meta">exiftool.org</div>
+<div class="lib-actions"><a class="primary" href="https://exiftool.org/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="surveillance" data-text="eff — surveillance self-defense threat modeling. ssd.eff.org">
+<span class="chip chip--surveil">Guide</span>
+<h3>EFF — Surveillance Self-Defense</h3>
+<p class="desc">Threat modeling.</p>
+<div class="meta">ssd.eff.org</div>
+<div class="lib-actions"><a class="primary" href="https://ssd.eff.org/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+</div>
+</section>
 
-    <!-- ================= Banned / suppressed books ================= -->
-    <section id="banned" aria-labelledby="banned-h" data-reveal>
-      <div class="section-head">
-        <h2 id="banned-h">Books someone didn’t want read</h2>
-        <p class="section-sub">Banned, burned, sued, or seized, and all of them legally free today.</p>
-      </div>
-      <div class="lib-grid">
-        <article class="lib-card" data-reveal>
-          <span class="chip chip--politics">Banned in the USSR until 1990</span>
-          <h3>Doctor Zhivago</h3>
-          <p>Boris Pasternak’s novel was banned at home while the CIA smuggled copies back in. The full text is now public domain in much of the world.</p>
-          <a class="more" href="https://archive.org/search?query=doctor+zhivago+pasternak" target="_blank" rel="noopener noreferrer">Read on the Internet Archive →</a>
-        </article>
-        <article class="lib-card" data-reveal>
-          <span class="chip chip--surveil">Seized by U.S. courts, 1933</span>
-          <h3>Ulysses</h3>
-          <p>Joyce’s masterpiece was burned in four countries and banned by a U.S. court for over a decade before a landmark obscenity ruling freed it. Public domain since 2012.</p>
-          <a class="more" href="https://www.gutenberg.org/ebooks/4300" target="_blank" rel="noopener noreferrer">Read on Project Gutenberg →</a>
-        </article>
-        <article class="lib-card" data-reveal>
-          <span class="chip chip--local">Banned in apartheid South Africa</span>
-          <h3>Burger’s Daughter</h3>
-          <p>Nadine Gordimer’s anti-apartheid novel was one of thousands outlawed under the Publications Act. Copies circulated in secret; the law is gone, the book remains.</p>
-          <a class="more" href="https://archive.org/search?query=burger%27s+daughter+gordimer" target="_blank" rel="noopener noreferrer">Find it on the Internet Archive →</a>
-        </article>
-        <article class="lib-card" data-reveal>
-          <span class="chip chip--surveil">Challenged somewhere almost every year</span>
-          <h3>1984 &amp; Animal Farm</h3>
-          <p>Orwell’s novels keep getting pulled from shelves by people who apparently never finished them. Both entered the public domain worldwide decades ago.</p>
-          <a class="more" href="https://www.gutenberg.org/ebooks/author/37" target="_blank" rel="noopener noreferrer">Read Orwell on Project Gutenberg →</a>
-        </article>
-      </div>
-    </section>
+<section id="osint" aria-labelledby="osint-h" data-reveal>
+<div class="lib-section-head"><h2 id="osint-h">OSINT & Verification — prove it before you publish it</h2><span class="count">9 sources</span></div>
+<p style="color:var(--text-soft);font-size:.92rem;max-width:70ch;margin-bottom:6px">Every claim gets documents, corroboration, or both.</p>
+<div class="lib-grid">
+<article class="lib-card" data-cat="osint" data-text="bellingcat guides geolocation methodology. bellingcat.com/resources">
+<span class="chip chip--surveil">Bellingcat</span>
+<h3>Bellingcat Guides</h3>
+<p class="desc">Geolocation methodology.</p>
+<div class="meta">bellingcat.com/resources</div>
+<div class="lib-actions"><a class="primary" href="https://www.bellingcat.com/resources/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="osint" data-text="osint framework 400+ tools map. osintframework.com">
+<span class="chip chip--surveil">Toolkit</span>
+<h3>OSINT Framework</h3>
+<p class="desc">400+ tools map.</p>
+<div class="meta">osintframework.com</div>
+<div class="lib-actions"><a class="primary" href="https://osintframework.com/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="osint" data-text="verification handbook free pdf. firstdraftnews.org">
+<span class="chip chip--surveil">First Draft</span>
+<h3>Verification Handbook</h3>
+<p class="desc">Free PDF.</p>
+<div class="meta">firstdraftnews.org</div>
+<div class="lib-actions"><a class="primary" href="https://firstdraftnews.org/long-form-article/verification-handbook/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="osint" data-text="google earth pro historical satellite slider. earth.google.com">
+<span class="chip chip--surveil">Maps</span>
+<h3>Google Earth Pro</h3>
+<p class="desc">Historical satellite slider.</p>
+<div class="meta">earth.google.com</div>
+<div class="lib-actions"><a class="primary" href="https://www.google.com/earth/versions/#earth-pro" target="_blank" rel="noopener noreferrer">Get →</a></div>
+</article>
+<article class="lib-card" data-cat="osint" data-text="tineye + yandex earliest instance, not popular. tineye.com">
+<span class="chip chip--surveil">Reverse image</span>
+<h3>TinEye + Yandex</h3>
+<p class="desc">Earliest instance, not popular.</p>
+<div class="meta">tineye.com</div>
+<div class="lib-actions"><a href="https://tineye.com/" target="_blank" rel="noopener noreferrer">TinEye →</a><a href="https://yandex.com/images" target="_blank" rel="noopener noreferrer">Yandex →</a></div>
+</article>
+<article class="lib-card" data-cat="osint" data-text="invid / weverify frame-by-frame. invid-project.eu">
+<span class="chip chip--surveil">Video</span>
+<h3>InVID / WeVerify</h3>
+<p class="desc">Frame-by-frame.</p>
+<div class="meta">invid-project.eu</div>
+<div class="lib-actions"><a class="primary" href="https://www.invid-project.eu/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="osint" data-text="openstreetmap footpaths, fences. openstreetmap.org">
+<span class="chip chip--surveil">Geolocation</span>
+<h3>OpenStreetMap</h3>
+<p class="desc">Footpaths, fences.</p>
+<div class="meta">openstreetmap.org</div>
+<div class="lib-actions"><a class="primary" href="https://www.openstreetmap.org/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="osint" data-text="wayback — save page now archive before edit. web.archive.org/save">
+<span class="chip chip--surveil">Web archive</span>
+<h3>Wayback — Save Page Now</h3>
+<p class="desc">Archive before edit.</p>
+<div class="meta">web.archive.org/save</div>
+<div class="lib-actions"><a href="https://web.archive.org/save" target="_blank" rel="noopener noreferrer">Save now →</a></div>
+</article>
+<article class="lib-card" data-cat="osint" data-text="suncalc solar angle. suncalc.org">
+<span class="chip chip--surveil">Chronolocation</span>
+<h3>SunCalc</h3>
+<p class="desc">Solar angle.</p>
+<div class="meta">suncalc.org</div>
+<div class="lib-actions"><a class="primary" href="https://www.suncalc.org/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+</div>
+</section>
 
-    <!-- ================= Declassified documents ================= -->
-    <section id="declassified" aria-labelledby="declass-h" data-reveal>
-      <div class="section-head">
-        <h2 id="declass-h">Declassified files worth your evening</h2>
-        <p class="section-sub">Officially released, officially public, officially ignored.</p>
-      </div>
-      <div class="lib-grid">
-        <article class="lib-card" data-reveal>
-          <span class="chip chip--surveil">Declassified 2001-present</span>
-          <h3>COINTELPRO files</h3>
-          <p>The FBI’s program of surveillance and disruption against civil-rights groups, read into the record after activists broke into a field office and mailed the proof to newspapers.</p>
-          <a class="more" href="https://vault.fbi.gov/cointelpro" target="_blank" rel="noopener noreferrer">FBI Vault: COINTELPRO →</a>
-        </article>
-        <article class="lib-card" data-reveal>
-          <span class="chip chip--politics">Released via FOIA</span>
-          <h3>Pentagon Papers</h3>
-          <p>The government’s own secret history of Vietnam proved four administrations misled the public, and made “prior restraint” a losing argument in court. Fully declassified in 2011.</p>
-          <a class="more" href="https://www.archives.gov/research/pentagon-papers" target="_blank" rel="noopener noreferrer">National Archives →</a>
-        </article>
-        <article class="lib-card" data-reveal>
-          <span class="chip chip--local">Declassified 1997</span>
-          <h3>Project SUNSHINE &amp; body snatching</h3>
-          <p>Files revealing that scientists globally collected thousands of deceased infants’ remains, often without parental consent, to study strontium-90 fallout.</p>
-          <a class="more" href="https://nsarchive.gwu.edu/project/nuclear-archives" target="_blank" rel="noopener noreferrer">National Security Archive →</a>
-        </article>
-        <article class="lib-card" data-reveal>
-          <span class="chip chip--surveil">Ongoing releases</span>
-          <h3>JFK assassination records</h3>
-          <p>Decades of scheduled releases under the JFK Records Act, a masterclass in how governments technically comply with transparency while burying it in volume.</p>
-          <a class="more" href="https://www.archives.gov/research/jfk" target="_blank" rel="noopener noreferrer">National Archives JFK collection →</a>
-        </article>
-      </div>
-    </section>
+<section id="legal" aria-labelledby="legal-h" data-reveal>
+<div class="lib-section-head"><h2 id="legal-h">Legal & Whistleblower — know the risk before you take it</h2><span class="count">8 sources</span></div>
+<p style="color:var(--text-soft);font-size:.92rem;max-width:70ch;margin-bottom:6px">Know the risk before you take it.</p>
+<div class="lib-grid">
+<article class="lib-card" data-cat="legal" data-text="freedom of the press — guides whistleblower guides. freedom.press">
+<span class="chip chip--politics">FPF</span>
+<h3>Freedom of the Press — Guides</h3>
+<p class="desc">Whistleblower guides.</p>
+<div class="meta">freedom.press</div>
+<div class="lib-actions"><a class="primary" href="https://freedom.press/training/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="legal" data-text="gap — know your rights lawyers for whistleblowers. whistleblower.org">
+<span class="chip chip--politics">Government Accountability Project</span>
+<h3>GAP — Know Your Rights</h3>
+<p class="desc">Lawyers for whistleblowers.</p>
+<div class="meta">whistleblower.org</div>
+<div class="lib-actions"><a class="primary" href="https://whistleblower.org/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="legal" data-text="reporters committee — hotline free legal hotline. rcfp.org">
+<span class="chip chip--politics">RCFP</span>
+<h3>Reporters Committee — Hotline</h3>
+<p class="desc">Free legal hotline.</p>
+<div class="meta">rcfp.org</div>
+<div class="lib-actions"><a class="primary" href="https://www.rcfp.org/resources/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="legal" data-text="eff — know your rights protest/border guides. eff.org/issues/know-your-rights">
+<span class="chip chip--politics">EFF</span>
+<h3>EFF — Know Your Rights</h3>
+<p class="desc">Protest/border guides.</p>
+<div class="meta">eff.org/issues/know-your-rights</div>
+<div class="lib-actions"><a class="primary" href="https://www.eff.org/issues/know-your-rights" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="legal" data-text="aclu of washington state rights cards. aclu-wa.org">
+<span class="chip chip--politics">ACLU-WA</span>
+<h3>ACLU of Washington</h3>
+<p class="desc">State rights cards.</p>
+<div class="meta">aclu-wa.org</div>
+<div class="lib-actions"><a class="primary" href="https://www.aclu-wa.org/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="legal" data-text="foia appeal — how to appeal ogis mediation. archives.gov/ogis">
+<span class="chip chip--politics">FOIA Appeal Guide</span>
+<h3>FOIA Appeal — How to appeal</h3>
+<p class="desc">OGIS mediation.</p>
+<div class="meta">archives.gov/ogis</div>
+<div class="lib-actions"><a href="https://www.archives.gov/ogis" target="_blank" rel="noopener noreferrer">OGIS →</a><a href="https://www.foia.gov/how-to.html" target="_blank" rel="noopener noreferrer">How to</a></div>
+</article>
+<article class="lib-card" data-cat="legal" data-text="signal — safety numbers verify key. support.signal.org">
+<span class="chip chip--politics">Signal</span>
+<h3>Signal — Safety numbers</h3>
+<p class="desc">Verify key.</p>
+<div class="meta">support.signal.org</div>
+<div class="lib-actions"><a class="primary" href="https://support.signal.org/hc/en-us/articles/360007060632" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="legal" data-text="qubes os compartmentalize. qubes-os.org">
+<span class="chip chip--politics">Qubes OS</span>
+<h3>Qubes OS</h3>
+<p class="desc">Compartmentalize.</p>
+<div class="meta">qubes-os.org</div>
+<div class="lib-actions"><a class="primary" href="https://www.qubes-os.org/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+</div>
+</section>
 
-    <!-- ================= Privacy tools ================= -->
-    <section id="tools" aria-labelledby="tools-h" data-reveal>
-      <div class="section-head">
-        <h2 id="tools-h">Tools this newsroom actually uses</h2>
-        <p class="section-sub">Free, open-source, battle-tested. No affiliation, no referral links, ever.</p>
-      </div>
-      <div class="lib-grid">
-        <article class="lib-card" data-reveal>
-          <span class="chip chip--local">Anonymity</span>
-          <h3>Tor Browser</h3>
-          <p>Routes traffic through volunteer relays so websites see the network instead of you. Built by a nonprofit, audited constantly, hated by advertisers.</p>
-          <a class="more" href="https://www.torproject.org/download/" target="_blank" rel="noopener noreferrer">torproject.org →</a>
-        </article>
-        <article class="lib-card" data-reveal>
-          <span class="chip chip--local">Messaging</span>
-          <h3>Signal</h3>
-          <p>End-to-end encryption by default, minimal metadata, open protocol. The reason “Signal number” appears in every serious tip-line policy.</p>
-          <a class="more" href="https://signal.org/" target="_blank" rel="noopener noreferrer">signal.org →</a>
-        </article>
-        <article class="lib-card" data-reveal>
-          <span class="chip chip--surveil">Secure drop box software</span>
-          <h3>GlobaLeaks / SecureDrop</h3>
-          <p>The two open-source platforms newsrooms run to accept leaks without logs. This site’s simple drop box is inspired by their threat model.</p>
-          <a class="more" href="https://securedrop.org/" target="_blank" rel="noopener noreferrer">securedrop.org →</a>
-        </article>
-        <article class="lib-card" data-reveal>
-          <span class="chip chip--politics">Verification</span>
-          <h3>ExifTool &amp; reverse image search</h3>
-          <p>Half of verification is proving a photo wasn’t. Strip metadata, check origins, demand originals, habits anyone can adopt for free.</p>
-          <a class="more" href="https://exiftool.org/" target="_blank" rel="noopener noreferrer">exiftool.org →</a>
-        </article>
-      </div>
-    </section>
+<section id="history" aria-labelledby="history-h" data-reveal>
+<div class="lib-section-head"><h2 id="history-h">History & Primary Sources — the receipts for the present</h2><span class="count">9 sources</span></div>
+<p style="color:var(--text-soft);font-size:.92rem;max-width:70ch;margin-bottom:6px">The receipts for the present.</p>
+<div class="lib-grid">
+<article class="lib-card" data-cat="history" data-text="founders online 70k papers of founders. founders.archives.gov">
+<span class="chip chip--culture">NARA</span>
+<h3>Founders Online</h3>
+<p class="desc">70k papers of founders.</p>
+<div class="meta">founders.archives.gov</div>
+<div class="lib-actions"><a class="primary" href="https://founders.archives.gov/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="history" data-text="chronicling america 20m newspaper pages 1789-1963. chroniclingamerica.loc.gov">
+<span class="chip chip--culture">Library of Congress</span>
+<h3>Chronicling America</h3>
+<p class="desc">20M newspaper pages 1789-1963.</p>
+<div class="meta">chroniclingamerica.loc.gov</div>
+<div class="lib-actions"><a class="primary" href="https://chroniclingamerica.loc.gov/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="history" data-text="smithsonian open access 4.5m images cc0. si.edu/openaccess">
+<span class="chip chip--culture">Smithsonian</span>
+<h3>Smithsonian Open Access</h3>
+<p class="desc">4.5M images CC0.</p>
+<div class="meta">si.edu/openaccess</div>
+<div class="lib-actions"><a class="primary" href="https://www.si.edu/openaccess" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="history" data-text="nasa technical reports server 500k aerospace reports. ntrs.nasa.gov">
+<span class="chip chip--culture">NASA</span>
+<h3>NASA Technical Reports Server</h3>
+<p class="desc">500k aerospace reports.</p>
+<div class="meta">ntrs.nasa.gov</div>
+<div class="lib-actions"><a class="primary" href="https://ntrs.nasa.gov/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="history" data-text="clinicaltrials.gov 500k studies. clinicaltrials.gov">
+<span class="chip chip--culture">NIH</span>
+<h3>ClinicalTrials.gov</h3>
+<p class="desc">500k studies.</p>
+<div class="meta">clinicaltrials.gov</div>
+<div class="lib-actions"><a class="primary" href="https://clinicaltrials.gov/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="history" data-text="doj civil rights — pattern & practice findings letters. justice.gov/crt">
+<span class="chip chip--culture">DOJ</span>
+<h3>DOJ Civil Rights — Pattern & Practice</h3>
+<p class="desc">Findings letters.</p>
+<div class="meta">justice.gov/crt</div>
+<div class="lib-actions"><a class="primary" href="https://www.justice.gov/crt/special-litigation-section-cases-and-matters" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="history" data-text="govinfo.gov bills, budgets, register. govinfo.gov">
+<span class="chip chip--culture">GPO</span>
+<h3>govinfo.gov</h3>
+<p class="desc">Bills, budgets, Register.</p>
+<div class="meta">govinfo.gov</div>
+<div class="lib-actions"><a class="primary" href="https://www.govinfo.gov/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="history" data-text="national archives catalog 18m descriptions, 150m pages. catalog.archives.gov">
+<span class="chip chip--culture">NARA Catalog</span>
+<h3>National Archives Catalog</h3>
+<p class="desc">18M descriptions, 150M pages.</p>
+<div class="meta">catalog.archives.gov</div>
+<div class="lib-actions"><a class="primary" href="https://catalog.archives.gov/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+<article class="lib-card" data-cat="history" data-text="world bank open knowledge 40k reports. openknowledge.worldbank.org">
+<span class="chip chip--culture">World Bank</span>
+<h3>World Bank Open Knowledge</h3>
+<p class="desc">40k reports.</p>
+<div class="meta">openknowledge.worldbank.org</div>
+<div class="lib-actions"><a class="primary" href="https://openknowledge.worldbank.org/" target="_blank" rel="noopener noreferrer">Open →</a></div>
+</article>
+</div>
+</section>
 
-    <section class="legal-note" data-reveal>
-      <p>
-        <strong>Sourcing policy:</strong> we link to official archives, libraries,
-        and rightsholders who freely distribute these works. Nothing here is
-        pirated. If a link breaks or a rightsholder objects, write to us and
-        we’ll fix or remove it within days, that’s what accountability looks like.
-      </p>
-    </section>
-
-    <!-- ================= Notify band ================= -->
-    <section class="notify-band" data-reveal>
-      <div>
-        <h2>New additions land quietly.</h2>
-        <p>The library grows between stories, documents, tools, recovered texts. Follow along by RSS or mirror the whole site.</p>
-      </div>
-      <div class="notify-actions">
-        <a href="download.html" class="btn btn--ghost">Download everything</a>
-        <a href="mirror.html" class="btn btn--ghost">Run a mirror</a>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- ================= Footer ================= -->
-  <footer class="site-footer">
-    <div class="container">
-      <div class="footer-grid">
-        <div class="footer-brand">
-          <div class="foot-logo">The Seattle <span>Avalanche</span></div>
-          <p>The Avalanche is an independent network. Seattle is the only official outlet right now. If it is not on the <a href="network.html">Network</a> page, it is not verified.</p>
-          <div class="privacy-badges">
-            <span class="badge">No cookies</span>
-            <span class="badge">No trackers</span>
-            <span class="badge">No ads</span>
-            <span class="badge">Reader funded</span>
-          </div>
-        </div>
-
-        <div class="footer-col">
-          <h4>Navigate</h4>
-          <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="about.html">About</a></li>
-          <li><a href="founders.html">Founders</a></li>
-          <li><a href="network.html">Network</a></li>
-            <li><a href="submit.html">Contact / send info</a></li>
-            <li><a href="answers.html">Answers board</a></li>
-            <li><a href="library.html">Media library</a></li>
-            <li><a href="mirror.html">Mirror this site</a></li>
-            <li><a href="download.html">Download site &amp; source</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h4>Policies</h4>
-          <ul>
-            <li><a href="about.html#faq">Source protection</a></li>
-            <li><a href="about.html#faq">Privacy (we collect nothing)</a></li>
-            <li><a href="#">Corrections</a></li>
-            <li><a href="#">Republishing (credit required)</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h4>Elsewhere</h4>
-          <ul>
-            <li><a href="#">RSS feed</a></li>
-            <li><a href="#">Tor mirror (.onion)</a></li>
-            <li><a href="#">Mastodon</a></li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="footer-bottom">
-        <span class="mono" id="ver-stamp"></span>
-        <span>© 2026 The Avalanche · Seattle is the sole official outlet · If it is not on the Network page, it is not verified</span> · <a href="admin.html" style="color:var(--faint);text-decoration:none;" title="Staff login">Admin</a>
-      </div>
-    </div>
-  </footer>
+<section class="legal-note" data-reveal style="margin-top:40px;">
+<p><strong>Sourcing policy:</strong> every link goes to an official archive, library, or rightsholder. Nothing is pirated. If a link breaks or a rightsholder proves we should not list it, we remove it within days.</p>
+</section>
+<section class="notify-band" id="download-all" data-reveal style="margin-top:28px;">
+<div><h2>Keep your own copy.</h2><p>This library is designed to survive us. Download the index as JSON, mirror the site, or grab the source.</p></div>
+<div class="notify-actions" style="display:grid;gap:10px"><button class="btn btn--primary" onclick="downloadLibrary()">⤓ Download library (JSON)</button><a href="download.html" class="btn btn--ghost">Download / mirror the whole site</a><button class="btn btn--ghost" onclick="copyLibraryLinks()">Copy all links as text</button></div>
+</section>
+<div class="info-banner" data-reveal style="margin-top:18px"><span class="icon">⚠</span><div><strong>Seed this:</strong> <code style="font-family:var(--font-mono);font-size:.82rem">library.json</code> is generated from this page and can be re-hosted anywhere.</div></div>
+</main>
+<footer class="site-footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><div class="foot-logo">The Seattle <span>Avalanche</span></div><p>The Avalanche is an independent network. Seattle is the only official outlet right now. If it is not on the <a href="network.html">Network</a> page, it is not verified.</p><div class="privacy-badges"><span class="badge">No cookies</span><span class="badge">No trackers</span><span class="badge">No ads</span><span class="badge">Reader funded</span></div></div><div class="footer-col"><h4>Navigate</h4><ul><li><a href="index.html">Home</a></li><li><a href="about.html">About</a></li><li><a href="founders.html">Founders</a></li><li><a href="network.html">Network</a></li><li><a href="submit.html">Contact / send info</a></li><li><a href="answers.html">Answers board</a></li><li><a href="library.html">Media library</a></li><li><a href="mirror.html">Mirror this site</a></li><li><a href="download.html">Download site &amp; source</a></li></ul></div><div class="footer-col"><h4>Policies</h4><ul><li><a href="about.html#faq">Source protection</a></li><li><a href="about.html#faq">Privacy (we collect nothing)</a></li><li><a href="#">Corrections</a></li><li><a href="#">Republishing (credit required)</a></li></ul></div><div class="footer-col"><h4>Elsewhere</h4><ul><li><a href="#">RSS feed</a></li><li><a href="#">Tor mirror (.onion)</a></li><li><a href="#">Mastodon</a></li></ul></div></div><div class="footer-bottom"><span class="mono" id="ver-stamp"></span><span>© 2026 The Avalanche · Seattle is the sole official outlet</span> · <a href="admin.html" style="color:var(--faint);text-decoration:none;" title="Staff login">Admin</a></div></div></footer>
+<script>
+function filterLib(){
+  const q=(document.getElementById("lib-search").value||"").toLowerCase().trim();
+  const cat=document.getElementById("lib-cat").value;
+  let visible=0;
+  document.querySelectorAll(".lib-card[data-cat]").forEach(card=>{
+    const text=(card.getAttribute("data-text")||"" + " " + card.textContent).toLowerCase();
+    const c=card.getAttribute("data-cat");
+    const matchQ=!q || text.includes(q);
+    const matchCat=cat==="all" || c===cat;
+    const show=matchQ && matchCat;
+    card.classList.toggle("hide", !show);
+    if(show) visible++;
+  });
+  document.querySelectorAll("section[id]").forEach(sec=>{
+    if(!sec.querySelector(".lib-grid")) return;
+    const any=[...sec.querySelectorAll(".lib-card")].some(c=> !c.classList.contains("hide"));
+    sec.style.display= any ? "" : "none";
+  });
+  const l=document.getElementById("lib-count");
+  if(l) l.textContent=visible + " sources" + (q? ' for "'+q+'"':"") + (cat!=="all"? " · "+cat:"");
+  document.getElementById("stat-total").textContent=visible;
+}
+function collectLibrary(){
+  return [...document.querySelectorAll(".lib-card")].map(card=>{
+    const title=card.querySelector("h3")?.textContent?.trim()||"";
+    const desc=card.querySelector("p.desc")?.textContent?.trim()||"";
+    const cat=card.getAttribute("data-cat")||"";
+    const links=[...card.querySelectorAll(".lib-actions a")].map(a=>({text:a.textContent.trim(), href:a.href}));
+    return {category:cat, title, description:desc, links};
+  });
+}
+function downloadLibrary(){
+  const data={generated:new Date().toISOString(), source:"The Seattle Avalanche — Free Media Library", count: document.querySelectorAll(".lib-card").length, items: collectLibrary()};
+  const blob=new Blob([JSON.stringify(data,null,2)], {type:"application/json"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="avalanche-library.json"; a.click(); URL.revokeObjectURL(a.href);
+}
+function copyLibraryLinks(){
+  const txt=collectLibrary().map(it=> `- ${it.title} [${it.category}]: ${it.links.map(l=> l.href).join(", ")}`).join("\n");
+  navigator.clipboard.writeText(txt).then(()=> alert("Copied "+collectLibrary().length+" sources")).catch(()=> prompt("Copy these", txt));
+}
+document.addEventListener("DOMContentLoaded", ()=>{ const c=document.querySelectorAll(".lib-card").length; document.getElementById("stat-total").textContent=c; document.getElementById("lib-count").textContent=c+" sources"; });
+</script>
 </body>
 </html>
-

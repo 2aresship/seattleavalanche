@@ -2049,6 +2049,68 @@ button {
   .notify-form input[type="email"] { width: 100%; }
 }
 
+
+/* ---------- Light mode fixes for gradients and mail/form bands ---------- */
+[data-theme="light"] .tip-band,
+[data-theme="light"] .notify-band,
+[data-theme="light"] .dl-panel {
+  background:
+    radial-gradient(600px 300px at 90% -20%, rgba(14,165,233,0.08), transparent 60%),
+    linear-gradient(160deg, #ffffff, #f0f9ff 70%);
+  border-color: rgba(14,165,233,0.18);
+}
+[data-theme="light"] .tip-band h2,
+[data-theme="light"] .notify-band h2,
+[data-theme="light"] .dl-panel h2 { color: var(--text); }
+[data-theme="light"] .tip-band p,
+[data-theme="light"] .notify-band p,
+[data-theme="light"] .dl-panel p { color: var(--text-soft); }
+
+[data-theme="light"] .info-banner {
+  background: rgba(14,165,233,0.06);
+  border-color: rgba(14,165,233,0.18);
+  color: var(--text-soft);
+}
+[data-theme="light"] .warn-banner {
+  background: rgba(245,158,11,0.08);
+  border-color: rgba(245,158,11,0.3);
+  color: #92400e;
+}
+[data-theme="light"] .form-shell,
+[data-theme="light"] .safety-checklist,
+[data-theme="light"] .channel,
+[data-theme="light"] .lib-card,
+[data-theme="light"] .module,
+[data-theme="light"] .cta-card {
+  background: #ffffff;
+  border-color: var(--line);
+  box-shadow: 0 4px 18px rgba(15,23,42,0.06);
+}
+[data-theme="light"] .cta-card {
+  background: linear-gradient(165deg, #ffffff, #f8fafc);
+}
+[data-theme="light"] .lib-links a {
+  background: #f8fafc;
+  border-color: var(--line);
+  color: var(--text-soft);
+}
+[data-theme="light"] .copy-field code,
+[data-theme="light"] .pgp-block pre {
+  background: #f1f5f9;
+  color: var(--text-soft);
+  border-color: var(--line);
+}
+[data-theme="light"] a:hover { color: var(--ice-deep); }
+[data-theme="light"] .warn-banner .icon { color: #d97706; }
+[data-theme="light"] .file-table th { background: #f1f5f9; }
+
+/* Library specific light tweaks */
+[data-theme="light"] .lib-toolbar {
+  background: rgba(255,255,255,0.9);
+  border-color: var(--line);
+}
+[data-theme="light"] .lib-count { color: var(--muted); }
+
 .ok-msg{background:rgba(111,224,168,.08);border:1px solid #6fe0a8;color:#6fe0a8;border-radius:8px;padding:10px 14px;margin-top:14px}
 .bad-msg{background:rgba(255,93,93,.08);border:1px solid #ff5d5d;color:#ff5d5d;border-radius:8px;padding:10px 14px;margin-top:14px}
 .form-shell{max-width:760px;border:1px solid var(--line);border-radius:14px;background:var(--surface);padding:28px}
