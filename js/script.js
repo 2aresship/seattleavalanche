@@ -183,5 +183,54 @@
         frame();
       }
     });
+
+    // subtle easter egg: triple-click logo intensifies snow briefly
+    var logo = document.querySelector(".logo-mark");
+    var clicks = 0; var clickTimer = null;
+    if (logo && !reducedMotion) {
+      logo.style.cursor = "pointer";
+      logo.setAttribute("title", "❄");
+      logo.addEventListener("click", function(){
+        clicks++;
+        clearTimeout(clickTimer);
+        clickTimer = setTimeout(function(){ clicks=0; }, 900);
+        if (clicks===3){
+          clicks=0;
+          // burst: add 40 extra flakes for 3s
+          for(var i=0;i<40;i++) flakes.push(makeFlake(false));
+          logo.style.filter = "drop-shadow(0 0 22px rgba(125,215,255,0.85))";
+          setTimeout(function(){ logo.style.filter = ""; }, 1800);
+        }
+      });
+    }
   }
+
+  /* ---------- Subtle easter eggs (professional) ---------- */
+  // Konami on main site: very subtle - masthead title shivers like snow
+  (function(){
+    if (reducedMotion) return;
+    var seq=["ArrowUp","ArrowUp","ArrowDown","ArrowDown","ArrowLeft","ArrowRight","ArrowLeft","ArrowRight","b","a"];
+    var p=0;
+    window.addEventListener("keydown", function(e){
+      if(e.key===seq[p]) p++; else p=0;
+      if(p===seq.length){
+        p=0;
+        var t=document.querySelector(".masthead-title span");
+        if(t){
+          t.style.transition="filter .2s";
+          t.style.filter="brightness(1.25) drop-shadow(0 0 10px rgba(125,215,255,0.45))";
+          setTimeout(function(){ t.style.filter=""; }, 1200);
+        }
+        // also brief snow gust if canvas exists
+        var cv=document.getElementById("snow-canvas");
+        if(cv) cv.style.opacity="1";
+        setTimeout(function(){ if(cv) cv.style.opacity="0.75"; }, 1500);
+      }
+      // ? hint
+      if(e.key==="?" && !e.ctrlKey && !e.metaKey){
+        var el=document.getElementById("easter");
+        if(el) el.style.opacity="1";
+      }
+    });
+  })();
 })();

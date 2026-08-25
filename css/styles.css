@@ -140,109 +140,74 @@
   background: linear-gradient(135deg, #f59e0b, #f97316);
 }
 
-/* ---------- Vibrant, non-repetitive accents + brightness ---------- */
+/* ---------- Professional color integration + subtle motion ---------- */
 body::before{
   content:"";
   position:fixed; inset:0;
   background:
-    radial-gradient(700px 500px at 15% 8%, rgba(125,215,255,0.09), transparent 65%),
-    radial-gradient(600px 400px at 85% 12%, rgba(157,78,221,0.07), transparent 60%),
-    radial-gradient(500px 400px at 50% 85%, rgba(255,107,157,0.05), transparent 65%);
+    radial-gradient(700px 500px at 15% 8%, rgba(125,215,255,0.045), transparent 65%),
+    radial-gradient(600px 400px at 85% 12%, rgba(125,215,255,0.03), transparent 60%);
   pointer-events:none; z-index:-1;
-  animation: bgDrift 28s ease-in-out infinite alternate;
 }
-@keyframes bgDrift{0%{transform:translate(0,0)}100%{transform:translate(-12px,10px) scale(1.02)}}
 
-.masthead{ background: linear-gradient(180deg, #0f1e33 0%, #13233f 45%, #0f141e 100%); }
+/* Masthead stays editorial - subtle depth, no rainbow */
+.masthead{ background: linear-gradient(180deg, #111827 0%, #0f1a2e 55%, #0f141e 100%); border-bottom-color: rgba(125,215,255,0.08); }
 .masthead-title a span{
-  background: linear-gradient(100deg, #fff 18%, #7dd7ff 38%, #c08bff 58%, #ff8fbc 78%, #fff 92%);
-  background-size:200% 100%;
+  background: linear-gradient(110deg, var(--text) 55%, var(--ice) 100%);
   -webkit-background-clip:text; background-clip:text;
-  animation: titleShimmer 9s linear infinite;
 }
-@keyframes titleShimmer{0%{background-position:0% 50%}100%{background-position:200% 50%}}
-.logo-mark{ animation: logoFloat 5.5s ease-in-out infinite; filter: drop-shadow(0 0 16px rgba(125,215,255,0.55)) drop-shadow(0 0 32px rgba(157,78,221,0.22)); }
-@keyframes logoFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+.logo-mark{ filter: drop-shadow(0 0 12px rgba(125,215,255,0.28)); transition: filter .3s ease; }
+.logo-mark:hover{ filter: drop-shadow(0 0 18px rgba(125,215,255,0.45)); }
+/* tiny easter egg: click logo 3x triggers snow - logic in script.js */
 
-.ticker-label{
-  background: linear-gradient(135deg, #ff5d5d, #ff8f6b 55%, #ffd166);
-  animation: tickerGlow 3s ease-in-out infinite alternate;
-}
-@keyframes tickerGlow{0%{filter:brightness(1)}100%{filter:brightness(1.08) saturate(1.15)}}
+/* Ticker stays alert, not rainbow - single ice accent */
+.ticker-label{ background: var(--ice); color: #04121b; }
 
-/* status cards - each unique */
-.status-card:nth-child(1){ border-image: linear-gradient(135deg, #7dd7ff, #0ea5e9) 1; border-top:3px solid transparent; background: linear-gradient(170deg, rgba(125,215,255,0.09), transparent 55%), var(--surface); box-shadow: 0 8px 32px rgba(125,215,255,0.09); }
-.status-card:nth-child(2){ border-image: linear-gradient(135deg, #a3ff12, #22c55e) 1; border-top:3px solid transparent; background: linear-gradient(170deg, rgba(163,255,18,0.07), transparent 55%), var(--surface); box-shadow: 0 8px 32px rgba(163,255,18,0.06); }
-.status-card:nth-child(3){ border-image: linear-gradient(135deg, #9d4edd, #ff6b9d) 1; border-top:3px solid transparent; background: linear-gradient(170deg, rgba(157,78,221,0.09), transparent 55%), var(--surface); box-shadow: 0 8px 32px rgba(157,78,221,0.09); }
-.status-card:hover{ transform: translateY(-4px) scale(1.01); box-shadow: 0 18px 45px rgba(0,0,0,0.38); }
-.status-card .chip{ animation: chipPulse 4s ease-in-out infinite; }
-@keyframes chipPulse{0%,100%{filter:brightness(1)}50%{filter:brightness(1.18)}}
-
-.how-step{ position:relative; overflow:hidden; }
-.how-step::before{ content:""; position:absolute; inset:0; background: radial-gradient(300px 120px at 0% 0%, rgba(255,255,255,0.04), transparent 70%); opacity:0; transition:opacity .25s; }
-.how-step:hover::before{ opacity:1; }
-.how-step:nth-child(1) .num { background: linear-gradient(135deg, #7dd7ff, #0ea5e9); box-shadow: 0 4px 14px rgba(14,165,233,0.35); }
-.how-step:nth-child(2) .num { background: linear-gradient(135deg, #9d4edd, #7c3aed); box-shadow: 0 4px 14px rgba(124,58,237,0.35); }
-.how-step:nth-child(3) .num { background: linear-gradient(135deg, #ff6b9d, #ec4899); box-shadow: 0 4px 14px rgba(236,72,153,0.32); }
-.how-step:nth-child(4) .num { background: linear-gradient(135deg, #a3ff12, #22c55e); color: #0f172a; box-shadow: 0 4px 14px rgba(34,197,94,0.32); }
-.how-step:hover{ transform: translateY(-3px); border-color: rgba(180,210,255,0.22); }
-
-/* CTA cards - unique per card with animated top glow */
-.cta-card{ overflow:hidden; position:relative; }
-.cta-card::after{ content:""; position:absolute; top:0; left:0; right:0; height:3px; background-size:200% 100%; animation: gradientSlide 6s linear infinite; }
-.cta-card:nth-child(1)::after { background: linear-gradient(90deg, #0ea5e9, #22d3ee, #0ea5e9); }
-.cta-card:nth-child(2)::after { background: linear-gradient(90deg, #7c3aed, #ff6b9d, #7c3aed); }
-.cta-card:nth-child(3)::after { background: linear-gradient(90deg, #ff8c42, #ffd166, #ff8c42); }
-@keyframes gradientSlide{0%{background-position:0% 50%}100%{background-position:200% 50%}}
-.cta-card:hover{ transform: translateY(-5px) scale(1.01); box-shadow: 0 16px 40px rgba(0,0,0,0.35); }
-.cta-icon{ animation: iconBob 3.2s ease-in-out infinite; display:inline-block; }
-.cta-card:nth-child(2) .cta-icon{ animation-delay:.4s }
-.cta-card:nth-child(3) .cta-icon{ animation-delay:.8s }
-@keyframes iconBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
-
-.status-card--active {
-  border-color: rgba(255, 107, 157, 0.35);
+/* Status cards - uniform professional, one subtle ice accent for active */
+.status-card{ border-top: 2px solid transparent; transition: transform .2s ease, border-color .2s, box-shadow .2s; }
+.status-card:hover{ transform: translateY(-2px); border-color: rgba(125,215,255,0.18); box-shadow: 0 10px 28px rgba(0,0,0,0.28); }
+.status-card--active{
+  border-top-color: var(--ice);
+  border-color: rgba(125,215,255,0.22);
   background:
-    linear-gradient(170deg, rgba(255, 107, 157, 0.08), transparent 42%),
-    linear-gradient(200deg, rgba(157, 78, 221, 0.06), transparent 50%),
+    linear-gradient(180deg, rgba(125,215,255,0.05), transparent 45%),
     var(--surface);
-  animation: activePulse 4s ease-in-out infinite alternate;
 }
-@keyframes activePulse{0%{box-shadow:0 8px 30px rgba(255,107,157,0.12)}100%{box-shadow:0 12px 40px rgba(157,78,221,0.16)}}
 
-/* lib cards - 6-way non-repetitive neon edge + hover glow */
-.lib-card{ transition: transform .2s, border-color .2s, box-shadow .2s; }
-.lib-card:nth-child(6n+1) { border-left: 3px solid rgba(125, 215, 255, 0.45); }
-.lib-card:nth-child(6n+2) { border-left: 3px solid rgba(157, 78, 221, 0.45); }
-.lib-card:nth-child(6n+3) { border-left: 3px solid rgba(255, 107, 157, 0.45); }
-.lib-card:nth-child(6n+4) { border-left: 3px solid rgba(163, 255, 18, 0.45); }
-.lib-card:nth-child(6n+5) { border-left: 3px solid rgba(255, 140, 66, 0.45); }
-.lib-card:nth-child(6n+6) { border-left: 3px solid rgba(45, 212, 191, 0.45); }
-.lib-card:hover{ transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,0.28); }
-.lib-card:nth-child(6n+1):hover{ box-shadow: 0 10px 30px rgba(125,215,255,0.14); border-left-color: #7dd7ff; }
-.lib-card:nth-child(6n+2):hover{ box-shadow: 0 10px 30px rgba(157,78,221,0.14); border-left-color: #9d4edd; }
-.lib-card:nth-child(6n+3):hover{ box-shadow: 0 10px 30px rgba(255,107,157,0.14); border-left-color: #ff6b9d; }
-.lib-card:nth-child(6n+4):hover{ box-shadow: 0 10px 30px rgba(163,255,18,0.12); border-left-color: #a3ff12; }
-.lib-card:nth-child(6n+5):hover{ box-shadow: 0 10px 30px rgba(255,140,66,0.13); border-left-color: #ff8c42; }
-.lib-card:nth-child(6n+6):hover{ box-shadow: 0 10px 30px rgba(45,212,191,0.13); border-left-color: #2dd4bf; }
+/* How it works - one palette, subtle lift */
+.how-step{ transition: transform .18s, border-color .18s; }
+.how-step:hover{ transform: translateY(-2px); border-color: rgba(125,215,255,0.18); }
+.how-step .num{ background: var(--ice); color:#04121b; box-shadow: none; }
+.how-step:nth-child(2) .num{ background: #8fb4ff; }
+.how-step:nth-child(3) .num{ background: #a8d8ff; }
+.how-step:nth-child(4) .num{ background: #c7e8ff; color:#0f172a; }
 
-/* brighter dark buttons + animated primary */
+/* CTA cards - unified ice top edge + gentle hover, no sliding rainbows */
+.cta-card{ border-top: 2px solid transparent; transition: transform .2s, border-color .2s, box-shadow .2s; }
+.cta-card:hover{ transform: translateY(-3px); border-top-color: rgba(125,215,255,0.45); box-shadow: 0 12px 32px rgba(0,0,0,0.28); }
+.cta-icon{ transition: transform .2s ease; }
+.cta-card:hover .cta-icon{ transform: translateY(-2px); }
+
+/* Library cards - single ice left edge, professional */
+.lib-card{ border-left: 2px solid transparent; transition: border-color .18s, transform .18s, box-shadow .18s; }
+.lib-card:hover{ border-left-color: var(--ice); transform: translateY(-2px); box-shadow: 0 8px 22px rgba(0,0,0,0.18); }
+
+/* Buttons - editorial, no shimmer - just solid ice with soft glow on hover */
 .btn--primary{
-  background: linear-gradient(135deg, #7dd7ff 0%, #38b6e8 45%, #9d4edd 100%);
-  background-size:200% 100%;
-  animation: btnShimmer 7s linear infinite;
-  box-shadow: 0 8px 28px rgba(56,182,232,0.32), 0 0 18px rgba(125,215,255,0.18);
+  background: var(--ice);
+  color: #04121b;
+  box-shadow: 0 4px 16px rgba(125,215,255,0.18);
 }
-@keyframes btnShimmer{0%{background-position:0% 50%}100%{background-position:200% 50%}}
-.btn--primary:hover{ filter:brightness(1.08); box-shadow: 0 10px 34px rgba(56,182,232,0.42), 0 0 22px rgba(157,78,221,0.18); }
+.btn--primary:hover{ background: #a6e4ff; box-shadow: 0 6px 20px rgba(125,215,255,0.26); }
 
-/* notify band brighter with animated glow */
-.notify-band, .tip-band, .dl-panel{ position:relative; overflow:hidden; }
-.notify-band::before, .tip-band::before, .dl-panel::before{
-  content:""; position:absolute; inset:-1px; background: radial-gradient(500px 220px at 85% -10%, rgba(125,215,255,0.10), transparent 60%);
-  animation: bandGlow 8s ease-in-out infinite alternate; pointer-events:none;
-}
-@keyframes bandGlow{0%{opacity:.7}100%{opacity:1; transform:translateY(2px)}}
+/* Bands - subtle ice wash, no pulsing */
+.notify-band, .tip-band, .dl-panel{ border-color: rgba(125,215,255,0.16); }
+.notify-band::before, .tip-band::before, .dl-panel::before{ display:none; }
+
+/* Small moving detail: snow is the animation - keep canvas subtle, add hover sparkle on headline */
+.statement h1:hover{ text-shadow: 0 0 22px rgba(125,215,255,0.18); transition: text-shadow .3s; }
+/* Easter egg hint: footer logo drifts on hover */
+.foot-logo:hover{ letter-spacing: 0.01em; transition: letter-spacing .25s; }
 
 /* ---------- Reset ---------- */
 *,
