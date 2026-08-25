@@ -58,6 +58,15 @@ export default {
     if (path === "/api/bans/clear" && request.method === "POST") {
       return authed(request, env, () => handleBansClear(env));
     }
+    if (request.method === "POST" && (path === "/api/tip/delete" || path === "/api/tips/delete")) {
+      return authed(request, env, () => handleTipsDelete(request, env));
+    }
+    if (request.method === "DELETE" && path === "/api/tips") {
+      return authed(request, env, () => handleTipsDelete(request, env));
+    }
+    if (request.method === "DELETE" && path.startsWith("/api/tip/")) {
+      return authed(request, env, () => handleTipDelete(request, env));
+    }
 
     // static assets
     if (env.ASSETS) {
@@ -142,7 +151,7 @@ function withSecurityHeaders(res) {
 function cors() {
   return {
     "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+    "Access-Control-Allow-Methods": "GET, POST, DELETE, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type, Authorization",
   };
 }
@@ -182,6 +191,76 @@ async function handleUnban(request, env){
 async function handleBansClear(env){
   await env.TIPS_KV.put("banned_ips", JSON.stringify([]));
   return json({ok:true, bans:[]});
+}
+
+
+async function handleTipDelete(request, env){
+  // DELETE /api/tip/AV-xxx  or POST /api/tip/delete {id}
+  let id = "";
+  try{
+    if(request.method==="DELETE"){
+      const u=new URL(request.url);
+      id = u.pathname.split("/").pop();
+      if(!id || id==="tip") {
+        const j=await request.json().catch(()=>({}));
+        id = String(j.id||"").trim();
+      }
+    } else {
+      const j=await request.json().catch(()=>({}));
+      id = String(j.id||j.tipId||"").trim();
+      if(!id){
+        const u=new URL(request.url);
+        id = u.searchParams.get("id")||u.searchParams.get("tipId")||"";
+      }
+    }
+  }catch(e){}
+  id=String(id||"").trim();
+  if(!/^AV-[A-Za-z0-9-]+$/.test(id)) return json({ok:false, error:"Bad id"},400);
+  if(env.TIPS_KV){
+    await env.TIPS_KV.delete("tip:"+id);
+    const idx=(await env.TIPS_KV.get("tips:index",{type:"json"}))||[];
+    const out=idx.filter(x=>x!==id);
+    if(out.length!==idx.length) await env.TIPS_KV.put("tips:index", JSON.stringify(out));
+  }
+  return json({ok:true, id});
+}
+async function handleTipsDelete(request, env){
+  // POST {id} or {ids:[...]}  or DELETE ?id=...&ids=...
+  let ids=[];
+  try{
+    if(request.method==="DELETE"){
+      const u=new URL(request.url);
+      const single=u.searchParams.get("id");
+      const multi=u.searchParams.getAll("ids");
+      if(single) ids.push(single);
+      if(multi.length) ids.push(...multi);
+      // also try ?ids=AV-1,AV-2
+      const csv=u.searchParams.get("ids");
+      if(csv && csv.includes(",")) ids=csv.split(",").map(s=>s.trim()).filter(Boolean);
+      if(!ids.length){
+        const j=await request.json().catch(()=>({}));
+        if(j.id) ids.push(String(j.id));
+        if(Array.isArray(j.ids)) ids.push(...j.ids.map(String));
+      }
+    } else {
+      const j=await request.json().catch(()=>({}));
+      if(j.id) ids.push(String(j.id));
+      if(j.tipId) ids.push(String(j.tipId));
+      if(Array.isArray(j.ids)) ids.push(...j.ids.map(String));
+      if(Array.isArray(j.tipIds)) ids.push(...j.tipIds.map(String));
+      // also support {ids:"AV-1,AV-2"}
+      if(typeof j.ids==="string" && j.ids.includes(",")) ids=j.ids.split(",").map(s=>s.trim()).filter(Boolean);
+    }
+  }catch(e){}
+  ids=[...new Set(ids.map(s=>String(s).trim()).filter(s=>/^AV-[A-Za-z0-9-]+$/.test(s)))];
+  if(!ids.length) return json({ok:false, error:"No valid ids"},400);
+  if(env.TIPS_KV){
+    for(const id of ids) await env.TIPS_KV.delete("tip:"+id);
+    const idx=(await env.TIPS_KV.get("tips:index",{type:"json"}))||[];
+    const out=idx.filter(x=>!ids.includes(x));
+    await env.TIPS_KV.put("tips:index", JSON.stringify(out));
+  }
+  return json({ok:true, ids, deleted: ids.length});
 }
 
 /* ---------- public: submit a tip ---------- */

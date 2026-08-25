@@ -446,6 +446,7 @@ function loadState(){
   return blankState();
 }
 function persist(){localStorage.setItem(LS_DATA,JSON.stringify(S));}
+function getAuth(){ return sessionStorage.getItem(LS_KEY)||localStorage.getItem(LS_KEY2)||""; }
 function lockNow(){persist();location.reload();}
 function showTab(name){
   document.querySelectorAll(".nav-btn").forEach(b=>b.classList.toggle("active",b.dataset.tab===name));
@@ -671,7 +672,24 @@ function renderInbox(){
 }
 function toggleSelect(id, on){ if(on) selectedTips.add(id); else selectedTips.delete(id); const e=$("inbox-selected"); if(e) e.textContent=selectedTips.size ? selectedTips.size+" selected" : ""; }
 function bulkMarkRead(){ selectedTips.forEach(id=>{ const t=(S.tips||[]).find(x=>x.id===id); if(t) t.read=true; }); persist(); selectedTips.clear(); renderInbox(); updateDashboard(); msg(true,"Marked selected read."); }
-function bulkDeleteTips(){ if(!selectedTips.size) return msg(false,"Select tips first."); if(!confirm("Delete "+selectedTips.size+" tips?")) return; S.tips=(S.tips||[]).filter(x=>!selectedTips.has(x.id)); selectedTips.clear(); persist(); renderInbox(); updateDashboard(); syncAnswers(); msg(true,"Deleted selected."); }
+async function bulkDeleteTips(){
+  if(!selectedTips.size) return msg(false,"Select tips first.");
+  if(!confirm("Delete "+selectedTips.size+" tips?")) return;
+  const ids=[...selectedTips];
+  S.tips=(S.tips||[]).filter(x=>!selectedTips.has(x.id));
+  selectedTips.clear();
+  persist(); renderInbox(); updateDashboard(); syncAnswers();
+  try{
+    const r=await fetch("/api/tips/delete",{method:"POST", headers:{Authorization:"Bearer "+getAuth(), "Content-Type":"application/json"}, body: JSON.stringify({ids})});
+    const j=await r.json().catch(()=>({ok:false}));
+    if(j.ok){ msg(true,"Deleted "+ids.length+" tip"+(ids.length===1?"":"s")+" (kept deleted on server)."); }
+    else if(r.status===401||r.status===501){ msg(true,"Deleted locally ("+ids.length+"). Server not configured - they may reappear after reload."); }
+    else { msg(false,"Local delete ok, but server bulk delete failed: "+(j.error||r.status)); }
+  }catch(e){
+    msg(false,"Deleted locally, but server bulk delete failed (offline). They may reappear after reload.");
+  }
+  renderInbox();
+}
 function exportInboxCSV(){
   const rows=[["id","received","topic","alias","contact","ip","allow_public","message","reply","published"]];
   (S.tips||[]).forEach(t=> rows.push([t.id, t.received, t.topic, t.alias, t.contact, t.ip||"", t.allow_public, (t.message||"").replace(/"/g,"\"\""), (t.reply&&t.reply.text||"").replace(/"/g,"\"\""), t.reply&&t.reply.published?1:0]));
@@ -680,7 +698,25 @@ function exportInboxCSV(){
 }
 function markRead(id){ const t=(S.tips||[]).find(x=>x.id===id); if(t){ t.read=true; persist(); renderInbox(); updateDashboard(); } }
 function markAllRead(){ (S.tips||[]).forEach(t=>t.read=true); persist(); renderInbox(); updateDashboard(); msg(true,"Marked all read."); }
-function delTip(id){ if(!confirm('Delete ' + id + '?')) return; S.tips = (S.tips||[]).filter(x=>x.id!==id); persist(); renderInbox(); updateDashboard(); syncAnswers(); msg(true,"Deleted."); }
+async function delTip(id){
+  if(!confirm('Delete ' + id + '?')) return;
+  const wasLen=(S.tips||[]).length;
+  S.tips = (S.tips||[]).filter(x=>x.id!==id);
+  const changed = S.tips.length !== wasLen;
+  if(!changed) return;
+  persist(); renderInbox(); updateDashboard(); syncAnswers();
+  try{
+    const r=await fetch("/api/tip/delete",{method:"POST", headers:{Authorization:"Bearer "+getAuth(), "Content-Type":"application/json"}, body: JSON.stringify({id})});
+    const j=await r.json().catch(()=>({ok:false}));
+    if(j.ok){ msg(true,"Deleted "+id+" (kept deleted on server)."); }
+    else if(r.status===401||r.status===501){ msg(true,"Deleted locally (server not configured - will reappear after reload until server deletion is enabled)."); }
+    else if(!j.ok && j.error){ msg(false,"Local delete ok, but server delete failed: "+j.error); }
+  }catch(e){
+    msg(false,"Deleted locally, but server delete failed (offline). It may reappear after reload.");
+  }
+  selectedTips.delete(id);
+  renderInbox();
+}
 function saveReply(id){
   const t=(S.tips||[]).find(x=>x.id===id); if(!t) return;
   const text = document.getElementById("reply-" + id).value.trim();
