@@ -13,17 +13,18 @@
   .sheet::before{content:"";position:absolute;inset:0;background:
     radial-gradient(circle at 1px 1px, rgba(0,0,0,0.055) 1px, transparent 0);
     background-size:12px 12px;opacity:0.45;pointer-events:none}
-  .topbar{background:#0a0e14;color:#7dd7ff;display:flex;justify-content:space-between;align-items:center;padding:7px 14px;font-family:JetBrains Mono,monospace;font-size:0.58rem;letter-spacing:0.16em;text-transform:uppercase}
+  .sheet::after{content:"AVALANCHE";position:absolute;top:44%;left:50%;transform:translate(-50%,-50%) rotate(-9deg);font-family:Anton,Impact,sans-serif;font-size:92px;letter-spacing:0.08em;color:rgba(10,14,20,0.045);pointer-events:none;white-space:nowrap;z-index:0}
+  .topbar{background:#0a0e14;color:#7dd7ff;display:flex;justify-content:space-between;align-items:center;padding:7px 14px;font-family:JetBrains Mono,monospace;font-size:0.58rem;letter-spacing:0.14em;text-transform:uppercase}
   .topbar b{color:#fff}
   .hero{position:relative;padding:18px 18px 0 18px;display:grid;grid-template-columns:1.15fr 0.85fr;gap:14px;align-items:end}
-  .hero-left h1{font-family:Anton,Impact,sans-serif;font-size:clamp(3.2rem, 9vw, 5.4rem);line-height:0.85;letter-spacing:-0.04em;text-transform:uppercase}
+  .hero-left h1{font-family:Anton,Impact,sans-serif;font-size:clamp(3.2rem, 9vw, 5.4rem);line-height:0.86;letter-spacing:-0.02em;text-transform:uppercase}
   .hero-left h1 span{display:block}
-  .hero-left h1 .line1{font-size:0.42em;letter-spacing:0.18em;font-family:JetBrains Mono,monospace;font-weight:700;color:#5c6b82}
+  .hero-left h1 .line1{font-size:0.42em;letter-spacing:0.16em;font-family:JetBrains Mono,monospace;font-weight:700;color:#5c6b82}
   .hero-left h1 .line2{color:#0a0e14}
   .hero-left h1 .line3{color:#0a0e14;-webkit-text-stroke:1.6px #0a0e14;paint-order:stroke}
   .hero-left h1 .line3 em{font-style:normal;color:#7dd7ff;-webkit-text-stroke:0;position:relative}
   .hero-left h1 .line3 em::after{content:"";position:absolute;left:-2px;right:-2px;bottom:6px;height:10px;background:rgba(125,215,255,0.18);z-index:-1}
-  .motto{display:inline-block;margin-top:8px;background:#0a0e14;color:#7dd7ff;font-family:JetBrains Mono,monospace;font-size:0.62rem;letter-spacing:0.24em;text-transform:uppercase;padding:4px 8px}
+  .motto{display:inline-block;margin-top:8px;background:#0a0e14;color:#7dd7ff;font-family:JetBrains Mono,monospace;font-size:0.62rem;letter-spacing:0.20em;text-transform:uppercase;padding:4px 8px}
   .kicker{margin-top:10px;font-family:Newsreader,Georgia,serif;font-style:italic;font-size:0.98rem;color:#334155;line-height:1.35;max-width:30em}
   .hero-right{position:relative;height:100%;display:grid;place-items:center}
   .mountain{width:100%;height:220px;position:relative;overflow:hidden;background:linear-gradient(180deg, #e0f2fe 0%, #f0f9ff 45%, #fefefe 100%);border:1px solid #111;display:grid;place-items:center}
@@ -69,8 +70,9 @@
   .btn{border:1px solid #0a0e14;background:#fefefe;color:#0a0e14;border-radius:999px;padding:10px 16px;font-weight:800;font-size:0.82rem;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,0.22)}
   .btn.primary{background:#0a0e14;color:#7dd7ff;border-color:#0a0e14}
   @media print{
+    *{ -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
     body{background:#fff;padding:0}
-    .sheet{box-shadow:none;border:none;width:100%}
+    .sheet{box-shadow:none;border:1px solid #111;width:100%; -webkit-print-color-adjust: exact; print-color-adjust: exact}
     .actions{display:none}
     @page{margin:0.2in}
   }
