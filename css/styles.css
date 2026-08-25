@@ -329,12 +329,12 @@ button {
 }
 
 .chip--local      { color: #7dd7ff; }
-.chip--politics   { color: #b79bff; }
-.chip--surveil    { color: #ff7a6b; }
-.chip--environ    { color: #6fe0a8; }
-.chip--labor      { color: #ffd166; }
-.chip--culture    { color: #ff8fd8; }
-.chip--housing    { color: #66e3d6; }
+.chip--politics   { color: #9db1ff; }
+.chip--surveil    { color: #8fb8ff; }
+.chip--environ    { color: #8fb8c9; }
+.chip--labor      { color: #a8b5c9; }
+.chip--culture    { color: #b0a8cc; }
+.chip--housing    { color: #8fb8c9; }
 .chip--opinion    { color: #9aa9bf; }
 
 /* ---------- Buttons ---------- */
