@@ -1,5 +1,5 @@
 {
-  "generated": "2026-08-22 22:01",
+  "generated": "2026-08-25 13:38",
   "site": {
     "motto": "Truth falls like snow",
     "tagline": "Independent · Anonymous",
@@ -11,13 +11,22 @@
       "blurb": "An investigation is currently underway. The subject stays secret on purpose. Announcing targets too early burns sources and evidence."
     },
     "notices": [
-      "Investigation №001 is underway. It publishes when it is ready",
+      "Investigation №001 is underway. It publishes when it’s ready",
       "This site collects nothing: no cookies, no analytics, no server logs",
       "Questions welcome. Ask anonymously through the drop box"
     ],
     "mirrors": [
-      "https://seattleavalanche.ct.ws"
-    ]
+      "https://seattleavalanche.online/"
+    ],
+    "network": [
+      {
+        "city": "The Seattle Avalanche",
+        "domain": "seattleavalanche.online",
+        "status": "Official · Active",
+        "since": "Aug 2026"
+      }
+    ],
+    "banned_ips": []
   },
   "posts": [
     {

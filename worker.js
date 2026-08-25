@@ -46,6 +46,18 @@ export default {
     if (request.method === "GET" && (path === "/api/tips" || path === "/api/subs")) {
       return authed(request, env, () => (path === "/api/subs" ? handleSubsList(env) : handleList(env)));
     }
+    if (path === "/api/bans" && request.method === "GET") {
+      return authed(request, env, () => handleBans(env));
+    }
+    if (path === "/api/ban" && request.method === "POST") {
+      return authed(request, env, () => handleBan(request, env));
+    }
+    if (path === "/api/unban" && request.method === "POST") {
+      return authed(request, env, () => handleUnban(request, env));
+    }
+    if (path === "/api/bans/clear" && request.method === "POST") {
+      return authed(request, env, () => handleBansClear(env));
+    }
 
     // static assets
     if (env.ASSETS) {
@@ -142,6 +154,36 @@ function json(obj, status = 200) {
   });
 }
 
+
+async function isBanned(ip, env){
+  if(!env.TIPS_KV || !ip) return false;
+  const bans = (await env.TIPS_KV.get("banned_ips", {type:"json"})) || [];
+  return bans.includes(ip);
+}
+async function handleBans(env){
+  const bans = (await env.TIPS_KV.get("banned_ips", {type:"json"})) || [];
+  return json({ok:true, bans});
+}
+async function handleBan(request, env){
+  let ip=""; try{ const j=await request.json(); ip=String(j.ip||"").trim(); }catch(e){}
+  if(!ip) return json({ok:false, error:"No IP"}, 400);
+  const bans = (await env.TIPS_KV.get("banned_ips", {type:"json"})) || [];
+  if(!bans.includes(ip)) bans.push(ip);
+  await env.TIPS_KV.put("banned_ips", JSON.stringify(bans.slice(-1000)));
+  return json({ok:true, bans});
+}
+async function handleUnban(request, env){
+  let ip=""; try{ const j=await request.json(); ip=String(j.ip||"").trim(); }catch(e){}
+  const bans = (await env.TIPS_KV.get("banned_ips", {type:"json"})) || [];
+  const out=bans.filter(x=> x!==ip);
+  await env.TIPS_KV.put("banned_ips", JSON.stringify(out));
+  return json({ok:true, bans: out});
+}
+async function handleBansClear(env){
+  await env.TIPS_KV.put("banned_ips", JSON.stringify([]));
+  return json({ok:true, bans:[]});
+}
+
 /* ---------- public: submit a tip ---------- */
 
 async function handleTip(request, env, ctx) {
@@ -167,6 +209,7 @@ async function handleTip(request, env, ctx) {
     if (!message) return json({ ok: false, error: "Message was empty." }, 400);
 
     const ip = request.headers.get("cf-connecting-ip") || "unknown";
+    if (await isBanned(ip, env)) return json({ok:false, error:"Blocked."}, 403);
     if (env.TIPS_KV) {
       const last = parseInt((await env.TIPS_KV.get("rate:" + ip)) || "0", 10);
       if (Date.now() - last < 30_000) {
@@ -187,6 +230,7 @@ async function handleTip(request, env, ctx) {
       message: message.slice(0, 30000),
       allow_public: (data.allow_public === "1" || data.allow_public === 1 || data.allow_public === true) ? 1 : 0,
       files: [],
+      ip,
       read: false,
     };
 
@@ -230,6 +274,7 @@ async function handleSubscribe(request, env) {
     }
 
     const ip = request.headers.get("cf-connecting-ip") || "unknown";
+    if (await isBanned(ip, env)) return json({ok:false, error:"Blocked."}, 403);
     if (env.TIPS_KV) {
       const last = parseInt((await env.TIPS_KV.get("rate-s:" + ip)) || "0", 10);
       if (Date.now() - last < 15_000) {

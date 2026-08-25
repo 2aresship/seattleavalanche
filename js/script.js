@@ -77,6 +77,45 @@
     revealEls.forEach(function (el) { el.classList.add("revealed"); });
   }
 
+  /* ---------- Theme toggle (light/dark) ---------- */
+  (function(){
+    var KEY='av_theme';
+    var rootEl=document.documentElement;
+    var saved=null; try{ saved=localStorage.getItem(KEY);}catch(e){}
+    var prefersLight=window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+    var theme=saved || (prefersLight ? 'light' : 'dark');
+    rootEl.setAttribute('data-theme', theme);
+    function updateBtn(t){
+      document.querySelectorAll('.theme-toggle').forEach(function(b){
+        b.setAttribute('aria-label','Switch to '+(t==='dark'?'light':'dark')+' mode');
+        b.setAttribute('title','Switch to '+(t==='dark'?'light':'dark')+' mode');
+        var k=b.querySelector('.theme-toggle-knob');
+        if(k) k.textContent= t==='light' ? '\u2600' : '\u263E';
+      });
+    }
+    function toggle(){
+      var cur=rootEl.getAttribute('data-theme') || 'dark';
+      var next= cur==='dark' ? 'light' : 'dark';
+      rootEl.setAttribute('data-theme', next);
+      try{ localStorage.setItem(KEY,next);}catch(e){}
+      updateBtn(next);
+    }
+    // apply immediately on parse, and wire after DOM ready
+    updateBtn(theme);
+    document.addEventListener('DOMContentLoaded', function(){
+      updateBtn(theme);
+      document.querySelectorAll('.theme-toggle').forEach(function(b){
+        b.addEventListener('click', toggle);
+      });
+    });
+    // also wire if script is deferred and DOM already ready
+    if(document.readyState!=='loading'){
+      document.querySelectorAll('.theme-toggle').forEach(function(b){
+        b.addEventListener('click', toggle);
+      });
+    }
+  })();
+
   /* ---------- Snowfall on masthead ---------- */
   var canvas = document.getElementById("snow-canvas");
   var masthead = canvas ? canvas.closest(".masthead") : null;

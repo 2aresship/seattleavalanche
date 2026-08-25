@@ -76,8 +76,8 @@ def session_valid(cfg, cookie_value):
 # ---------------------------------------------------------------- content ----
 
 DEFAULT_SITE = {
-    "motto": "Truth falls like snow - and accumulates",
-    "tagline": "Independent · Anonymous · Unstoppable",
+    "motto": "Truth falls like snow",
+    "tagline": "Independent · Anonymous",
     "investigation": {
         "number": "001",
         "title": "",
@@ -90,7 +90,9 @@ DEFAULT_SITE = {
         "This site collects nothing: no cookies, no analytics, no server logs",
         "Questions welcome - ask anonymously through the drop box",
     ],
-    "mirrors": ["https://seattleavalanche.ct.ws"],
+    "mirrors": ["https://seattleavalanche.online/"],
+    "network": [{"city": "The Seattle Avalanche", "domain": "seattleavalanche.online", "status": "Official · Active", "since": "Aug 2026"}],
+    "banned_ips": [],
 }
 
 def load_site_cfg():
@@ -106,6 +108,16 @@ def load_site_cfg():
             # ensure keys exist
             out.setdefault("notices", DEFAULT_SITE["notices"])
             out.setdefault("mirrors", DEFAULT_SITE["mirrors"])
+            out.setdefault("network", DEFAULT_SITE["network"])
+            out.setdefault("banned_ips", [])
+            # migrate old ct.ws mirrors
+            if any("ct.ws" in m for m in out.get("mirrors", [])):
+                out["mirrors"]=["https://seattleavalanche.online/"]
+                out["network"]=[{"city": "The Seattle Avalanche", "domain": "seattleavalanche.online", "status": "Official · Active", "since": "Aug 2026"}]
+            if out.get("motto","").endswith("accumulates"):
+                out["motto"]="Truth falls like snow"
+            if "Unstoppable" in out.get("tagline",""):
+                out["tagline"]="Independent · Anonymous"
             return out
         except Exception:
             pass

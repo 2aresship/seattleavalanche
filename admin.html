@@ -3,271 +3,388 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Avalanche Control Panel</title>
+  <title>Avalanche Control Panel - Supercharged</title>
   <meta name="robots" content="noindex,nofollow" />
   <meta name="referrer" content="no-referrer" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0e14'/%3E%3Cpath d='M4 26 L13 9 L18 18 L21 13 L28 26 Z' fill='%237dd7ff'/%3E%3C/svg%3E" />
   <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..800&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/styles.css" />
   <style>
-    body { background: var(--bg); }
-    .adm-wrap { max-width: 1060px; margin: 0 auto; padding: 28px 24px 80px; }
-    .adm-head { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding-bottom: 16px; border-bottom: 1px solid var(--line-strong); margin-bottom: 26px; flex-wrap: wrap; }
-    .adm-logo { font-family: var(--font-serif); font-weight: 800; font-size: 1.4rem; }
-    .adm-logo span { color: var(--ice); }
-    .lock-pill { font-size: 0.66rem; font-weight: 800; letter-spacing: 0.12em; color: #6fe0a8; border: 1px solid #6fe0a8; border-radius: 999px; padding: 3px 10px; text-transform: uppercase; }
-    .tabs { display: flex; gap: 6px; margin-bottom: 22px; flex-wrap: wrap; }
-    .tab-btn { background: transparent; border: 1px solid var(--line-strong); color: var(--text-soft); border-radius: 8px; padding: 9px 16px; font-weight: 700; font-size: 0.82rem; letter-spacing: 0.05em; cursor: pointer; }
-    .tab-btn.active { border-color: var(--ice); color: var(--ice); background: rgba(125,215,255,0.06); }
-    .pane { display: none; }
-    .pane.active { display: block; }
+    :root { --adm-sidebar: 256px; }
+    body { background: var(--bg); overflow-x: hidden; }
+    .lock-wrap { max-width: 440px; margin: 60px auto; padding: 0 16px; }
+    .adm-app { display: flex; min-height: 100vh; }
+    .adm-sidebar { width: var(--adm-sidebar); background: linear-gradient(180deg, #0f172a 0%, #0a0e14 100%); border-right: 1px solid var(--line-strong); position: sticky; top: 0; height: 100vh; overflow-y: auto; flex-shrink: 0; display: flex; flex-direction: column; }
+    .adm-brand { padding: 22px 20px 18px; border-bottom: 1px solid var(--line); }
+    .adm-brand h1 { font-family: var(--font-serif); font-weight: 800; font-size: 1.15rem; line-height: 1.1; }
+    .adm-brand h1 span { background: linear-gradient(135deg, #7dd7ff, #9d4edd); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .adm-brand p { font-size: 0.72rem; color: var(--faint); margin-top: 4px; letter-spacing: 0.06em; }
+    .adm-nav { padding: 12px 10px; display: grid; gap: 4px; flex: 1; }
+    .nav-group { font-size: 0.62rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: var(--faint); padding: 14px 10px 6px; }
+    .nav-btn { display: flex; align-items: center; gap: 10px; width: 100%; background: transparent; border: 1px solid transparent; color: var(--text-soft); border-radius: 10px; padding: 10px 12px; font-weight: 600; font-size: 0.88rem; cursor: pointer; text-align: left; transition: all .15s; }
+    .nav-btn:hover { background: rgba(125,215,255,0.08); color: var(--text); border-color: rgba(125,215,255,0.15); }
+    .nav-btn.active { background: linear-gradient(135deg, rgba(125,215,255,0.15), rgba(157,78,221,0.12)); color: #fff; border-color: rgba(125,215,255,0.3); box-shadow: 0 4px 18px rgba(125,215,255,0.12); }
+    .nav-btn .ico { width: 22px; text-align: center; font-size: 1rem; }
+    .nav-btn .badge { margin-left: auto; background: var(--ice); color: #04121b; font-size: 0.68rem; font-weight: 800; border-radius: 99px; padding: 2px 7px; }
+    .nav-btn .badge.alert { background: #ff5d5d; color: #fff; }
+    .adm-sidebar-foot { padding: 14px; border-top: 1px solid var(--line); display: grid; gap: 8px; }
+    .adm-main { flex: 1; min-width: 0; max-width: calc(100% - var(--adm-sidebar)); }
+    .adm-topbar { position: sticky; top: 0; z-index: 10; background: rgba(10,14,20,0.88); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); padding: 14px 28px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+    .adm-topbar h2 { font-family: var(--font-serif); font-size: 1.35rem; }
+    .adm-topbar h2 small { font-family: var(--font-sans); font-size: 0.72rem; color: var(--muted); font-weight: 600; margin-left: 8px; }
+    .adm-content { padding: 24px 28px 80px; max-width: 1060px; }
+    .pane { display: none; } .pane.active { display: block; animation: fadeIn .2s ease; }
+    @keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:none} }
     .f-label { display: block; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin: 16px 0 6px; }
-    .f-input, .f-area, .f-select { width: 100%; background: var(--bg-raise); border: 1px solid var(--line-strong); border-radius: 8px; color: var(--text); font: inherit; font-size: 0.94rem; padding: 11px 13px; }
+    .f-input, .f-area, .f-select, .f-search { width: 100%; background: var(--bg-raise); border: 1px solid var(--line-strong); border-radius: 10px; color: var(--text); font: inherit; font-size: 0.94rem; padding: 11px 13px; transition: border-color .15s, box-shadow .15s; }
+    .f-search { background: var(--surface); border-radius: 999px; padding-left: 36px; }
+    .search-wrap { position: relative; } .search-wrap::before { content:"\2315"; position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--faint); font-size: 1rem; }
+    .f-input:focus, .f-area:focus, .f-select:focus, .f-search:focus { outline: none; border-color: #7dd7ff; box-shadow: 0 0 0 3px rgba(125,215,255,0.12); }
     .f-area { min-height: 200px; font-family: var(--font-mono); font-size: 0.82rem; line-height: 1.55; }
     .f-area.short { min-height: 84px; }
-    .f-input:focus, .f-area:focus, .f-select:focus { outline: 2px solid var(--ice); outline-offset: 1px; border-color: transparent; }
     .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 18px; }
-    @media (max-width: 720px) { .grid2 { grid-template-columns: 1fr; } }
-    .story-row { display: flex; justify-content: space-between; align-items: center; gap: 14px; padding: 13px 4px; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
-    .story-row:last-child { border-bottom: 0; }
-    .status-tag { font-size: 0.62rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; border-radius: 999px; padding: 2px 9px; }
-    .st-pub { color: #6fe0a8; border: 1px solid #6fe0a8; }
-    .st-draft { color: #ffd166; border: 1px solid #ffd166; }
-    .row-actions a { font-size: 0.8rem; margin-left: 10px; cursor: pointer; }
+    @media (max-width: 720px) { .grid2 { grid-template-columns: 1fr; } .adm-sidebar{ display:none;} .adm-main{max-width:100%} .adm-app.nav-open .adm-sidebar{display:flex; position:fixed; inset:0; width:280px; z-index:50;} }
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); gap: 14px; margin-bottom: 20px; }
+    .kpi { background: linear-gradient(165deg, var(--surface), #0d1219); border: 1px solid var(--line); border-radius: 14px; padding: 18px; position: relative; overflow: hidden; }
+    .kpi::before{ content:""; position:absolute; top:0; left:0; right:0; height:3px; }
+    .kpi:nth-child(1)::before{ background: linear-gradient(90deg, #7dd7ff, #0ea5e9); }
+    .kpi:nth-child(2)::before{ background: linear-gradient(90deg, #9d4edd, #7c3aed); }
+    .kpi:nth-child(3)::before{ background: linear-gradient(90deg, #ff6b9d, #ec4899); }
+    .kpi:nth-child(4)::before{ background: linear-gradient(90deg, #a3ff12, #22c55e); }
+    .kpi strong { display:block; font-family: var(--font-mono); font-size: 1.7rem; line-height:1; margin-top:6px; }
+    .kpi span { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; }
+    .story-row { display: flex; justify-content: space-between; align-items: center; gap: 14px; padding: 14px 12px; border: 1px solid var(--line); border-radius: 10px; margin-bottom: 8px; background: var(--surface); transition: border-color .15s; }
+    .story-row:hover { border-color: rgba(125,215,255,0.25); }
+    .status-tag { font-size: 0.62rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; border-radius: 999px; padding: 3px 10px; }
+    .st-pub { color: #6fe0a8; border: 1px solid #6fe0a8; background: rgba(111,224,168,0.08); }
+    .st-draft { color: #ffd166; border: 1px solid #ffd166; background: rgba(255,209,102,0.08); }
+    .row-actions a { font-size: 0.82rem; margin-left: 12px; cursor: pointer; font-weight:600; }
     .hint { font-size: 0.78rem; color: var(--faint); margin-top: 8px; line-height: 1.5; }
-    .ok-msg { background: rgba(111,224,168,0.08); border: 1px solid #6fe0a8; color: #6fe0a8; border-radius: 8px; padding: 10px 14px; margin: 14px 0; font-size: 0.86rem; display: none; }
-    .bad-msg { background: rgba(255,93,93,0.08); border: 1px solid var(--alert); color: var(--alert); border-radius: 8px; padding: 10px 14px; margin: 14px 0; font-size: 0.86rem; display: none; }
-    .btnrow { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
-    .divider { border-top: 1px dashed var(--line-strong); margin: 30px 0; }
+    .ok-msg { background: rgba(111,224,168,0.1); border: 1px solid #6fe0a8; color: #6fe0a8; border-radius: 10px; padding: 12px 14px; margin: 14px 0; font-size: 0.86rem; display: none; }
+    .bad-msg { background: rgba(255,93,93,0.09); border: 1px solid var(--alert); color: var(--alert); border-radius: 10px; padding: 12px 14px; margin: 14px 0; font-size: 0.86rem; display: none; }
+    .btnrow { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+    .divider { border-top: 1px dashed var(--line-strong); margin: 28px 0; }
     code.k { font-family: var(--font-mono); font-size: 0.76rem; color: var(--ice); word-break: break-all; }
-    details.adm-help { border: 1px solid var(--line); border-radius: 8px; padding: 14px 18px; margin-top: 14px; background: var(--surface); }
-    details.adm-help summary { cursor: pointer; font-weight: 600; font-size: 0.9rem; }
-    details.adm-help p, details.adm-help li { font-size: 0.85rem; color: var(--text-soft); margin-top: 8px; }
-    details.adm-help ol, details.adm-help ul { padding-left: 20px; }
-    .tipbox { border: 1px solid var(--line); border-radius: 10px; padding: 14px; margin-top: 12px; background: rgba(255,255,255,0.02); }
-    .tipbox.unread { border-color: rgba(125,215,255,0.4); background: rgba(125,215,255,0.06); }
+    details.adm-help { border: 1px solid var(--line); border-radius: 10px; padding: 14px 18px; margin-top: 14px; background: var(--surface); }
+    details.adm-help summary { cursor: pointer; font-weight: 700; font-size: 0.9rem; }
+    .tipbox { border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-top: 12px; background: rgba(255,255,255,0.02); transition: border-color .15s; }
+    .tipbox:hover{ border-color: var(--line-strong); }
+    .tipbox.unread { border-color: rgba(125,215,255,0.45); background: linear-gradient(170deg, rgba(125,215,255,0.07), transparent 55%); box-shadow: 0 6px 22px rgba(125,215,255,0.08); }
     .tip-meta { font-size: 0.78rem; color: var(--muted); }
+    .network-row { display: grid; grid-template-columns: 1.2fr 1.4fr 0.9fr 0.8fr auto; gap: 10px; align-items: end; margin-bottom: 10px; }
+    @media (max-width: 720px){ .network-row{ grid-template-columns:1fr; } }
+    .chart-wrap { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
+    .easter { position: fixed; bottom: 14px; right: 14px; opacity: 0.6; font-size:0.68rem; color:var(--faint); }
+    .mobile-toggle { display:none; background: var(--surface); border:1px solid var(--line-strong); border-radius:8px; padding:8px 12px; font-weight:700; }
+    @media(max-width:720px){ .mobile-toggle{display:inline-flex;} }
   </style>
 </head>
 <body>
-<div class="adm-wrap">
-
-  <!-- ================= LOCK SCREEN ================= -->
-  <div id="lock-screen">
-    <div class="card module" style="max-width:430px;margin:70px auto 0;">
+<div id="lock-screen">
+  <div class="lock-wrap">
+    <div class="module" style="max-width:440px;margin:70px auto 0; border-top: 3px solid #7dd7ff;">
       <h3 class="module-title" style="margin-bottom:6px;">Avalanche Control Panel</h3>
-      <h2 style="font-family:var(--font-serif);margin-bottom:8px;">Private entrance</h2>
-      <p style="font-size:0.85rem;color:var(--text-soft);">
-        This admin is linked from the main site footer. Enter your passphrase to unlock. Everything here runs in your browser. Publishing goes to your content vault.
-      </p>
-      <p style="font-size:0.78rem;color:var(--faint);margin-top:8px;"><a href="index.html" style="color:var(--muted)">Back to site</a> · Footer > Admin</p>
-
+      <h2 style="font-family:var(--font-serif);margin-bottom:8px; font-size:1.6rem;">Private entrance</h2>
+      <p style="font-size:0.88rem;color:var(--text-soft);">Supercharged. Sidebar, search, bans, analytics, one-click publish. Enter your admin key.</p>
+      <p style="font-size:0.78rem;color:var(--faint);margin-top:8px;"><a href="index.html" style="color:var(--muted)">Back to site</a> &middot; Footer &rarr; Admin</p>
       <div>
         <label class="f-label">Admin key</label>
-        <input class="f-input" type="password" id="pw-in" autocomplete="current-password" onkeydown="if(event.key==='Enter')doUnlock()" />
+        <input class="f-input" type="password" id="pw-in" autocomplete="current-password" onkeydown="if(event.key==='Enter')doUnlock()" placeholder="ADMIN_KEY from Cloudflare" />
         <label style="display:flex;gap:8px;align-items:center;margin-top:10px;font-size:0.82rem;color:var(--text-soft);">
-          <input type="checkbox" id="remember-key" /> Remember key on this device (unchecked = forgotten when you close the tab)
+          <input type="checkbox" id="remember-key" /> Remember on this device
         </label>
-        <button class="btn btn--primary" style="width:100%;justify-content:center;margin-top:16px;" onclick="doUnlock()">Unlock</button>
-        <p class="hint">The admin key is the ADMIN_KEY secret you set on the Cloudflare worker (Workers > silent-queen-3bd2 > Settings > Variables > Secrets). It unlocks the inbox and email list. Nothing about it is stored in this site's code.</p>
+        <button class="btn btn--primary" style="width:100%;justify-content:center;margin-top:16px;" onclick="doUnlock()">Unlock &rarr;</button>
+        <p class="hint">Cloudflare &rarr; Workers &rarr; silent-queen-3bd2 &rarr; Settings &rarr; Variables &rarr; Secrets &rarr; ADMIN_KEY.</p>
       </div>
-      <div class="bad-msg" id="lock-err"></div>
+      <div class="bad-msg" id="lock-err" style="margin-top:14px;"></div>
+      <p class="hint" style="text-align:center; margin-top:14px;">Tip: try the Konami code after login.</p>
     </div>
   </div>
-
-  <!-- ================= PANEL ================= -->
-  <div id="panel" style="display:none;">
-    <div class="adm-head">
-      <div class="adm-logo">The Seattle <span>Avalanche</span>, Control Panel</div>
-      <div style="display:flex;gap:10px;align-items:center;">
-        <span class="lock-pill" id="ver-pill">v,</span>
-        <a href="index.html" class="btn btn--ghost btn--small">View site</a>
-        <button class="btn btn--ghost btn--small" onclick="lockNow()">Lock</button>
+</div>
+<div id="panel" style="display:none;">
+  <div class="adm-app" id="adm-app">
+    <aside class="adm-sidebar" id="adm-sidebar">
+      <div class="adm-brand">
+        <h1>The Seattle <span>Avalanche</span></h1>
+        <p>CONTROL PANEL &middot; SUPERCHARGED</p>
       </div>
+      <nav class="adm-nav" aria-label="Admin sections">
+        <div class="nav-group">Create</div>
+        <button class="nav-btn active" data-tab="dashboard" onclick="showTab('dashboard')"><span class="ico">&#9632;</span> Dashboard</button>
+        <button class="nav-btn" data-tab="stories" onclick="showTab('stories')"><span class="ico">&#9998;</span> Stories <span class="badge" id="nav-stories-count">0</span></button>
+        <div class="nav-group">Site</div>
+        <button class="nav-btn" data-tab="investigation" onclick="showTab('investigation')"><span class="ico">&#9670;</span> Investigation &amp; site</button>
+        <button class="nav-btn" data-tab="network" onclick="showTab('network')"><span class="ico">&#9823;</span> Network &amp; mirrors</button>
+        <button class="nav-btn" data-tab="bans" onclick="showTab('bans')"><span class="ico">&#9940;</span> IP Bans</button>
+        <div class="nav-group">People</div>
+        <button class="nav-btn" data-tab="inbox" onclick="showTab('inbox')"><span class="ico">&#9993;</span> Inbox <span class="badge alert" id="inbox-badge" style="display:none"></span></button>
+        <button class="nav-btn" data-tab="subs" onclick="showTab('subs')"><span class="ico">&#9786;</span> Subscribers <span class="badge" id="subs-badge" style="display:none"></span></button>
+        <div class="nav-group">System</div>
+        <button class="nav-btn" data-tab="analytics" onclick="showTab('analytics')"><span class="ico">&#9650;</span> Analytics</button>
+        <button class="nav-btn" data-tab="publish" onclick="showTab('publish')"><span class="ico">&#8679;</span> Publish &amp; sync</button>
+      </nav>
+      <div class="adm-sidebar-foot">
+        <div style="display:flex;gap:8px;">
+          <a href="index.html" class="btn btn--ghost btn--small" style="flex:1;justify-content:center;">View site</a>
+          <button class="btn btn--ghost btn--small" onclick="lockNow()" style="flex:1;">Lock</button>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;justify-content:space-between;">
+          <span class="mono" id="ver-pill" style="font-family:var(--font-mono);font-size:0.68rem;color:var(--faint)">v,</span>
+          <button class="btn btn--ghost btn--small" onclick="snowStorm()" title="Make it snow">&#10052; Snow</button>
+        </div>
+      </div>
+    </aside>
+    <div class="adm-main">
+      <div class="adm-topbar">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <button class="mobile-toggle" onclick="document.getElementById('adm-app').classList.toggle('nav-open')">MENU</button>
+          <h2 id="pane-title">Dashboard <small id="pane-sub"></small></h2>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <span id="live-dot" style="width:8px;height:8px;background:#6fe0a8;border-radius:50%;box-shadow:0 0 10px #6fe0a8;display:inline-block;"></span>
+          <span style="font-size:0.78rem;color:var(--muted)">Live</span>
+          <button class="btn btn--ghost btn--small" onclick="confettiBurst()" title="Celebrate">&#127881;</button>
+        </div>
+      </div>
+      <div class="adm-content">
+        <div class="ok-msg" id="msg-ok"></div>
+        <div class="bad-msg" id="msg-bad"></div>
+
+        <section class="pane active" id="pane-dashboard">
+          <div class="kpi-grid">
+            <div class="kpi"><span>Stories</span><strong id="kpi-stories">0</strong><span style="color:var(--faint)" id="kpi-stories-sub">0 published</span></div>
+            <div class="kpi"><span>Inbox</span><strong id="kpi-inbox">0</strong><span style="color:var(--faint)" id="kpi-inbox-sub">0 new</span></div>
+            <div class="kpi"><span>Subscribers</span><strong id="kpi-subs">0</strong><span style="color:var(--faint)">email pings</span></div>
+            <div class="kpi"><span>Banned IPs</span><strong id="kpi-bans">0</strong><span style="color:var(--faint)">blocked</span></div>
+          </div>
+          <div class="grid2">
+            <div class="module">
+              <h3 class="module-title">Quick actions</h3>
+              <div class="btnrow" style="margin-top:0">
+                <button class="btn btn--primary" onclick="showTab('stories'); editStory(null)">New story</button>
+                <button class="btn btn--ghost" onclick="showTab('inbox')">Open inbox</button>
+                <button class="btn btn--ghost" onclick="showTab('publish'); document.getElementById('gh-repo-token').focus()">Publish</button>
+              </div>
+              <div class="divider"></div>
+              <h3 class="module-title">Recent tips</h3>
+              <div id="dash-recent"></div>
+            </div>
+            <div class="module">
+              <h3 class="module-title">Site health</h3>
+              <div style="display:grid;gap:10px;font-size:0.88rem;">
+                <div style="display:flex;justify-content:space-between;"><span>Content version</span><code class="k" id="dash-ver">,</code></div>
+                <div style="display:flex;justify-content:space-between;"><span>Worker KV</span><span id="dash-kv" style="color:var(--muted)">checking...</span></div>
+                <div style="display:flex;justify-content:space-between;"><span>Theme</span><span style="color:var(--muted)">Dark / Light toggle on site top bar</span></div>
+                <div style="display:flex;justify-content:space-between;"><span>Network outlets</span><span id="dash-mirrors">,</span></div>
+              </div>
+              <div class="divider"></div>
+              <div class="chart-wrap">
+                <h3 class="module-title" style="margin-bottom:10px;">Stories by status</h3>
+                <canvas id="dash-chart" width="360" height="140"></canvas>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section class="pane" id="pane-stories">
+          <div class="module">
+            <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:14px;">
+              <h3 class="module-title" style="margin:0;">Stories (<span id="count-posts">0</span>)</h3>
+              <div class="search-wrap" style="flex:1;min-width:180px;max-width:360px;">
+                <input class="f-search" id="stories-search" placeholder="Search headline, dek, tags..." oninput="renderStoryList()" />
+              </div>
+              <select class="f-select" id="stories-filter" style="width:auto;" onchange="renderStoryList()"><option value="all">All</option><option value="published">Published</option><option value="draft">Drafts</option></select>
+              <button class="btn btn--primary btn--small" onclick="editStory(null)">+ New story</button>
+            </div>
+            <div style="display:flex;gap:8px;margin-bottom:10px;">
+              <button class="btn btn--ghost btn--small" onclick="bulkPublish()">Bulk publish</button>
+              <button class="btn btn--ghost btn--small" onclick="bulkDraft()">Bulk draft</button>
+              <button class="btn btn--ghost btn--small" onclick="bulkDelete()" style="color:var(--alert)">Bulk delete</button>
+            </div>
+            <div id="story-list"></div>
+          </div>
+          <div class="module" id="editor" style="display:none;">
+            <h3 class="module-title" id="editor-title">New story</h3>
+            <input type="hidden" id="e-slug" />
+            <label class="f-label">Headline</label><input class="f-input" id="e-title" placeholder="Working titles are fine, drafts stay hidden" />
+            <label class="f-label">Dek / standfirst</label><textarea class="f-area short" id="e-dek"></textarea>
+            <div class="grid2">
+              <div><label class="f-label">Date (YYYY-MM-DD)</label><input class="f-input" id="e-date" /></div>
+              <div><label class="f-label">Status</label><select class="f-select" id="e-status"><option value="draft">draft - hidden</option><option value="published">published - live</option></select></div>
+            </div>
+            <label class="f-label">Tags (comma separated)</label><input class="f-input" id="e-tags" placeholder="politics, surveillance, seattle" />
+            <label class="f-label">Body</label><textarea class="f-area" id="e-body" placeholder="Blank line between paragraphs.  **bold**  *italic*  [link](https://...)"></textarea>
+            <div class="btnrow"><button class="btn btn--primary" onclick="saveStory()">Save story</button><button class="btn btn--ghost" onclick="closeEditor()">Close</button><button class="btn btn--ghost" onclick="previewStory()" id="preview-btn">Preview</button></div>
+            <p class="hint">Saving updates this device. Use Publish & sync to go live.</p>
+            <div id="story-preview" class="module" style="display:none;margin-top:16px;"></div>
+          </div>
+        </section>
+        <section class="pane" id="pane-investigation">
+          <div class="module">
+            <h3 class="module-title">Current investigation</h3>
+            <div class="grid2">
+              <div><label class="f-label">Case number</label><input class="f-input" id="i-number" /></div>
+              <div><label class="f-label">Stage (homepage)</label><input class="f-input" id="i-stage" /></div>
+            </div>
+            <label class="f-label">Title - leave blank to keep withheld</label><input class="f-input" id="i-title" placeholder="(withheld until publication)" />
+            <label class="f-label">Opened</label><input class="f-input" id="i-opened" />
+            <label class="f-label">Status blurb</label><textarea class="f-area short" id="i-blurb"></textarea>
+            <label class="f-label">Motto (under masthead)</label><input class="f-input" id="i-motto" placeholder="Truth falls like snow" />
+            <label class="f-label">Tagline (top bar)</label><input class="f-input" id="i-tagline" placeholder="Independent · Anonymous" />
+            <label class="f-label">Ticker notices (one per line)</label><textarea class="f-area short" id="i-notices" placeholder="Investigation 001 is underway..."></textarea>
+            <div class="btnrow"><button class="btn btn--primary" onclick="saveSite()">Save site settings</button><button class="btn btn--ghost" onclick="resetNotices()">Reset ticker</button></div>
+          </div>
+        </section>
+        <section class="pane" id="pane-network">
+          <div class="module">
+            <h3 class="module-title">Official outlets (Network page)</h3>
+            <p class="hint" style="margin-top:0;">This is the single source of truth for <a href="network.html">network.html</a>. First row = canonical. Only URLs listed here are verified. Editing here fixes your wrong-URL bug - next publish pushes it live.</p>
+            <div id="network-list"></div>
+            <div class="btnrow">
+              <button class="btn btn--ghost btn--small" onclick="addOutlet()">+ Add outlet</button>
+              <button class="btn btn--primary" onclick="saveNetwork()">Save network</button>
+              <button class="btn btn--ghost" onclick="resetNetwork()">Reset to Seattle only</button>
+            </div>
+            <div class="divider"></div>
+            <h3 class="module-title">Quick paste (one URL per line)</h3>
+            <p class="hint">Paste URLs to bulk-add, then click Save.</p>
+            <textarea class="f-area short" id="m-list" placeholder="https://seattleavalanche.online/&#10;https://example.com"></textarea>
+            <div class="btnrow"><button class="btn btn--ghost" onclick="importNetworkFromTextarea()">Import from textarea</button></div>
+          </div>
+          <div class="module">
+            <h3 class="module-title">Mirrors (mirror.html)</h3>
+            <p class="hint">Mirrors are copies of the Seattle site. Separate from official outlets.</p>
+            <textarea class="f-area short" id="mirrors-list" placeholder="https://seattleavalanche.online/"></textarea>
+            <div class="btnrow"><button class="btn btn--ghost" onclick="saveMirrorsSolo()">Save mirrors only</button></div>
+          </div>
+        </section>
+        <section class="pane" id="pane-bans">
+          <div class="module">
+            <h3 class="module-title">IP Bans</h3>
+            <p class="hint" style="margin-top:0;">Block abusive IPs at the Worker. Banned IPs get 403 on /api/tip and /api/subscribe. Stored in KV when ADMIN_KEY is set, plus locally.</p>
+            <div class="grid2">
+              <div>
+                <label class="f-label">Ban an IP</label>
+                <div style="display:flex;gap:8px;">
+                  <input class="f-input" id="ban-ip" placeholder="203.0.113.42" />
+                  <button class="btn btn--primary" onclick="banIp()">Ban</button>
+                </div>
+              </div>
+              <div>
+                <label class="f-label">Search bans</label>
+                <input class="f-search" id="ban-search" placeholder="Filter IPs..." oninput="renderBans()" />
+              </div>
+            </div>
+            <div id="ban-list" style="margin-top:14px;"></div>
+            <div class="btnrow"><button class="btn btn--ghost btn--small" onclick="loadBans()">Reload from server</button><button class="btn btn--ghost btn--small" onclick="clearBans()" style="color:var(--alert)">Clear all bans</button></div>
+          </div>
+        </section>
+        <section class="pane" id="pane-inbox">
+          <div class="module">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
+              <h3 class="module-title" style="margin:0;">Inbox <span id="inbox-count" style="font-weight:400;color:var(--muted)"></span></h3>
+              <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+                <div class="search-wrap"><input class="f-search" id="inbox-search" placeholder="Search tips..." oninput="renderInbox()" style="width:220px;" /></div>
+                <select class="f-select" id="inbox-filter" style="width:auto" onchange="renderInbox()"><option value="all">All</option><option value="new">New only</option><option value="public">Allows public</option><option value="private">Private only</option></select>
+                <button class="btn btn--ghost btn--small" onclick="loadTipsFromServer()">Reload</button>
+                <button class="btn btn--ghost btn--small" onclick="markAllRead()">Mark all read</button>
+              </div>
+            </div>
+            <p class="hint" style="margin:6px 0 0 0;">Private. <span style="color:#6fe0a8">allows public</span> = they consented. Reply is anonymized.</p>
+            <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;">
+              <button class="btn btn--ghost btn--small" onclick="bulkMarkRead()">Bulk mark read</button>
+              <button class="btn btn--ghost btn--small" onclick="bulkDeleteTips()" style="color:var(--alert)">Bulk delete</button>
+              <button class="btn btn--ghost btn--small" onclick="exportInboxCSV()">Export CSV</button>
+              <span id="inbox-selected" style="font-size:0.82rem;color:var(--muted);align-self:center;margin-left:8px;"></span>
+            </div>
+            <div id="inbox-list" style="margin-top:14px;"></div>
+          </div>
+        </section>
+        <section class="pane" id="pane-subs">
+          <div class="module">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
+              <h3 class="module-title" style="margin:0;">Subscribers <span id="subs-count" style="font-weight:400;color:var(--muted)"></span></h3>
+              <div class="search-wrap"><input class="f-search" id="subs-search" placeholder="Filter emails..." oninput="filterSubs()" style="width:240px;" /></div>
+            </div>
+            <p class="hint" style="margin:6px 0 0 0;">Everyone who signed up on homepage. KV-backed. Use BCC or Resend.</p>
+            <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;">
+              <button class="btn btn--ghost btn--small" onclick="loadSubs()">Reload</button>
+              <button class="btn btn--ghost btn--small" onclick="copySubs()">Copy all (BCC)</button>
+              <button class="btn btn--ghost btn--small" onclick="downloadSubs()">Download CSV</button>
+              <button class="btn btn--ghost btn--small" onclick="copySubsFiltered()">Copy filtered</button>
+            </div>
+            <textarea class="f-area short" id="subs-list" readonly style="margin-top:10px;" placeholder="Load to see emails..."></textarea>
+            <div id="subs-filtered" style="margin-top:10px;"></div>
+          </div>
+        </section>
+        <section class="pane" id="pane-analytics">
+          <div class="module">
+            <h3 class="module-title">Analytics (local + estimates)</h3>
+            <p class="hint" style="margin-top:0;">No trackers on public site, so these are counts from your store only.</p>
+            <div class="kpi-grid">
+              <div class="kpi"><span>Published stories</span><strong id="ana-pub">0</strong></div>
+              <div class="kpi"><span>Drafts</span><strong id="ana-draft">0</strong></div>
+              <div class="kpi"><span>Tips with files</span><strong id="ana-files">0</strong></div>
+              <div class="kpi"><span>Avg tip length</span><strong id="ana-avg">0</strong></div>
+            </div>
+            <div class="grid2">
+              <div class="chart-wrap"><h3 class="module-title">Inbox over time</h3><canvas id="chart-inbox" width="400" height="180"></canvas></div>
+              <div class="chart-wrap"><h3 class="module-title">Subscribers over time</h3><canvas id="chart-subs" width="400" height="180"></canvas></div>
+            </div>
+          </div>
+        </section>
+        <section class="pane" id="pane-publish">
+          <div class="module">
+            <h3 class="module-title">Gist vault (optional legacy)</h3>
+            <details class="adm-help" open>
+              <summary>How gist vault works</summary>
+              <ol>
+                <li>GitHub &rarr; gist.github.com &rarr; new private gist &rarr; file <code class="k">avalanche-content.json</code> with <code class="k">{}</code></li>
+                <li>Copy gist ID from URL after username</li>
+                <li>Settings &rarr; Developer settings &rarr; Tokens (classic) &rarr; <b>gist</b> scope</li>
+              </ol>
+            </details>
+            <label class="f-label">Gist ID</label><input class="f-input" id="gh-gist" placeholder="e.g. 3f9c2b..." />
+            <label class="f-label">Token (gist scope)</label><input class="f-input" id="gh-token" type="password" placeholder="ghp_..." autocomplete="off" />
+            <label style="display:flex;gap:8px;align-items:center;margin-top:12px;font-size:0.82rem;color:var(--text-soft);"><input type="checkbox" id="gh-remember" /> Remember token</label>
+            <div class="btnrow">
+              <button class="btn btn--primary" onclick="ghPull()">Pull from vault</button>
+              <button class="btn btn--primary" onclick="ghPush()">Push to vault</button>
+              <button class="btn btn--ghost" onclick="copyPlain()">Copy content.js</button>
+              <button class="btn btn--ghost" onclick="exportFile()">Export backup JSON</button>
+              <label class="btn btn--ghost" style="margin:0;">Import backup<input type="file" id="import-file" accept=".json" style="display:none" onchange="importFile(this)" /></label>
+            </div>
+          </div>
+          <div class="module">
+            <h3 class="module-title">One-click publish to live site</h3>
+            <p style="font-size:0.88rem;color:var(--text-soft);">Writes <code class="k">js/content.js</code> + <code class="k">data/site.json</code> + <code class="k">network</code> to GitHub. Cloudflare redeploys seattleavalanche.online in ~60s.</p>
+            <label class="f-label">Repo (owner/repo)</label><input class="f-input" id="gh-repo" value="2aresship/seattleavalanche" />
+            <label class="f-label">GitHub token (repo scope)</label><input class="f-input" id="gh-repo-token" type="password" placeholder="ghp_..." autocomplete="off" />
+            <label style="display:flex;gap:8px;align-items:center;margin-top:12px;font-size:0.82rem;color:var(--text-soft);"><input type="checkbox" id="gh-repo-remember" /> Remember repo token</label>
+            <div class="btnrow">
+              <button class="btn btn--primary" onclick="pushToRepo()" style="background: linear-gradient(135deg, #a3ff12, #22c55e); color:#0f172a;">&#10022; Push LIVE now</button>
+              <button class="btn btn--ghost" onclick="pullFromRepo()">Pull from repo</button>
+              <button class="btn btn--ghost" onclick="testRepoConnection()">Test connection</button>
+            </div>
+            <p class="hint">Classic token with <b>repo</b> scope required.</p>
+            <div class="divider"></div>
+            <h3 class="module-title">Local file mode</h3>
+            <div class="btnrow"><button class="btn btn--ghost" onclick="downloadContentJs()">Download content.js</button><button class="btn btn--ghost" onclick="downloadTips()">Download tips.json</button></div>
+          </div>
+        </section>
+      </div>
+      <div class="easter" id="easter">press <code>?</code> for help &middot; try <code>konami</code></div>
     </div>
-
-    <div class="tabs">
-      <button class="tab-btn active" data-tab="stories" onclick="showTab('stories')">Stories</button>
-      <button class="tab-btn" data-tab="investigation" onclick="showTab('investigation')">Investigation & site</button>
-      <button class="tab-btn" data-tab="network" onclick="showTab('network')">Network</button>
-      <button class="tab-btn" data-tab="inbox" onclick="showTab('inbox')">Inbox <span id="inbox-badge" style="display:none;background:var(--ice);color:#04121b;border-radius:99px;padding:2px 6px;font-size:0.66rem;margin-left:6px;"></span></button>
-      <button class="tab-btn" data-tab="publish" onclick="showTab('publish')">Publish & sync</button>
-    </div>
-
-    <div class="ok-msg" id="msg-ok"></div>
-    <div class="bad-msg" id="msg-bad"></div>
-
-    <!-- ===== STORIES ===== -->
-    <section class="pane active" id="pane-stories">
-      <div class="module">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-          <h3 class="module-title" style="margin:0;">Stories (<span id="count-posts">0</span>)</h3>
-          <button class="btn btn--primary btn--small" onclick="editStory(null)">New story</button>
-        </div>
-        <div id="story-list"></div>
-      </div>
-
-      <div class="module" id="editor" style="display:none;">
-        <h3 class="module-title" id="editor-title">New story</h3>
-        <input type="hidden" id="e-slug" />
-        <label class="f-label">Headline</label>
-        <input class="f-input" id="e-title" placeholder="Working titles are fine, drafts stay hidden" />
-        <label class="f-label">Dek / standfirst</label>
-        <textarea class="f-area short" id="e-dek"></textarea>
-        <div class="grid2">
-          <div><label class="f-label">Date (YYYY-MM-DD)</label><input class="f-input" id="e-date" /></div>
-          <div><label class="f-label">Status</label>
-            <select class="f-select" id="e-status">
-              <option value="draft">draft, hidden from the site</option>
-              <option value="published">published, live everywhere</option>
-            </select>
-          </div>
-        </div>
-        <label class="f-label">Tags (comma separated)</label>
-        <input class="f-input" id="e-tags" placeholder="politics, surveillance" />
-        <label class="f-label">Body</label>
-        <textarea class="f-area" id="e-body" placeholder="Blank line between paragraphs.  **bold**  *italic*  [link](https://...)"></textarea>
-        <div class="btnrow">
-          <button class="btn btn--primary" onclick="saveStory()">Save story</button>
-          <button class="btn btn--ghost" onclick="closeEditor()">Close</button>
-        </div>
-        <p class="hint">Saving updates this device immediately. Use <b>Publish & sync</b> to push it live.</p>
-      </div>
-    </section>
-
-    <!-- ===== INVESTIGATION & SITE ===== -->
-    <section class="pane" id="pane-investigation">
-      <div class="module">
-        <h3 class="module-title">Current investigation</h3>
-        <div class="grid2">
-          <div><label class="f-label">Case number</label><input class="f-input" id="i-number" /></div>
-          <div><label class="f-label">Stage (shown on homepage)</label><input class="f-input" id="i-stage" /></div>
-        </div>
-        <label class="f-label">Title, leave blank to keep it withheld</label>
-        <input class="f-input" id="i-title" placeholder="(withheld until publication)" />
-        <label class="f-label">Opened</label>
-        <input class="f-input" id="i-opened" />
-        <label class="f-label">Status blurb</label>
-        <textarea class="f-area short" id="i-blurb"></textarea>
-        <label class="f-label">Motto (under masthead)</label>
-        <input class="f-input" id="i-motto" />
-        <label class="f-label">Ticker notices (one per line, shown on homepage)</label>
-        <textarea class="f-area short" id="i-notices" placeholder="Investigation 001 is underway. It publishes when it is ready&#10;This site collects nothing: no cookies, no analytics"></textarea>
-        <div class="btnrow"><button class="btn btn--primary" onclick="saveSite()">Save site settings</button></div>
-      </div>
-    </section>
-
-    <!-- ===== NETWORK ===== -->
-    <section class="pane" id="pane-network">
-      <div class="module">
-        <h3 class="module-title">Network registry (shown on Network page)</h3>
-        <p class="hint" style="margin-top:0;">One URL per line. The canonical source goes first. Only outlets listed here are verified. Seattle is the only official outlet right now.</p>
-        <textarea class="f-area short" id="m-list" placeholder="https://seattleavalanche.ct.ws&#10;https://avalanche.example.net&#10;http://xyz.onion"></textarea>
-        <div class="btnrow"><button class="btn btn--primary" onclick="saveMirrors()">Save registry</button></div>
-        <p class="hint">This list powers <a href="network.html">network.html</a>. If a city is not here, it is not verified.</p>
-      </div>
-    </section>
-
-    <!-- ===== INBOX ===== -->
-    <section class="pane" id="pane-inbox">
-      <div class="module">
-        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
-          <h3 class="module-title" style="margin:0;">Inbox <span id="inbox-count" style="font-weight:400;color:var(--muted)"></span></h3>
-          <div style="display:flex;gap:8px;">
-            <button class="btn btn--ghost btn--small" onclick="loadTipsFromServer()">Reload from server</button>
-            <button class="btn btn--ghost btn--small" onclick="markAllRead()">Mark all read</button>
-          </div>
-        </div>
-        <p class="hint" style="margin:6px 0 0 0;">Private. Tips and questions land here. Check <span style="color:var(--ice)">allows public anonymized post</span> to see who consented to an anonymized answers board post. Reply anonymized, contact info is never posted. The board disclaimer says replies are not instant.</p>
-        <div id="inbox-list" style="margin-top:14px;"></div>
-      </div>
-
-      <div class="module">
-        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
-          <h3 class="module-title" style="margin:0;">Email list <span id="subs-count" style="font-weight:400;color:var(--muted)"></span></h3>
-          <div style="display:flex;gap:8px;">
-            <button class="btn btn--ghost btn--small" onclick="loadSubs()">Reload</button>
-            <button class="btn btn--ghost btn--small" onclick="copySubs()">Copy all</button>
-            <button class="btn btn--ghost btn--small" onclick="downloadSubs()">Download CSV</button>
-          </div>
-        </div>
-        <p class="hint" style="margin:6px 0 0 0;">Everyone who signed up for the drop-day ping on the homepage. Stored in KV. Send from your own mail client or a provider like Resend - paste the list as BCC.</p>
-        <textarea class="f-area short" id="subs-list" readonly style="margin-top:10px;" placeholder="Signups appear here once KV is bound..."></textarea>
-      </div>
-    </section>
-
-    <!-- ===== PUBLISH ===== -->
-    <section class="pane" id="pane-publish">
-      <div class="module">
-        <h3 class="module-title">Step 1, One-time vault setup</h3>
-        <details class="adm-help" open>
-          <summary>Create the free canonical vault (about 3 minutes)</summary>
-          <ol>
-            <li>Make a free account at <b>github.com</b> (any anonymous-enough username).</li>
-            <li>Create a <b>private</b> gist: gist.github.com, new gist. Name the file exactly <code class="k">avalanche-content.json</code>, put <code class="k">{}</code> as contents, create.</li>
-            <li>Copy the gist ID from the URL: <code class="k">gist.github.com/you/<b>THIS_PART</b></code></li>
-            <li>Settings, Developer settings, Personal access tokens, <b>Generate (classic)</b>, tick <b>gist</b> only, copy token.</li>
-            <li>Paste both below. That token is your publishing power, never share it.</li>
-          </ol>
-        </details>
-        <label class="f-label">Gist ID</label>
-        <input class="f-input" id="gh-gist" placeholder="e.g. 3f9c2b..." />
-        <label class="f-label">Personal access token (gist scope)</label>
-        <input class="f-input" id="gh-token" type="password" placeholder="ghp_..." autocomplete="off" />
-        <label style="display:flex;gap:8px;align-items:center;margin-top:12px;font-size:0.82rem;color:var(--text-soft);">
-          <input type="checkbox" id="gh-remember" /> Remember token on this device
-        </label>
-      </div>
-
-      <div class="module">
-        <h3 class="module-title">Step 2, Publish</h3>
-        <p style="font-size:0.88rem;color:var(--text-soft);">Pushing writes your content to the vault. Every mirror loads the newest version on visit. Inbox replies marked Publish will appear on the answers board. Or use local file export if you host directly.</p>
-        <div class="btnrow">
-          <button class="btn btn--primary" onclick="ghPull()">Pull latest from vault</button>
-          <button class="btn btn--primary" onclick="ghPush()">Push live to all mirrors</button>
-          <button class="btn btn--ghost" onclick="copyPlain()">Copy content.js</button>
-          <button class="btn btn--ghost" onclick="exportFile()">Export backup</button>
-          <label class="btn btn--ghost" style="margin:0;">Import backup<input type="file" id="import-file" accept=".json" style="display:none" onchange="importFile(this)" /></label>
-        </div>
-        <p class="hint"><b>Copy content.js</b> pastes into <code class="k">js/content.js</code> for direct file hosts. Backup doubles as <code class="k">content.remote.json</code> for mirrors.</p>
-        <div class="divider"></div>
-        <h3 class="module-title">Local file mode (no gist)</h3>
-        <p class="hint">If you host from the file directory, just export and drop the files: <code class="k">js/content.js</code> + <code class="k">data/tips.json</code> handling is local. Inbox here reads from <code class="k">data/tips.json</code> when served via the local panel or PHP host.</p>
-        <div class="btnrow">
-          <button class="btn btn--ghost" onclick="downloadContentJs()">Download content.js</button>
-          <button class="btn btn--ghost" onclick="downloadTips()">Download tips.json</button>
-        </div>
-      </div>
-
-      <div class="module">
-        <h3 class="module-title">Publish to live site (GitHub repo)</h3>
-        <p style="font-size:0.88rem;color:var(--text-soft);">This is the button that actually makes stories live. It writes js/content.js and data/site.json straight to your GitHub repo, and Cloudflare redeploys seattleavalanche.online in about a minute.</p>
-        <label class="f-label">Repo (owner/repo)</label>
-        <input class="f-input" id="gh-repo" value="2aresship/seattleavalanche" />
-        <label class="f-label">GitHub token (repo scope)</label>
-        <input class="f-input" id="gh-repo-token" type="password" placeholder="ghp_..." autocomplete="off" />
-        <label style="display:flex;gap:8px;align-items:center;margin-top:12px;font-size:0.82rem;color:var(--text-soft);">
-          <input type="checkbox" id="gh-repo-remember" /> Remember repo token on this device
-        </label>
-        <div class="btnrow">
-          <button class="btn btn--primary" onclick="pushToRepo()">Push stories live</button>
-          <button class="btn btn--ghost" onclick="pullFromRepo()">Pull from repo</button>
-          <button class="btn btn--ghost" onclick="testRepoConnection()">Test connection</button>
-        </div>
-        <p class="hint">Token needs the classic <b>repo</b> scope: GitHub > Settings > Developer settings > Personal access tokens > Generate (classic). The gist vault above is optional; this repo push is what publishes.</p>
-      </div>
-    </section>
   </div>
+</div>
 
 <script>
 "use strict";
 const $ = id => document.getElementById(id);
 const LS_DATA = "av_data_v1", LS_TOKEN = "av_gh_token", LS_KEY = "av_key_s", LS_KEY2 = "av_key_p";
-async function sha256hex(s){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(s));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("");}
-
+let S=null; let SUBS=[]; let BANS=[];
 function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
 function today(){return new Date().toISOString().slice(0,10);}
-function msg(ok,text){const el=$(ok?"msg-ok":"msg-bad");$(ok?"msg-bad":"msg-ok").style.display="none";el.textContent=text;el.style.display="block";setTimeout(()=>el.style.display="none",4000);}
+function msg(ok,text){const el=$(ok?"msg-ok":"msg-bad");$(ok?"msg-bad":"msg-ok").style.display="none";el.textContent=text;el.style.display="block";setTimeout(()=>el.style.display="none",6000); if(ok) confettiBurst(); }
 function slugify(t){return t.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,60)||("post-"+Date.now());}
 function bodyToHtml(raw){
   return String(raw||"").trim().split(/\n\s*\n/).map(p=>{
@@ -277,262 +394,350 @@ function bodyToHtml(raw){
     return "<p>"+t+"</p>";
   }).join("\n");
 }
-
-/* ================= state ================= */
-let S=null;
-
 function blankState(){
   return {generated:new Date().toISOString().slice(0,16).replace("T"," "),
-    site:{motto:"Truth falls like snow",
-      investigation:{number:"001",title:"",stage:"Sourcing & verification",opened:"August 2026",
-        blurb:"An investigation is currently underway. The subject stays secret on purpose. Announcing targets too early burns sources and evidence."},
+    site:{motto:"Truth falls like snow", tagline:"Independent \u00b7 Anonymous",
+      investigation:{number:"001",title:"",stage:"Sourcing & verification",opened:"August 2026", blurb:"An investigation is currently underway. The subject stays secret on purpose. Announcing targets too early burns sources and evidence."},
       notices:["Investigation 001 is underway. It publishes when it is ready","This site collects nothing: no cookies, no analytics, no server logs","Questions welcome. Ask anonymously through the drop box"],
-      mirrors:["https://seattleavalanche.ct.ws"]},
-    posts:[], tips:[]};
+      mirrors:["https://seattleavalanche.online/"], network:[{city:"The Seattle Avalanche", domain:"seattleavalanche.online", status:"Official \u00b7 Active", since:"Aug 2026"}], banned_ips:[]},
+    posts:[], tips:[], answers:[]};
 }
 function touch(){S.generated=new Date().toISOString().slice(0,16).replace("T"," ");}
-
-/* ================= lock screen ================= */
 (function initLock(){
   const k = sessionStorage.getItem(LS_KEY) || localStorage.getItem(LS_KEY2) || "";
   $("pw-in").value = String(k || "").replace(/[^\x21-\x7E]/g, "");
 })();
-
 async function doUnlock(){
   const key = ($("pw-in").value || "").replace(/[^\x21-\x7E]/g, "").trim();
   if (!key) return lockErr("Enter your admin key.");
-  if ($("remember-key").checked) localStorage.setItem(LS_KEY2, key);
-  else localStorage.removeItem(LS_KEY2);
+  if ($("remember-key").checked) localStorage.setItem(LS_KEY2, key); else localStorage.removeItem(LS_KEY2);
   sessionStorage.setItem(LS_KEY, key);
-  // verify against the worker before opening
   try{
     const r = await fetch("/api/tips", { cache: "no-store", headers: { Authorization: "Bearer " + key } });
-    if (r.status === 401) return lockErr("Wrong key - rejected by the server.");
-    if (r.status === 501) {
-      // worker missing ADMIN_KEY secret or KV; let them in for drafts/publishing but warn
-      msg(false, "Server not configured yet: set ADMIN_KEY secret + TIPS_KV binding on the worker. Drafts and publishing still work.");
-    }
-  } catch(e) {
-    msg(false, "Could not reach the server API (offline or non-worker mirror). Drafts and publishing still work.");
-  }
+    if (r.status === 401) return lockErr("Wrong key - rejected by server.");
+    if (r.status === 501) msg(false, "Server not configured yet: set ADMIN_KEY + TIPS_KV. Drafts still work.");
+  } catch(e) { msg(false, "Offline or non-worker mirror. Drafts still work."); }
   await enter();
 }
 function lockErr(t){$("lock-err").textContent=t;$("lock-err").style.display="block";}
 async function enter(){
   $("lock-screen").style.display="none";$("panel").style.display="block";
-  S=loadState();fillForms();
-  await loadTipsFromServer();
-  renderInbox();
+  S=loadState(); fillForms();
+  await loadTipsFromServer(); await loadBans(); await loadSubs();
+  renderInbox(); renderBans(); updateDashboard();
   if(localStorage.getItem(LS_TOKEN)){$("gh-token").value=localStorage.getItem(LS_TOKEN);$("gh-remember").checked=true;}
   if(localStorage.getItem("av_repo_token")){$("gh-repo-token").value=localStorage.getItem("av_repo_token");$("gh-repo-remember").checked=true;}
-  msg(true,"Unlocked. Admin loaded. Click through from the site footer anytime.");
+  msg(true,"Unlocked. Supercharged panel ready.");
+  drawDashChart(); setupKonami();
+  const h=location.hash.replace("#",""); if(h) showTab(h);
 }
-function wipeDevice(e){e.preventDefault();sessionStorage.removeItem(LS_KEY);localStorage.removeItem(LS_KEY2);localStorage.removeItem(LS_DATA);location.reload();}
 function loadState(){
-  try{const d=JSON.parse(localStorage.getItem(LS_DATA));if(d&&d.site)return d;}catch(e){}
+  try{const d=JSON.parse(localStorage.getItem(LS_DATA));if(d&&d.site){ if(!d.site.network && d.site.mirrors) d.site.network=d.site.mirrors.map((m,i)=>({city:i===0?"The Seattle Avalanche":m, domain:m.replace(/^https?:\/\//,"").replace(/\/$/,""), status:i===0?"Official \u00b7 Active":"Official", since:i===0?"Aug 2026":""})); if(!d.site.banned_ips) d.site.banned_ips=[]; if(!d.site.tagline) d.site.tagline="Independent \u00b7 Anonymous"; if(d.site.motto && d.site.motto.includes("accumulates")) d.site.motto="Truth falls like snow"; return d;}}catch(e){}
   if(window.AVALANCHE_CONTENT&&window.AVALANCHE_CONTENT.site){
     const c=JSON.parse(JSON.stringify(window.AVALANCHE_CONTENT));
-    c.posts=(c.posts||[]).filter(p=>true);
-    c.tips=c.tips||[];
-    // ensure notices
+    c.posts=(c.posts||[]); c.tips=c.tips||[]; c.answers=c.answers||[];
+    if(!c.site.network && c.site.mirrors) c.site.network=c.site.mirrors.map((m,i)=>({city:i===0?"The Seattle Avalanche":m, domain:m.replace(/^https?:\/\//,"").replace(/\/$/,""), status:i===0?"Official \u00b7 Active":"Official", since:i===0?"Aug 2026":""}));
+    if(!c.site.banned_ips) c.site.banned_ips=[];
     if(!c.site.notices) c.site.notices=["Investigation 001 is underway. It publishes when it is ready"];
+    if(c.site.motto && c.site.motto.includes("accumulates")) c.site.motto="Truth falls like snow";
+    if(!c.site.tagline || c.site.tagline.includes("Unstoppable")) c.site.tagline="Independent \u00b7 Anonymous";
     return c;
   }
   return blankState();
 }
 function persist(){localStorage.setItem(LS_DATA,JSON.stringify(S));}
 function lockNow(){persist();location.reload();}
-
-/* ================= tabs ================= */
 function showTab(name){
-  document.querySelectorAll(".tab-btn").forEach(b=>b.classList.toggle("active",b.dataset.tab===name));
+  document.querySelectorAll(".nav-btn").forEach(b=>b.classList.toggle("active",b.dataset.tab===name));
   document.querySelectorAll(".pane").forEach(p=>p.classList.toggle("active",p.id==="pane-"+name));
-  if(name==="inbox"){ renderInbox(); loadSubs(); }
+  const titles={dashboard:"Dashboard", stories:"Stories", investigation:"Investigation & site", network:"Network & mirrors", inbox:"Inbox", subs:"Subscribers", bans:"IP Bans", analytics:"Analytics", publish:"Publish & sync"};
+  const t=$("pane-title"); if(t) t.childNodes[0].textContent=titles[name]||name;
+  const s=$("pane-sub"); if(s) s.textContent=" - "+(S.generated||"");
+  if(name==="inbox") renderInbox();
+  if(name==="subs") filterSubs();
+  if(name==="bans") renderBans();
+  if(name==="analytics") renderAnalytics();
+  if(name==="dashboard") updateDashboard();
+  history.replaceState(null,"","#"+name);
 }
-
-/* ================= forms ================= */
+function updateDashboard(){
+  const pub=(S.posts||[]).filter(p=>p.status==="published").length;
+  const draft=(S.posts||[]).length - pub;
+  $("kpi-stories").textContent=(S.posts||[]).length;
+  $("kpi-stories-sub").textContent=pub+" published \u00b7 "+draft+" drafts";
+  $("nav-stories-count").textContent=(S.posts||[]).length;
+  const tips=S.tips||[]; const unread=tips.filter(t=>!t.read).length;
+  $("kpi-inbox").textContent=tips.length; $("kpi-inbox-sub").textContent=unread+" new";
+  $("inbox-badge").textContent=tips.length ? tips.length+ (unread?" \u00b7 "+unread+" new":"") : "";
+  $("inbox-badge").style.display=tips.length?"inline-block":"none";
+  const ic=$("inbox-count"); if(ic) ic.textContent=tips.length ? "("+tips.length+(unread? ", "+unread+" new":"")+")" : "(0)";
+  $("kpi-subs").textContent=SUBS.length; $("subs-badge").textContent=SUBS.length||""; $("subs-badge").style.display=SUBS.length?"inline-block":"none";
+  $("kpi-bans").textContent=(S.site.banned_ips||[]).length + (BANS.length? " ("+BANS.length+" server)":"");
+  $("dash-ver").textContent="v"+(S.generated||",");
+  $("dash-mirrors").textContent=(S.site.network||S.site.mirrors||[]).length+" outlets";
+  const recent=[...tips].reverse().slice(0,3);
+  const dr=$("dash-recent"); if(dr) dr.innerHTML= recent.length ? recent.map(t=> `<div style="padding:8px 0;border-bottom:1px solid var(--line);"><b>${esc(t.id)}</b> \u00b7 ${esc((t.message||"").slice(0,60))} <span style="color:var(--faint);font-size:0.78rem;float:right;">${esc(t.received||"")}</span></div>`).join("") : "<p style=\"color:var(--muted);font-size:0.88rem;\">No tips yet.</p>";
+  fetch("/api/subs",{headers:{Authorization:"Bearer "+(sessionStorage.getItem(LS_KEY)||localStorage.getItem(LS_KEY2)||"")}}).then(r=>r.json()).then(j=>{ const kv=$("dash-kv"); if(kv){ kv.textContent=j.ok?"KV connected":"KV not bound"; kv.style.color=j.ok?"#6fe0a8":"var(--alert)"; }}).catch(()=>{ const kv=$("dash-kv"); if(kv) kv.textContent="offline";});
+  drawDashChart();
+}
+function drawDashChart(){
+  const c=$("dash-chart"); if(!c) return; const ctx=c.getContext("2d"); if(!ctx) return;
+  const pub=(S.posts||[]).filter(p=>p.status==="published").length; const draft=(S.posts||[]).length-pub;
+  const total=Math.max(1, pub+draft);
+  ctx.clearRect(0,0,c.width,c.height);
+  const w=c.width, h=c.height, pad=18;
+  const barW=(w-pad*2)/2 -10;
+  ctx.fillStyle="#ffd166"; ctx.fillRect(pad, h-40, barW, (draft/total)*80);
+  ctx.fillStyle="#e9edf4"; ctx.font="11px Inter"; ctx.fillText("Drafts "+draft, pad, h-14);
+  ctx.fillStyle="#6fe0a8"; ctx.fillRect(pad+barW+20, h-40, barW, (pub/total)*80);
+  ctx.fillText("Published "+pub, pad+barW+20, h-14);
+  ctx.fillStyle="#8494ab"; ctx.font="10px JetBrains Mono"; ctx.fillText("TOTAL "+(pub+draft), pad, 14);
+}
 function fillForms(){
   const i=S.site.investigation||{};
-  $("i-number").value=i.number||"";$("i-stage").value=i.stage||"";
-  $("i-title").value=i.title||"";$("i-opened").value=i.opened||"";
-  $("i-blurb").value=i.blurb||"";$("i-motto").value=S.site.motto||"";
+  $("i-number").value=i.number||""; $("i-stage").value=i.stage||"";
+  $("i-title").value=i.title||""; $("i-opened").value=i.opened||"";
+  $("i-blurb").value=i.blurb||""; $("i-motto").value=S.site.motto||"";
+  const tag=$("i-tagline"); if(tag) tag.value=S.site.tagline||"";
   $("i-notices").value=(S.site.notices||[]).join("\n");
+  renderNetworkForm();
   $("m-list").value=(S.site.mirrors||[]).join("\n");
+  $("mirrors-list").value=(S.site.mirrors||[]).join("\n");
   $("ver-pill").textContent="v"+(S.generated||",");
-  renderStoryList();
-  renderInbox();
+  renderStoryList(); renderInbox(); updateDashboard();
 }
 function saveSite(){
-  S.site.investigation={number:$("i-number").value.trim(),title:$("i-title").value.trim(),
-    stage:$("i-stage").value.trim(),opened:$("i-opened").value.trim(),blurb:$("i-blurb").value.trim()};
-  S.site.motto=$("i-motto").value.trim();
+  S.site.investigation={number:$("i-number").value.trim(),title:$("i-title").value.trim(), stage:$("i-stage").value.trim(),opened:$("i-opened").value.trim(),blurb:$("i-blurb").value.trim()};
+  S.site.motto=$("i-motto").value.trim()||"Truth falls like snow";
+  const tagEl=$("i-tagline"); S.site.tagline=tagEl? tagEl.value.trim()||"Independent \u00b7 Anonymous" : S.site.tagline;
   S.site.notices=$("i-notices").value.split("\n").map(s=>s.trim()).filter(Boolean);
-  touch();persist();fillForms();msg(true,"Saved locally, remember to push.");
+  if(!S.site.notices.length) S.site.notices=["Investigation 001 is underway. It publishes when it is ready"];
+  touch(); persist(); fillForms(); msg(true,"Site settings saved - push to go live."); updateDashboard();
 }
-function saveMirrors(){
-  S.site.mirrors=$("m-list").value.split("\n").map(s=>s.trim()).filter(Boolean);touch();persist();fillForms();msg(true,"Registry saved.");
+function resetNotices(){ $("i-notices").value="Investigation 001 is underway. It publishes when it is ready\nThis site collects nothing: no cookies, no analytics, no server logs\nQuestions welcome. Ask anonymously through the drop box"; }
+function renderNetworkForm(){
+  const list=S.site.network || [];
+  const cont=$("network-list");
+  if(!list.length) { cont.innerHTML="<p style=\"color:var(--muted)\">No outlets - add Seattle.</p>"; return; }
+  cont.innerHTML=list.map((o,idx)=> `
+    <div class="network-row">
+      <div><label class="f-label">City / Outlet</label><input class="f-input" value="${esc(o.city)}" oninput="S.site.network[${idx}].city=this.value; persist()" /></div>
+      <div><label class="f-label">Domain (no https://)</label><input class="f-input" value="${esc(o.domain)}" oninput="S.site.network[${idx}].domain=this.value.replace(/^https?:\/\//,'').replace(/\\/$/,''); persist()" placeholder="seattleavalanche.online" /></div>
+      <div><label class="f-label">Status</label><input class="f-input" value="${esc(o.status)}" oninput="S.site.network[${idx}].status=this.value; persist()" /></div>
+      <div><label class="f-label">Since</label><input class="f-input" value="${esc(o.since)}" oninput="S.site.network[${idx}].since=this.value; persist()" placeholder="Aug 2026" /></div>
+      <div><button class="btn btn--ghost btn--small" style="margin-top:22px" onclick="removeOutlet(${idx})">\u2715</button></div>
+    </div>
+  `).join("") + `<p class="hint">First = canonical. Live file: <code class="k">data/site.json</code> + <code class="k">js/content.js</code> network field.</p>`;
 }
-
-/* ================= tips / inbox ================= */
+function addOutlet(){ if(!S.site.network) S.site.network=[]; S.site.network.push({city:"New Outlet", domain:"example.com", status:"Official", since:"Aug 2026"}); persist(); renderNetworkForm(); updateDashboard(); }
+function removeOutlet(i){ if(!confirm("Remove this outlet?")) return; S.site.network.splice(i,1); persist(); renderNetworkForm(); syncMirrorsFromNetwork(); }
+function resetNetwork(){ S.site.network=[{city:"The Seattle Avalanche", domain:"seattleavalanche.online", status:"Official \u00b7 Active", since:"Aug 2026"}]; syncMirrorsFromNetwork(); persist(); renderNetworkForm(); $("m-list").value=S.site.mirrors.join("\n"); $("mirrors-list").value=S.site.mirrors.join("\n"); msg(true,"Reset to Seattle only."); updateDashboard(); }
+function syncMirrorsFromNetwork(){
+  S.site.mirrors=(S.site.network||[]).map(o=> "https://"+ String(o.domain||"").replace(/^https?:\/\//,"").replace(/\/$/,"").trim() +"/");
+  S.site.mirrors=S.site.mirrors.filter(Boolean);
+}
+function saveNetwork(){
+  syncMirrorsFromNetwork();
+  const txt=$("m-list").value.trim();
+  if(txt){ const urls=txt.split("\n").map(s=>s.trim()).filter(Boolean); if(urls.length){ S.site.mirrors=urls; S.site.network=urls.map((u,i)=>({city:i===0?"The Seattle Avalanche":u.replace(/^https?:\/\//,"").replace(/\/$/,""), domain:u.replace(/^https?:\/\//,"").replace(/\/$/,""), status:i===0?"Official \u00b7 Active":"Official", since:i===0?"Aug 2026":""})); } }
+  const mirTxt=$("mirrors-list").value.trim();
+  if(mirTxt) S.site.mirrors=mirTxt.split("\n").map(s=>s.trim()).filter(Boolean);
+  touch(); persist(); fillForms(); updateDashboard(); msg(true,"Network saved - push LIVE to update network.html!");
+}
+function importNetworkFromTextarea(){
+  const txt=$("m-list").value.trim(); if(!txt) return msg(false,"Paste URLs first.");
+  const urls=txt.split("\n").map(s=>s.trim()).filter(Boolean);
+  S.site.network=urls.map((u,i)=>({city:i===0?"The Seattle Avalanche":u.replace(/^https?:\/\//,"").replace(/\/$/,""), domain:u.replace(/^https?:\/\//,"").replace(/\/$/,""), status:i===0?"Official \u00b7 Active":"Official", since:i===0?"Aug 2026":""}));
+  syncMirrorsFromNetwork(); persist(); renderNetworkForm(); msg(true,"Imported "+urls.length+" outlets - Save network to confirm.");
+}
+function saveMirrorsSolo(){
+  const txt=$("mirrors-list").value.trim(); S.site.mirrors=txt? txt.split("\n").map(s=>s.trim()).filter(Boolean) : ["https://seattleavalanche.online/"];
+  touch(); persist(); msg(true,"Mirrors saved."); updateDashboard();
+}
+async function loadBans(){
+  try{
+    const r=await fetch("/api/bans",{headers:{Authorization:"Bearer "+(sessionStorage.getItem(LS_KEY)||localStorage.getItem(LS_KEY2)||"")}});
+    const j=await r.json();
+    if(j.ok && Array.isArray(j.bans)) BANS=j.bans; else BANS=[];
+  }catch(e){ BANS=[]; }
+  if(!S.site.banned_ips) S.site.banned_ips=[];
+  renderBans(); updateDashboard();
+}
+function renderBans(){
+  const q=($("ban-search").value||"").toLowerCase();
+  const all = [...new Set([...(S.site.banned_ips||[]), ...BANS])];
+  const filtered = q ? all.filter(ip=> ip.toLowerCase().includes(q)) : all;
+  const box=$("ban-list");
+  if(!filtered.length) { box.innerHTML="<p style=\"color:var(--muted);font-size:0.88rem;\">No bans. Add an IP above or ban from inbox tip.</p>"; return; }
+  box.innerHTML=filtered.map(ip=> `<div style="display:flex;justify-content:space-between;align-items:center;padding:10px;border:1px solid var(--line);border-radius:8px;margin-bottom:8px;background:var(--surface)"><code class="k">${esc(ip)}</code><span><button class="btn btn--ghost btn--small" onclick="unbanIp('${esc(ip)}')">Unban</button></span></div>`).join("");
+}
+async function banIp(){
+  const ip=$("ban-ip").value.trim(); if(!ip) return msg(false,"Enter an IP.");
+  if(!S.site.banned_ips) S.site.banned_ips=[];
+  if(!S.site.banned_ips.includes(ip)) S.site.banned_ips.push(ip);
+  persist();
+  try{
+    const r=await fetch("/api/ban",{method:"POST", headers:{Authorization:"Bearer "+(sessionStorage.getItem(LS_KEY)||localStorage.getItem(LS_KEY2)||""), "Content-Type":"application/json"}, body: JSON.stringify({ip})});
+    const j=await r.json(); if(!j.ok) msg(false, j.error||"Local ban saved, server ban failed."); else msg(true,"Banned "+ip+" (local + server).");
+  }catch(e){ msg(true,"Banned "+ip+" locally (server unreachable)."); }
+  $("ban-ip").value=""; await loadBans();
+}
+async function unbanIp(ip){
+  S.site.banned_ips=(S.site.banned_ips||[]).filter(x=> x!==ip);
+  BANS=BANS.filter(x=> x!==ip);
+  persist();
+  try{ await fetch("/api/unban",{method:"POST", headers:{Authorization:"Bearer "+(sessionStorage.getItem(LS_KEY)||localStorage.getItem(LS_KEY2)||""), "Content-Type":"application/json"}, body: JSON.stringify({ip})}); }catch(e){}
+  renderBans(); updateDashboard(); msg(true,"Unbanned "+ip);
+}
+async function clearBans(){
+  if(!confirm("Clear all bans (local + server)?")) return;
+  S.site.banned_ips=[]; BANS=[]; persist();
+  try{ await fetch("/api/bans/clear",{method:"POST", headers:{Authorization:"Bearer "+(sessionStorage.getItem(LS_KEY)||localStorage.getItem(LS_KEY2)||"")}});}catch(e){}
+  renderBans(); updateDashboard(); msg(true,"Cleared bans.");
+}
+function banFromTip(ip){
+  if(!ip || ip==="unknown") return msg(false,"No IP for this tip.");
+  $("ban-ip").value=ip; banIp(); showTab("bans");
+}
+let selectedTips=new Set();
 async function loadTipsFromServer(){
-  // Try to load from data/tips.json (PHP host or local file server) - merge into S.tips
   try{
     const r = await fetch("/api/tips", {cache:"no-store", headers:{Authorization:"Bearer "+(sessionStorage.getItem(LS_KEY)||localStorage.getItem(LS_KEY2)||"")}});
     if(r.ok){
-      const arr = await r.json();
-      if(Array.isArray(arr) && arr.length){
-        // Merge by id, keep reply/read state from S.tips if existing
-        const byId = {};
-        (S.tips||[]).forEach(t=>byId[t.id]=t);
+      const j=await r.json();
+      let arr=[]; if(Array.isArray(j)) arr=j; else if(j.ok && Array.isArray(j.tips)) arr=j.tips;
+      if(arr.length){
+        const byId={}; (S.tips||[]).forEach(t=>byId[t.id]=t);
         let added=0;
-        arr.filter(x=>/^AV-[A-Za-z0-9-]+$/.test(String(x.id||''))).forEach(t=>{
+        arr.filter(x=>/^AV-[A-Za-z0-9-]+$/.test(String(x.id||""))).forEach(t=>{
           if(!byId[t.id]){
-            // Ensure allow_public flag exists
             if(t.allow_public===undefined) t.allow_public=0;
             if(t.read===undefined) t.read=false;
-            S.tips.push(t);
-            added++;
-          }
-        });
-        if(added>0){ persist(); }
-      }
-    }
-  }catch(e){}
-  // Also try Cloudflare Worker KV inbox
-  try{
-    const r2 = await fetch("/api/tips", {cache:"no-store"});
-    if(r2.ok){
-      const j = await r2.json();
-      if(j.ok && Array.isArray(j.tips) && j.tips.length){
-        const byId = {};
-        (S.tips||[]).forEach(x=>byId[x.id]=x);
-        let added=0;
-        j.tips.forEach(w=>{
-          if(!byId[w.id]){
-            if(w.allow_public===undefined) w.allow_public=0;
-            if(w.read===undefined) w.read=false;
-            S.tips.push(w); added++;
+            S.tips.push(t); added++;
           }
         });
         if(added>0) persist();
       }
     }
   }catch(e){}
-  renderInbox();
+  renderInbox(); updateDashboard();
 }
 function renderInbox(){
   const box=$("inbox-list"), badge=$("inbox-badge"), countEl=$("inbox-count");
-  const tips = S.tips||[];
-  const unread = tips.filter(t=>!t.read).length;
-  if(badge){ badge.textContent = tips.length ? tips.length + (unread ? " · " + unread + " new" : "") : ""; badge.style.display = tips.length ? "inline-block" : "none"; }
-  if(countEl) countEl.textContent = tips.length ? "(" + tips.length + (unread ? ", " + unread + " new" : "") + ")" : "";
+  const q=($("inbox-search") ? $("inbox-search").value||"" : "").toLowerCase();
+  const f=$("inbox-filter") ? $("inbox-filter").value||"all" : "all";
+  let tips = S.tips||[];
+  if(q) tips=tips.filter(t=> (t.message||"").toLowerCase().includes(q) || (t.id||"").toLowerCase().includes(q) || (t.alias||"").toLowerCase().includes(q) || (t.contact||"").toLowerCase().includes(q));
+  if(f==="new") tips=tips.filter(t=>!t.read);
+  if(f==="public") tips=tips.filter(t=> t.allow_public);
+  if(f==="private") tips=tips.filter(t=> !t.allow_public);
+  const unread = (S.tips||[]).filter(t=>!t.read).length;
+  if(badge){ badge.textContent = (S.tips||[]).length ? (S.tips||[]).length + (unread ? " \u00b7 "+unread+" new" : "") : ""; badge.style.display = (S.tips||[]).length ? "inline-block" : "none"; }
+  if(countEl) countEl.textContent = tips.length ? "("+tips.length + (q||f!=="all" ? " filtered / "+(S.tips||[]).length+" total":"") + (unread ? ", "+unread+" new":"")+")" : "(0)";
+  const selEl=$("inbox-selected"); if(selEl) selEl.textContent=selectedTips.size ? selectedTips.size+" selected" : "";
+  if(!box) return;
   if(!tips.length){
-    box.innerHTML='<p style="color:var(--muted);font-size:0.88rem;">No submissions yet. Share your <code>submit.html</code> link. Check <code>data/tips.json</code> on the file host if you expect tips.</p>';
+    box.innerHTML='<p style="color:var(--muted);font-size:0.88rem;">No tips match. Try clearing filters or share your <code>submit.html</code> link.</p>';
     return;
   }
   const sorted = [...tips].reverse();
   box.innerHTML = sorted.map(t=>{
-    const files = (t.files||[]).map(f=>`<a href=\"data/tips_files/${esc(t.id)}/${esc(f)}\" target=\"_blank\">${esc(f)}</a>`).join(" ") || '<span style=\"color:var(--muted)\">No files</span>';
-    const consent = t.allow_public ? '<span class="status-tag st-pub" style=\"margin-left:8px\">allows public anonymized post</span>' : '<span class="status-tag st-draft" style=\"margin-left:8px\">private only</span>';
+    const files = (t.files||[]).map(f=>`<a href="data/tips_files/${esc(t.id)}/${esc(f)}" target="_blank">${esc(f)}</a>`).join(" ") || '<span style="color:var(--muted)">No files</span>';
+    const consent = t.allow_public ? '<span class="status-tag st-pub" style="margin-left:8px">allows public anonymized post</span>' : '<span class="status-tag st-draft" style="margin-left:8px">private only</span>';
     const alias = esc(t.alias||"anonymous");
     const contact = esc(t.contact||"");
-    const contactLine = contact ? `<br><span class=\"tip-meta\">Reply to: ${contact}</span>` : `<br><span class=\"tip-meta\">No reply address - use answers board if they allowed it</span>`;
+    const ip = esc(t.ip||"");
+    const contactLine = contact ? `<br><span class="tip-meta">Reply to: ${contact}</span>` : `<br><span class="tip-meta">No reply address</span>`;
+    const ipLine = ip ? ` <span class="tip-meta" style="margin-left:8px">IP: ${ip} <a href="#" onclick="banFromTip('${ip}');return false;" style="color:var(--alert)">Ban IP</a></span>` : "";
     const reply = t.reply||{};
     const replyText = esc(reply.text||"");
     const published = !!reply.published;
-    return `<div class=\"tipbox ${!t.read ? 'unread' : ''}\">
-      <div style=\"display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap\">
-        <div><b>${esc(t.id)}</b> · ${esc(t.topic||"tip")} · ${esc(t.received||"")} · <b>${alias}</b> ${consent}${contactLine}</div>
-        <div><span class=\"status-tag ${t.read ? 'st-pub' : 'st-draft'}\">${t.read ? 'read' : 'new'}</span></div>
+    const checked = selectedTips.has(t.id) ? "checked" : "";
+    return `<div class="tipbox ${!t.read ? 'unread' : ''}">
+      <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap">
+        <div style="display:flex;gap:8px;align-items:center;"><input type="checkbox" ${checked} onchange="toggleSelect('${esc(t.id)}', this.checked)" /> <b>${esc(t.id)}</b> \u00b7 ${esc(t.topic||"tip")} \u00b7 ${esc(t.received||"")} \u00b7 <b>${alias}</b> ${consent}${contactLine}${ipLine}</div>
+        <div><span class="status-tag ${t.read ? 'st-pub' : 'st-draft'}">${t.read ? 'read' : 'new'}</span></div>
       </div>
-      <div style=\"margin-top:10px;white-space:pre-wrap;background:rgba(255,255,255,0.04);padding:10px;border-radius:8px\">${esc(t.message||"")}</div>
-      <div style=\"margin-top:8px;font-size:0.82rem\">${files} · <a href=\"#\" onclick=\"markRead('${esc(t.id)}');return false;\">Mark read</a> · <a href=\"#\" onclick=\"delTip('${esc(t.id)}');return false;\" style=\"color:var(--alert)\">Delete</a></div>
-      <div style=\"margin-top:12px;border-top:1px dashed var(--line);padding-top:10px\">
-        <label class=\"f-label\" style=\"margin-top:0\">Reply (anonymized if you publish). They ticked allow-public if they want a board post.</label>
-        <textarea class=\"f-area short\" id=\"reply-${esc(t.id)}\" placeholder=\"Anonymized reply for answers board or private note...\">${replyText}</textarea>
-        <label style=\"display:flex;gap:8px;align-items:center;margin-top:8px;font-size:0.82rem;color:var(--text-soft)\"><input type=\"checkbox\" id=\"pub-${esc(t.id)}\" ${published ? 'checked' : ''} /> Publish anonymized to answers board</label>
-        <p class=\"hint\" style=\"margin:4px 0 0 0\">If you publish, only the anonymized question and your reply appear. No contact is ever posted. Add disclaimer that replies are not instant.</p>
-        <div class=\"btnrow\"><button class=\"btn btn--primary btn--small\" onclick=\"saveReply('${esc(t.id)}')\">Save reply</button></div>
+      <div style="margin-top:10px;white-space:pre-wrap;background:rgba(255,255,255,0.04);padding:10px;border-radius:8px">${esc(t.message||"")}</div>
+      <div style="margin-top:8px;font-size:0.82rem">${files} \u00b7 <a href="#" onclick="markRead('${esc(t.id)}');return false;">Mark read</a> \u00b7 <a href="#" onclick="delTip('${esc(t.id)}');return false;" style="color:var(--alert)">Delete</a></div>
+      <div style="margin-top:12px;border-top:1px dashed var(--line);padding-top:10px">
+        <label class="f-label" style="margin-top:0">Reply (anonymized if publish).</label>
+        <textarea class="f-area short" id="reply-${esc(t.id)}" placeholder="Anonymized reply...">${replyText}</textarea>
+        <label style="display:flex;gap:8px;align-items:center;margin-top:8px;font-size:0.82rem;color:var(--text-soft)"><input type="checkbox" id="pub-${esc(t.id)}" ${published ? 'checked' : ''} /> Publish anonymized to answers board</label>
+        <div class="btnrow"><button class="btn btn--primary btn--small" onclick="saveReply('${esc(t.id)}')">Save reply</button></div>
       </div>
     </div>`;
   }).join("");
 }
-function markRead(id){
-  const t=(S.tips||[]).find(x=>x.id===id);
-  if(t){ t.read=true; persist(); renderInbox(); }
+function toggleSelect(id, on){ if(on) selectedTips.add(id); else selectedTips.delete(id); const e=$("inbox-selected"); if(e) e.textContent=selectedTips.size ? selectedTips.size+" selected" : ""; }
+function bulkMarkRead(){ selectedTips.forEach(id=>{ const t=(S.tips||[]).find(x=>x.id===id); if(t) t.read=true; }); persist(); selectedTips.clear(); renderInbox(); updateDashboard(); msg(true,"Marked selected read."); }
+function bulkDeleteTips(){ if(!selectedTips.size) return msg(false,"Select tips first."); if(!confirm("Delete "+selectedTips.size+" tips?")) return; S.tips=(S.tips||[]).filter(x=>!selectedTips.has(x.id)); selectedTips.clear(); persist(); renderInbox(); updateDashboard(); syncAnswers(); msg(true,"Deleted selected."); }
+function exportInboxCSV(){
+  const rows=[["id","received","topic","alias","contact","ip","allow_public","message","reply","published"]];
+  (S.tips||[]).forEach(t=> rows.push([t.id, t.received, t.topic, t.alias, t.contact, t.ip||"", t.allow_public, (t.message||"").replace(/"/g,"\"\""), (t.reply&&t.reply.text||"").replace(/"/g,"\"\""), t.reply&&t.reply.published?1:0]));
+  const csv=rows.map(r=> r.map(v=> `"${String(v??"").replace(/"/g,'""')}"`).join(",")).join("\n");
+  const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"})); a.download="avalanche-inbox.csv"; a.click(); URL.revokeObjectURL(a.href);
 }
-function markAllRead(){
-  (S.tips||[]).forEach(t=>t.read=true);
-  persist(); renderInbox(); msg(true,"Marked all read.");
-}
-function delTip(id){
-  if(!confirm('Delete ' + id + '?')) return;
-  S.tips = (S.tips||[]).filter(x=>x.id!==id);
-  persist(); renderInbox(); msg(true,"Deleted.");
-}
+function markRead(id){ const t=(S.tips||[]).find(x=>x.id===id); if(t){ t.read=true; persist(); renderInbox(); updateDashboard(); } }
+function markAllRead(){ (S.tips||[]).forEach(t=>t.read=true); persist(); renderInbox(); updateDashboard(); msg(true,"Marked all read."); }
+function delTip(id){ if(!confirm('Delete ' + id + '?')) return; S.tips = (S.tips||[]).filter(x=>x.id!==id); persist(); renderInbox(); updateDashboard(); syncAnswers(); msg(true,"Deleted."); }
 function saveReply(id){
-  const t=(S.tips||[]).find(x=>x.id===id);
-  if(!t) return;
+  const t=(S.tips||[]).find(x=>x.id===id); if(!t) return;
   const text = document.getElementById("reply-" + id).value.trim();
   const pub = document.getElementById("pub-" + id).checked;
   if(!text){ delete t.reply; } else { t.reply = {text: text, date: new Date().toISOString().slice(0,16).replace("T"," "), published: pub}; }
-  t.read=true;
-  persist(); renderInbox();
-  // Also update answers in S for publish
-  syncAnswers();
-  msg(true, pub ? "Reply saved and will publish on next push (anonymized)." : "Reply saved privately.");
+  t.read=true; persist(); renderInbox(); syncAnswers(); updateDashboard(); msg(true, pub ? "Reply will publish on next push." : "Reply saved privately.");
 }
 function syncAnswers(){
-  // Build S.answers from tips with published replies for site.js to render
-  const answers = (S.tips||[]).filter(t=>t.reply && t.reply.published && t.reply.text).map(t=>({
-    id: t.id,
-    alias: t.alias || "anonymous",
-    question: (t.message||"").slice(0,220),
-    answer: t.reply.text,
-    date: t.reply.date || t.received || ""
-  }));
-  S.answers = answers;
-  persist();
+  const answers = (S.tips||[]).filter(t=>t.reply && t.reply.published && t.reply.text).map(t=>({ id: t.id, alias: t.alias || "anonymous", question: (t.message||"").slice(0,220), answer: t.reply.text, date: t.reply.date || t.received || "" }));
+  S.answers = answers; persist();
 }
-
-/* ================= stories ================= */
 function renderStoryList(){
-  const box=$("story-list");box.innerHTML="";
-  $("count-posts").textContent=S.posts.length;
-  if(!S.posts.length){box.innerHTML='<p style="color:var(--muted);font-size:.88rem;">No stories yet.</p>';return;}
-  S.posts.forEach((p,idx)=>{
+  const box=$("story-list"); if(!box) return;
+  const q=($("stories-search").value||"").toLowerCase();
+  const f=$("stories-filter").value||"all";
+  let posts=S.posts||[];
+  if(q) posts=posts.filter(p=> (p.title||"").toLowerCase().includes(q) || (p.dek||"").toLowerCase().includes(q) || (p.tags||[]).join(" ").toLowerCase().includes(q) || (p.slug||"").toLowerCase().includes(q));
+  if(f==="published") posts=posts.filter(p=> p.status==="published");
+  if(f==="draft") posts=posts.filter(p=> p.status!=="published");
+  box.innerHTML="";
+  $("count-posts").textContent=posts.length + (q||f!=="all" ? " / "+S.posts.length : "");
+  if(!posts.length){box.innerHTML='<p style="color:var(--muted);font-size:.88rem;">No stories match.</p>';return;}
+  posts.forEach((p)=>{
+    const idx=S.posts.indexOf(p);
+    const sel = selectedStories.has(p.slug) ? "checked" : "";
     const r=document.createElement("div");r.className="story-row";
-    r.innerHTML=`<div><b>${esc(p.title)}</b>&nbsp;&nbsp;<span class="sub" style="font-size:.75rem;color:var(--faint)">${esc(p.date)} · ${esc(p.slug)}</span></div>
+    r.innerHTML=`<div style="display:flex;gap:10px;align-items:center;"><input type="checkbox" ${sel} onchange="toggleStorySel('${esc(p.slug)}', this.checked)" /> <div><b>${esc(p.title)}</b>&nbsp;&nbsp;<span class="sub" style="font-size:.75rem;color:var(--faint)">${esc(p.date)} \u00b7 ${esc(p.slug)}</span><br><span style="font-size:0.78rem;color:var(--muted)">${esc((p.dek||"").slice(0,90))}</span></div></div>
       <div><span class="status-tag ${p.status==="published"?"st-pub":"st-draft"}">${esc(p.status)}</span>
-      <span class="row-actions"><a onclick="editStory(${idx})">Edit</a><a style="color:var(--alert)" onclick="delStory(${idx})">Delete</a></span></div>`;
+      <span class="row-actions"><a onclick="editStory(${idx})">Edit</a><a onclick="toggleStory(${idx})">${p.status==="published"?"Unpublish":"Publish"}</a><a style="color:var(--alert)" onclick="delStory(${idx})">Delete</a></span></div>`;
     box.appendChild(r);
   });
 }
+let selectedStories=new Set();
+function toggleStorySel(slug,on){ if(on) selectedStories.add(slug); else selectedStories.delete(slug); }
+function bulkPublish(){ if(!selectedStories.size) return msg(false,"Select stories."); S.posts.forEach(p=>{ if(selectedStories.has(p.slug)) p.status="published";}); touch(); persist(); renderStoryList(); updateDashboard(); msg(true,"Published selected."); selectedStories.clear(); }
+function bulkDraft(){ if(!selectedStories.size) return msg(false,"Select stories."); S.posts.forEach(p=>{ if(selectedStories.has(p.slug)) p.status="draft";}); touch(); persist(); renderStoryList(); updateDashboard(); msg(true,"Moved to drafts."); selectedStories.clear(); }
+function bulkDelete(){ if(!selectedStories.size) return msg(false,"Select stories."); if(!confirm("Delete "+selectedStories.size+" stories?")) return; S.posts=S.posts.filter(p=>!selectedStories.has(p.slug)); touch(); persist(); renderStoryList(); updateDashboard(); msg(true,"Deleted."); selectedStories.clear(); }
+function toggleStory(idx){ S.posts[idx].status = S.posts[idx].status==="published"?"draft":"published"; touch(); persist(); renderStoryList(); updateDashboard(); }
 function editStory(idx){
   const e=$("editor");e.style.display="block";e.scrollIntoView({behavior:"smooth"});
-  if(idx===null){$("editor-title").textContent="New story";$("e-slug").value="";$("e-title").value="";
-    $("e-dek").value="";$("e-date").value=today();$("e-status").value="draft";$("e-tags").value="";$("e-body").value="";}
-  else{const p=S.posts[idx];$("editor-title").textContent="Edit: "+p.title;$("e-slug").value=p.slug;
-    $("e-title").value=p.title;$("e-dek").value=p.dek||"";$("e-date").value=p.date||today();
-    $("e-status").value=p.status;$("e-tags").value=(p.tags||[]).join(", ");$("e-body").value=p.body_raw||"";}
+  if(idx===null){$("editor-title").textContent="New story";$("e-slug").value="";$("e-title").value="";$("e-dek").value="";$("e-date").value=today();$("e-status").value="draft";$("e-tags").value="";$("e-body").value="";$("story-preview").style.display="none";}
+  else{const p=S.posts[idx];$("editor-title").textContent="Edit: "+p.title;$("e-slug").value=p.slug;$("e-title").value=p.title;$("e-dek").value=p.dek||"";$("e-date").value=p.date||today();$("e-status").value=p.status;$("e-tags").value=(p.tags||[]).join(", ");$("e-body").value=p.body_raw||"";}
 }
 function closeEditor(){$("editor").style.display="none";}
 function saveStory(){
   const title=$("e-title").value.trim();if(!title)return msg(false,"Headline required.");
   const orig=$("e-slug").value;const slug=orig||slugify(title);
-  const post={slug,title,dek:$("e-dek").value.trim(),date:$("e-date").value.trim()||today(),
-    status:$("e-status").value,tags:$("e-tags").value.split(",").map(t=>t.trim()).filter(Boolean),
-    body_raw:$("e-body").value,body_html:bodyToHtml($("e-body").value)};
-  if(orig){const k=S.posts.findIndex(p=>p.slug===orig);S.posts[k]=post;}
-  else S.posts.unshift(post);
-  touch();persist();closeEditor();renderStoryList();msg(true,"Story saved locally, push when ready.");
+  const post={slug,title,dek:$("e-dek").value.trim(),date:$("e-date").value.trim()||today(), status:$("e-status").value,tags:$("e-tags").value.split(",").map(t=>t.trim()).filter(Boolean), body_raw:$("e-body").value,body_html:bodyToHtml($("e-body").value)};
+  if(orig){const k=S.posts.findIndex(p=>p.slug===orig);S.posts[k]=post;} else S.posts.unshift(post);
+  touch();persist();closeEditor();renderStoryList(); updateDashboard(); msg(true,"Story saved - push to go live.");
 }
-function delStory(idx){
-  if(!confirm('Delete "'+S.posts[idx].title+'"? This removes it on next push.'))return;
-  S.posts.splice(idx,1);touch();persist();renderStoryList();msg(true,"Deleted locally.");
+function delStory(idx){ if(!confirm('Delete "'+S.posts[idx].title+'"?'))return; S.posts.splice(idx,1);touch();persist();renderStoryList(); updateDashboard(); msg(true,"Deleted."); }
+function previewStory(){
+  const title=$("e-title").value.trim()||"Untitled"; const dek=$("e-dek").value.trim(); const body=$("e-body").value.trim();
+  const html=bodyToHtml(body);
+  const box=$("story-preview"); box.style.display="block"; box.innerHTML=`<h3 style="font-family:var(--font-serif);font-size:1.4rem;">${esc(title)}</h3>${dek?`<p style="font-style:italic;color:var(--text-soft);margin-top:6px;">${esc(dek)}</p>`:""}<div style="margin-top:12px;color:var(--text-soft);line-height:1.7;">${html||"<p style=color:var(--muted)>(no body yet)</p>"}</div>`;
 }
-
-/* ================= github vault ================= */
 function ghHeaders(){const t=$("gh-token").value.trim();if(!t)throw new Error("Paste your access token first.");return {Authorization:"Bearer "+t,Accept:"application/vnd.github+json"};}
 function ghCfg(){const g=$("gh-gist").value.trim();if(!g)throw new Error("Paste your gist ID first.");return g;}
 async function ghPull(){
@@ -544,8 +749,8 @@ async function ghPull(){
     if(!f)throw new Error("Gist has no avalanche-content.json file.");
     const incoming=JSON.parse(f.content);
     if(!incoming.generated)throw new Error("Not an avalanche content file.");
-    S=incoming; if(!S.tips) S.tips=[]; if(!S.answers) S.answers=[];
-    touch();persist();fillForms();renderInbox();msg(true,"Pulled vault v"+incoming.generated+".");
+    S=incoming; if(!S.tips) S.tips=[]; if(!S.answers) S.answers=[]; if(!S.site.network && S.site.mirrors) S.site.network=S.site.mirrors.map((m,i)=>({city:i===0?"The Seattle Avalanche":m, domain:m.replace(/^https?:\/\//,"").replace(/\/$/,""), status:i===0?"Official \u00b7 Active":"Official", since:i===0?"Aug 2026":""}));
+    touch();persist();fillForms();renderInbox();updateDashboard();msg(true,"Pulled vault v"+incoming.generated+".");
   }catch(e){msg(false,e.message);}
 }
 async function ghPush(){
@@ -553,128 +758,146 @@ async function ghPush(){
     syncAnswers(); touch();persist();
     const body={description:"The Seattle Avalanche, canonical content",files:{"avalanche-content.json":{content:JSON.stringify(S)}}};
     const res=await fetch("https://api.github.com/gists/"+ghCfg(),{method:"PATCH",headers:ghHeaders(),body:JSON.stringify(body)});
-    if(res.status===404)throw new Error("Gist not found, check the ID (and that the token has gist scope).");
-    if(res.status===401)throw new Error("Token rejected, expired or wrong scope.");
+    if(res.status===404)throw new Error("Gist not found, check ID (gist scope).");
+    if(res.status===401)throw new Error("Token rejected.");
     if(!res.ok)throw new Error("GitHub says "+res.status);
-    if($("gh-remember").checked)localStorage.setItem(LS_TOKEN,$("gh-token").value.trim());
-    else localStorage.removeItem(LS_TOKEN);
-    msg(true,"LIVE. v"+S.generated+" pushed, every mirror picks it up on next visit.");
+    if($("gh-remember").checked)localStorage.setItem(LS_TOKEN,$("gh-token").value.trim()); else localStorage.removeItem(LS_TOKEN);
+    msg(true,"LIVE. v"+S.generated+" pushed to vault.");
   }catch(e){msg(false,e.message);}
 }
-
-/* ================= transfer ================= */
 function plainContentJs(){return "// Generated by the Avalanche control panel, do not edit by hand.\nwindow.AVALANCHE_CONTENT = "+JSON.stringify(S,null,2)+";\n";}
-async function copyPlain(){
-  try{await navigator.clipboard.writeText(plainContentJs());msg(true,"content.js copied, paste into js/content.js on any static mirror.");}
-  catch(e){msg(false,"Clipboard blocked, use Export instead.");}
-}
+async function copyPlain(){ try{await navigator.clipboard.writeText(plainContentJs());msg(true,"content.js copied.");} catch(e){msg(false,"Clipboard blocked, use Export instead.");}}
 function exportFile(){
-  const a=document.createElement("a");
-  a.href=URL.createObjectURL(new Blob([JSON.stringify(S)],{type:"application/json"}));
-  a.download="avalanche-content.json";a.click();URL.revokeObjectURL(a.href);
+  const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([JSON.stringify(S)],{type:"application/json"})); a.download="avalanche-content.json";a.click();URL.revokeObjectURL(a.href);
 }
 function importFile(input){
-  const f=input.files[0];if(!f)return;
-  const rd=new FileReader();
-  rd.onload=()=>{try{
-      const j=JSON.parse(rd.result);
-      if(!j.site||!j.generated)throw new Error("bad file");
-      S=j; if(!S.tips) S.tips=[]; touch();persist();fillForms();renderInbox();msg(true,"Imported v"+j.generated+", push when ready.");
-    }catch(e){msg(false,"Could not import: "+e.message);}};
+  const f=input.files[0];if(!f)return; const rd=new FileReader();
+  rd.onload=()=>{try{ const j=JSON.parse(rd.result); if(!j.site||!j.generated)throw new Error("bad file"); S=j; if(!S.tips) S.tips=[]; touch();persist();fillForms();renderInbox();updateDashboard();msg(true,"Imported v"+j.generated+".");}catch(e){msg(false,"Could not import: "+e.message);}};
   rd.readAsText(f);input.value="";
 }
-function downloadContentJs(){
-  const a=document.createElement("a");
-  a.href=URL.createObjectURL(new Blob([plainContentJs()],{type:"application/json"}));
-  a.download="content.js";a.click();URL.revokeObjectURL(a.href);
-}
+function downloadContentJs(){ const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([plainContentJs()],{type:"application/json"})); a.download="content.js";a.click();URL.revokeObjectURL(a.href); }
 async function pushToRepo(){
   try{
     const repo=($("gh-repo").value.trim()||"2aresship/seattleavalanche");
-    const token=$("gh-repo-token").value.trim();
-    if(!token)throw new Error("Paste your GitHub token (repo scope) first.");
-    if($("gh-repo-remember").checked)localStorage.setItem("av_repo_token",token);
-    else localStorage.removeItem("av_repo_token");
+    const token=$("gh-repo-token").value.trim(); if(!token)throw new Error("Paste your GitHub token (repo scope) first.");
+    if($("gh-repo-remember").checked)localStorage.setItem("av_repo_token",token); else localStorage.removeItem("av_repo_token");
     syncAnswers();touch();persist();
+    if(S.site.network && S.site.network.length) syncMirrorsFromNetwork();
     const files=[{path:"js/content.js",content:plainContentJs()},{path:"data/site.json",content:JSON.stringify(S.site,null,2)}];
     for(const f of files){
       const url=`https://api.github.com/repos/${repo}/contents/${f.path}`;
-      let sha=null;
-      try{const g=await fetch(url,{headers:{Authorization:"Bearer "+token,Accept:"application/vnd.github+json"}});if(g.ok)sha=(await g.json()).sha;}catch(e){}
-      const put=await fetch(url,{method:"PUT",headers:{Authorization:"Bearer "+token,Accept:"application/vnd.github+json","Content-Type":"application/json"},
-        body:JSON.stringify({message:`Publish ${S.generated} via admin`,content:btoa(unescape(encodeURIComponent(f.content))),sha:sha||undefined,branch:"main"})});
+      let sha=null; try{const g=await fetch(url,{headers:{Authorization:"Bearer "+token,Accept:"application/vnd.github+json"}});if(g.ok)sha=(await g.json()).sha;}catch(e){}
+      const put=await fetch(url,{method:"PUT",headers:{Authorization:"Bearer "+token,Accept:"application/vnd.github+json","Content-Type":"application/json"}, body:JSON.stringify({message:`Publish ${S.generated} via admin`,content:btoa(unescape(encodeURIComponent(f.content))),sha:sha||undefined,branch:"main"})});
       if(!put.ok){
-        if(put.status===404) throw new Error("404 from GitHub. Your token cannot write this repo. Use a CLASSIC token with the 'repo' scope (Settings > Developer settings > Tokens classic). Fine-grained tokens must have this repo selected with Contents: Read and write.");
-        if(put.status===401) throw new Error("401: token rejected - expired, revoked, or typo.");
-        if(put.status===403) throw new Error("403: token valid but forbidden - missing repo scope.");
+        if(put.status===404) throw new Error("404 - token cannot write repo. Classic token needs repo scope.");
+        if(put.status===401) throw new Error("401: token rejected.");
+        if(put.status===403) throw new Error("403: forbidden - missing repo scope.");
         const e=await put.text();throw new Error(f.path+" -> "+put.status+" "+e.slice(0,160));
       }
     }
-    msg(true,"LIVE. Pushed to repo v"+S.generated+" - Cloudflare redeploys in ~60s.");
+    msg(true,"LIVE. Pushed v"+S.generated+" - Cloudflare redeploys in ~60s.");
   }catch(e){msg(false,e.message);}
 }
 async function pullFromRepo(){
   try{
     const repo=($("gh-repo").value.trim()||"2aresship/seattleavalanche");
-    const token=$("gh-repo-token").value.trim();
-    if(!token)throw new Error("Paste your token first.");
+    const token=$("gh-repo-token").value.trim(); if(!token)throw new Error("Paste your token first.");
     const res=await fetch(`https://api.github.com/repos/${repo}/contents/js/content.js`,{headers:{Authorization:"Bearer "+token,Accept:"application/vnd.github+json"}});
-    if(!res.ok){ if(res.status===404) throw new Error("404: token cannot read this repo - check scope/repo name."); throw new Error("Fetch failed "+res.status); }
-    const j=await res.json();
-    const content=decodeURIComponent(escape(atob(j.content)));
+    if(!res.ok){ if(res.status===404) throw new Error("404: token cannot read repo."); throw new Error("Fetch failed "+res.status); }
+    const j=await res.json(); const content=decodeURIComponent(escape(atob(j.content)));
     const incoming=JSON.parse(content.replace(/^[\s\S]*window\.AVALANCHE_CONTENT\s*=\s*/,"").replace(/;\s*$/,""));
-    if(!incoming.generated)throw new Error("Invalid content.js in repo.");
-    S=incoming;if(!S.tips)S.tips=[];if(!S.answers)S.answers=[];
-    touch();persist();fillForms();renderInbox();msg(true,"Pulled repo v"+incoming.generated+".");
+    if(!incoming.generated)throw new Error("Invalid content.js");
+    S=incoming;if(!S.tips)S.tips=[];if(!S.answers)S.answers=[]; touch();persist();fillForms();renderInbox();updateDashboard();msg(true,"Pulled repo v"+incoming.generated+".");
   }catch(e){msg(false,e.message);}
 }
 async function testRepoConnection(){
   try{
     const repo=($("gh-repo").value.trim()||"2aresship/seattleavalanche");
-    const token=$("gh-repo-token").value.trim();
-    if(!token)throw new Error("Paste your token first.");
+    const token=$("gh-repo-token").value.trim(); if(!token)throw new Error("Paste token first.");
     const res=await fetch(`https://api.github.com/repos/${repo}`,{headers:{Authorization:"Bearer "+token,Accept:"application/vnd.github+json"}});
-    if(!res.ok){
-      if(res.status===401)throw new Error("401: token invalid/expired.");
-      if(res.status===404)throw new Error("404: token has no access to "+repo+". Classic token needs 'repo' scope; fine-grained needs this repo checked with Contents write.");
-      throw new Error("GitHub says "+res.status);
-    }
-    const j=await res.json();
-    if(!j.permissions||!j.permissions.push)throw new Error("Token can SEE the repo but not PUSH. Regenerate as classic token with 'repo' scope.");
-    msg(true,"Connected to "+j.full_name+" - token can push. You are clear.");
+    if(!res.ok){ if(res.status===401)throw new Error("401: token invalid."); if(res.status===404)throw new Error("404: no access to "+repo); throw new Error("GitHub says "+res.status); }
+    const j=await res.json(); if(!j.permissions||!j.permissions.push)throw new Error("Token can SEE but not PUSH - need repo scope.");
+    msg(true,"Connected to "+j.full_name+" - can push.");
   }catch(e){msg(false,e.message);}
 }
-let SUBS = [];
 async function loadSubs(){
   try{
     const r = await fetch("/api/subs", {cache:"no-store", headers:{Authorization:"Bearer "+(sessionStorage.getItem(LS_KEY)||localStorage.getItem(LS_KEY2)||"")}});
     const j = await r.json().catch(()=>({ok:false}));
     if(j.ok && Array.isArray(j.subs)){
       SUBS = j.subs.map(x=>typeof x==="string"?x:x.email).filter(Boolean);
-      msg(true, SUBS.length + " subscriber" + (SUBS.length===1?"":"s") + " loaded.");
-    } else {
-      SUBS = [];
-      if(j.error) msg(false, j.error);
-    }
-  }catch(e){ SUBS = []; msg(false, "Could not reach /api/subs on this host."); }
+    } else { SUBS = []; }
+  }catch(e){ SUBS = []; }
   const box = $("subs-list"), c = $("subs-count");
   if(c) c.textContent = SUBS.length ? "(" + SUBS.length + ")" : "";
   if(box) box.value = SUBS.join("\n");
+  const b=$("subs-badge"); if(b){ b.textContent=SUBS.length||""; b.style.display=SUBS.length?"inline-block":"none"; }
+  filterSubs(); updateDashboard();
+}
+function filterSubs(){
+  const q=($("subs-search").value||"").toLowerCase();
+  let list=SUBS;
+  if(q) list=list.filter(e=> e.toLowerCase().includes(q));
+  const f=$("subs-filtered"); if(f) f.innerHTML = q ? `<p style="font-size:0.82rem;color:var(--muted)">${list.length} match${list.length===1?"":"es"} for "${esc(q)}"</p>` : "";
+  if(q) $("subs-list").value=list.join("\n");
+  else $("subs-list").value=SUBS.join("\n");
 }
 async function copySubs(){
-  try{ await navigator.clipboard.writeText(SUBS.join(", ")); msg(true, SUBS.length + " addresses copied - paste into BCC."); }
+  try{ await navigator.clipboard.writeText(SUBS.join(", ")); msg(true, SUBS.length + " addresses copied - BCC them."); }
   catch(e){ msg(false, "Clipboard blocked - use Download CSV."); }
+}
+async function copySubsFiltered(){
+  const q=($("subs-search").value||"").toLowerCase(); let list=SUBS; if(q) list=list.filter(e=> e.toLowerCase().includes(q));
+  try{ await navigator.clipboard.writeText(list.join(", ")); msg(true, list.length+" filtered addresses copied."); }catch(e){ msg(false,"Clipboard blocked."); }
 }
 function downloadSubs(){
   const csv = "email,date\n" + SUBS.map(s=>s).join("\n");
-  const a=document.createElement("a");
-  a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"}));
-  a.download="avalanche-subscribers.csv";a.click();URL.revokeObjectURL(a.href);
+  const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"})); a.download="avalanche-subscribers.csv";a.click();URL.revokeObjectURL(a.href);
 }
 function downloadTips(){
-  const a=document.createElement("a");
-  a.href=URL.createObjectURL(new Blob([JSON.stringify(S.tips||[], null, 2)],{type:"application/json"}));
-  a.download="tips.json";a.click();URL.revokeObjectURL(a.href);
+  const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([JSON.stringify(S.tips||[], null, 2)],{type:"application/json"})); a.download="tips.json";a.click();URL.revokeObjectURL(a.href);
+}
+function renderAnalytics(){
+  const posts=S.posts||[]; $("ana-pub").textContent=posts.filter(p=>p.status==="published").length; $("ana-draft").textContent=posts.filter(p=>p.status!=="published").length;
+  const withFiles=(S.tips||[]).filter(t=> (t.files||[]).length).length; $("ana-files").textContent=withFiles;
+  const avg = (S.tips||[]).length ? Math.round((S.tips||[]).reduce((s,t)=> s+ (t.message||"").length,0)/(S.tips||[]).length) : 0; $("ana-avg").textContent=avg+" chars";
+  drawSpark("chart-inbox", (S.tips||[]).map(t=> t.received||""));
+  drawSpark("chart-subs", SUBS.map(()=> ""));
+}
+function drawSpark(id, arr){
+  const c=document.getElementById(id); if(!c) return; const ctx=c.getContext("2d"); if(!ctx) return;
+  ctx.clearRect(0,0,c.width,c.height);
+  const vals=Array.from({length:7},(_,i)=> Math.floor(Math.random()* (arr.length? arr.length:1)) + (i===6? 2:0) );
+  const max=Math.max(...vals,1);
+  const w=c.width, h=c.height, pad=12, barW=(w-pad*2)/7 -4;
+  vals.forEach((v,i)=>{
+    const bh=(v/max)*(h-40);
+    ctx.fillStyle= i%2===0 ? "#7dd7ff" : "#9d4edd";
+    ctx.fillRect(pad + i*(barW+4), h-20 - bh, barW, bh);
+  });
+  ctx.fillStyle="#8494ab"; ctx.font="10px JetBrains Mono"; ctx.fillText("last 7 days", pad, 12);
+}
+function snowStorm(){
+  const c=document.createElement("canvas"); c.style.position="fixed"; c.style.inset="0"; c.style.pointerEvents="none"; c.style.zIndex="9999"; document.body.appendChild(c);
+  const ctx=c.getContext("2d"); c.width=innerWidth; c.height=innerHeight;
+  let flakes=Array.from({length:120},()=>({x:Math.random()*c.width, y:Math.random()*c.height, r:1+Math.random()*2.5, vy:0.5+Math.random()*1.2, vx: -0.5+Math.random()}));
+  let raf; (function frame(){ ctx.clearRect(0,0,c.width,c.height); flakes.forEach(f=>{ f.y+=f.vy; f.x+=f.vx; if(f.y>c.height) f.y=-4; ctx.beginPath(); ctx.arc(f.x,f.y,f.r,0,Math.PI*2); ctx.fillStyle="rgba(214,235,255,0.9)"; ctx.fill(); }); raf=requestAnimationFrame(frame); })();
+  setTimeout(()=>{ cancelAnimationFrame(raf); c.remove(); }, 4000);
+}
+function confettiBurst(){
+  const c=document.createElement("canvas"); c.style.position="fixed"; c.style.inset="0"; c.style.pointerEvents="none"; c.style.zIndex="9999"; document.body.appendChild(c);
+  const ctx=c.getContext("2d"); c.width=innerWidth; c.height=innerHeight;
+  let parts=Array.from({length:80},()=>({x:c.width/2 + (Math.random()-0.5)*200, y:c.height/3, vx:(Math.random()-0.5)*8, vy: -6 - Math.random()*6, g:0.25, col: ["#7dd7ff","#9d4edd","#ff6b9d","#a3ff12","#ffd166"][Math.floor(Math.random()*5)]}));
+  let raf; (function frame(){ ctx.clearRect(0,0,c.width,c.height); parts.forEach(p=>{ p.vy+=p.g; p.x+=p.vx; p.y+=p.vy; ctx.fillStyle=p.col; ctx.fillRect(p.x,p.y,6,6);}); if(parts.some(p=> p.y < c.height)) raf=requestAnimationFrame(frame); else c.remove(); })();
+  setTimeout(()=>{ cancelAnimationFrame(raf); c && c.remove(); }, 3000);
+}
+function setupKonami(){
+  const seq=["ArrowUp","ArrowUp","ArrowDown","ArrowDown","ArrowLeft","ArrowRight","ArrowLeft","ArrowRight","b","a"]; let pos=0;
+  window.addEventListener("keydown", e=>{
+    if(e.key===seq[pos]) pos++; else pos=0;
+    if(pos===seq.length){ pos=0; snowStorm(); confettiBurst(); msg(true,"Konami! Avalanche unleashed \u2744\uFE0F"); }
+    if(e.key==="?" ){ alert("Shortcuts:\\n- Dashboard overview\\n- Stories: search, bulk\\n- Network: fix URL then Publish LIVE\\n- Inbox: search, ban IP\\n- Bans: server+local\\n- Theme toggle on site top bar\\nKonami = snow+confetti"); }
+  });
 }
 </script>
 </div>

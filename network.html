@@ -24,7 +24,8 @@
       <div class="container topbar-inner">
         <span data-date>Friday, August 21, 2026</span>
         <span class="tagline">Independent · Anonymous</span>
-        <nav class="topbar-links" aria-label="Utility">
+        <button class="theme-toggle" aria-label="Toggle theme" title="Toggle theme"><span class="theme-toggle-knob">&#9789;</span></button>
+          <nav class="topbar-links" aria-label="Utility">
           <a href="#" title="Onion service coming soon">Tor Mirror</a>
           <a href="#">RSS</a>
         </nav>
@@ -103,7 +104,7 @@
           <thead>
             <tr><th scope="col">City / Outlet</th><th scope="col">Status</th><th scope="col">Domain</th><th scope="col">Since</th></tr>
           </thead>
-          <tbody>
+          <tbody id="network-tbody">
             <tr>
               <td><strong>The Seattle Avalanche</strong></td>
               <td><span class="chip chip--local" style="color:#6fe0a8;border-color:#6fe0a8;">● Official - Active</span></td>

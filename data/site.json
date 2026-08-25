@@ -1,6 +1,6 @@
 {
-  "motto": "Truth falls like snow and accumulates",
-  "tagline": "Independent · Anonymous · Unstoppable",
+  "motto": "Truth falls like snow",
+  "tagline": "Independent · Anonymous",
   "investigation": {
     "number": "001",
     "title": "",
@@ -15,5 +15,13 @@
   ],
   "mirrors": [
     "https://seattleavalanche.online/"
+  ],
+  "network": [
+    {
+      "city": "The Seattle Avalanche",
+      "domain": "seattleavalanche.online",
+      "status": "Official · Active",
+      "since": "Aug 2026"
+    }
   ]
 }

@@ -30,7 +30,131 @@
   --container: 1180px;
   --radius: 10px;
   --shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+
+  --accent-pink: #ff6b9d;
+  --accent-purple: #9d4edd;
+  --accent-cyan: #00d9ff;
+  --accent-lime: #a3ff12;
+  --accent-orange: #ff8c42;
+  --gradient-1: linear-gradient(135deg, #7dd7ff 0%, #9d4edd 50%, #ff6b9d 100%);
+  --gradient-2: linear-gradient(135deg, #00d9ff 0%, #a3ff12 100%);
+  --gradient-3: linear-gradient(135deg, #ff8c42 0%, #ff6b9d 100%);
 }
+
+/* ---------- Light theme ---------- */
+[data-theme="light"] {
+  --bg: #f8fafc;
+  --bg-raise: #ffffff;
+  --surface: #ffffff;
+  --surface-2: #f1f5f9;
+  --line: rgba(15, 23, 42, 0.08);
+  --line-strong: rgba(15, 23, 42, 0.15);
+
+  --text: #0f172a;
+  --text-soft: #334155;
+  --muted: #64748b;
+  --faint: #94a3b8;
+
+  --ice: #0ea5e9;
+  --ice-deep: #0284c7;
+  --ice-glow: rgba(14, 165, 233, 0.12);
+  --alert: #ef4444;
+  --alert-dim: rgba(239, 68, 68, 0.08);
+
+  --shadow: 0 18px 50px rgba(15, 23, 42, 0.08);
+}
+
+[data-theme="light"] body {
+  background:
+    radial-gradient(1200px 600px at 85% -10%, rgba(14, 165, 233, 0.06), transparent 60%),
+    radial-gradient(900px 500px at -10% 30%, rgba(168, 85, 247, 0.05), transparent 55%),
+    var(--bg);
+}
+
+[data-theme="light"] .topbar {
+  background: rgba(248, 250, 252, 0.85);
+  border-bottom-color: var(--line);
+}
+
+[data-theme="light"] .navbar {
+  background: rgba(255, 255, 255, 0.92);
+  border-bottom-color: var(--line);
+}
+
+[data-theme="light"] .masthead {
+  background: linear-gradient(180deg, #f8fafc 0%, #e0f2fe 50%, #f0f9ff 100%);
+}
+
+[data-theme="light"] .site-footer {
+  background: linear-gradient(180deg, #f1f5f9, #ffffff);
+  border-top-color: var(--line-strong);
+}
+
+[data-theme="light"] .chip--local      { color: #0284c7; }
+[data-theme="light"] .chip--politics   { color: #7c3aed; }
+[data-theme="light"] .chip--surveil    { color: #dc2626; }
+[data-theme="light"] .chip--environ    { color: #059669; }
+[data-theme="light"] .chip--labor      { color: #d97706; }
+[data-theme="light"] .chip--culture    { color: #db2777; }
+[data-theme="light"] .chip--housing    { color: #0891b2; }
+
+/* ---------- Theme toggle ---------- */
+.theme-toggle {
+  background: var(--surface-2);
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  width: 52px;
+  height: 28px;
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 2px;
+  transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+  border-color: var(--ice);
+}
+
+.theme-toggle-knob {
+  width: 22px;
+  height: 22px;
+  background: linear-gradient(135deg, var(--ice), var(--ice-deep));
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  transition: transform 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+[data-theme="light"] .theme-toggle-knob {
+  transform: translateX(24px);
+  background: linear-gradient(135deg, #f59e0b, #f97316);
+}
+
+/* ---------- More colorful accents ---------- */
+.status-card--active {
+  border-color: rgba(255, 107, 157, 0.35);
+  background:
+    linear-gradient(170deg, rgba(255, 107, 157, 0.06), transparent 42%),
+    linear-gradient(200deg, rgba(157, 78, 221, 0.04), transparent 50%),
+    var(--surface);
+}
+
+.how-step:nth-child(1) .num { background: linear-gradient(135deg, #7dd7ff, #0ea5e9); }
+.how-step:nth-child(2) .num { background: linear-gradient(135deg, #9d4edd, #7c3aed); }
+.how-step:nth-child(3) .num { background: linear-gradient(135deg, #ff6b9d, #ec4899); }
+.how-step:nth-child(4) .num { background: linear-gradient(135deg, #a3ff12, #22c55e); color: #0f172a; }
+
+.cta-card:nth-child(1) { border-top: 3px solid #0ea5e9; }
+.cta-card:nth-child(2) { border-top: 3px solid #9d4edd; }
+.cta-card:nth-child(3) { border-top: 3px solid #ff6b9d; }
+
+.lib-card:nth-child(3n+1) { border-left: 3px solid rgba(125, 215, 255, 0.3); }
+.lib-card:nth-child(3n+2) { border-left: 3px solid rgba(157, 78, 221, 0.3); }
+.lib-card:nth-child(3n+3) { border-left: 3px solid rgba(255, 107, 157, 0.3); }
 
 /* ---------- Reset ---------- */
 *,

@@ -104,6 +104,16 @@
       }
     }
 
+    /* tagline + motto (live from site config) */
+    if (C.site) {
+      if (C.site.tagline) {
+        document.querySelectorAll(".tagline").forEach(function(el){ el.textContent = C.site.tagline; });
+      }
+      if (C.site.motto) {
+        document.querySelectorAll(".motto").forEach(function(el){ el.textContent = C.site.motto; });
+      }
+    }
+
     /* answers board - answers.html */
     if (el("answers-list")) {
       var list = el("answers-list");
@@ -126,8 +136,26 @@
       }
     }
 
-    /* mirror registry table (mirror.html) */
-    if (el("mirror-table") && C.site) {
+    /* network official outlets table (network.html) + mirror registry table (mirror.html) */
+    if (C.site) {
+      // official outlets table on network.html
+      var netBody = el("network-tbody");
+      if (netBody) {
+        var raw = C.site.network || C.site.mirrors || [];
+        // support both legacy string array and new object array {city, domain, status, since}
+        var outlets = raw.map(function(v){
+          if (typeof v === "string") return { city: v.indexOf("seattle")>-1 ? "The Seattle Avalanche" : v, domain: v.replace(/^https?:\/\//,"").replace(/\/$/,""), status: v===raw[0] ? "Official \u00b7 Active" : "Official", since: v===raw[0] ? "Aug 2026" : "" };
+          return { city: v.city||v.name||"Outlet", domain: (v.domain||v.url||"").replace(/^https?:\/\//,"").replace(/\/$/,""), status: v.status||"Official", since: v.since||"" };
+        });
+        if (!outlets.length) outlets=[{city:"The Seattle Avalanche", domain:"seattleavalanche.online", status:"Official \u00b7 Active", since:"Aug 2026"}];
+        netBody.innerHTML = outlets.map(function(o,i){
+          var chip = i===0 ? "<span class=\"chip chip--local\" style=\"color:#6fe0a8;border-color:#6fe0a8;\">\u25cf Official \u00b7 Active</span>" : "<span class=\"chip chip--local\">"+o.status+"</span>";
+          return "<tr><td><strong>"+escHtml(o.city)+"</strong></td><td>"+chip+"</td><td><span class=\"mono\" style=\"font-family:var(--font-mono);font-size:0.78rem;\">"+escHtml(o.domain)+"</span></td><td>"+escHtml(o.since)+"</td></tr>";
+        }).join("") + "<tr><td colspan=\"4\" style=\"color:var(--muted);text-align:center;padding:22px 14px;\">Only outlets listed here are verified. If it is not here, it is not official.</td></tr>";
+      }
+      // also render mirror table if present
+      var mirrorTable = el("mirror-table");
+      if (mirrorTable) {
       var tbody = el("mirror-table").getElementsByTagName("tbody")[0];
       if (tbody) {
         var mirrors = (C.site.mirrors || []).map(String);
@@ -144,6 +172,7 @@
           }).join("") +
           '<tr><td colspan="2" style="color:var(--faint);">Want your mirror listed? See step 03 above.</td></tr>';
         }
+      }
       }
     }
 
