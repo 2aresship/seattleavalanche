@@ -27,9 +27,9 @@
   --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
 
-  --container: 1180px;
-  --radius: 10px;
-  --shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+  --container: 1080px;
+  --radius: 6px;
+  --shadow: 0 10px 28px rgba(0, 0, 0, 0.32);
 
   --accent-pink: #ff6b9d;
   --accent-purple: #9d4edd;
@@ -209,6 +209,51 @@ body::before{
 /* Easter egg hint: footer logo drifts on hover */
 .foot-logo:hover{ letter-spacing: 0.01em; transition: letter-spacing .25s; }
 
+/* ---------- News-site compact + newspaper feel (smaller UI) ---------- */
+.masthead-inner{ padding: 22px 0 16px; gap:14px; }
+.masthead-title a{ font-size: clamp(1.9rem, 4.8vw, 3.2rem); letter-spacing:-0.03em; }
+.masthead-title .motto{ font-size:0.62rem; letter-spacing:0.28em; margin-top:4px; }
+.logo-mark{ width:44px; height:36px; }
+.topbar-inner{ padding:6px 0; font-size:0.68rem; }
+.navbar .nav-list a{ padding:11px 10px; font-size:0.74rem; letter-spacing:0.05em; }
+.statement{ padding:36px 0 4px; }
+.statement h1{ font-size: clamp(2rem, 4.5vw, 3.1rem); line-height:1.06; }
+.statement .lede{ font-size:1.02rem; line-height:1.52; margin-top:14px; }
+.section-head{ margin:32px 0 14px; padding-bottom:8px; }
+.section-head h2{ font-size: clamp(1.25rem, 2.4vw, 1.6rem); }
+.status-grid{ gap:14px; margin-top:22px; }
+.status-card{ padding:16px 14px; gap:10px; border-radius:6px; }
+.status-card h2{ font-size:1.15rem; }
+.status-card p{ font-size:0.84rem; }
+.case-meta{ padding-top:10px; gap:5px; }
+.case-meta dt{ font-size:0.60rem; }
+.case-meta dd{ font-size:0.76rem; }
+.steps-row{ gap:12px; }
+.how-step{ padding:14px 12px; border-radius:6px; }
+.how-step h3{ font-size:1.02rem; margin:8px 0 4px; }
+.how-step p{ font-size:0.82rem; }
+.cta-trio{ gap:14px; margin:32px 0 6px; }
+.cta-card{ padding:18px 16px; border-radius:6px; }
+.cta-card h3{ font-size:1.14rem; margin:8px 0 4px; }
+.cta-card p{ font-size:0.82rem; }
+.notify-band{ padding:18px 20px; gap:18px; margin:32px 0 8px; border-radius:10px; }
+.notify-band h2{ font-size:1.25rem; }
+.lib-grid{ gap:14px; margin-top:18px; }
+.lib-card{ padding:16px 14px; border-radius:6px; }
+.lib-card h3{ font-size:1.02rem; }
+.lib-card p.desc{ font-size:0.82rem; }
+.btn{ padding:8px 14px; font-size:0.78rem; border-radius:6px; }
+.btn--small{ padding:6px 10px; font-size:0.70rem; }
+.chip{ font-size:0.60rem; padding:2px 7px; letter-spacing:0.11em; }
+.module{ padding:16px 14px; border-radius:6px; }
+.info-banner{ padding:12px 14px; font-size:0.84rem; }
+.ticker-content a{ font-size:0.80rem; }
+/* newspaper rule accent */
+.section-head{ border-bottom: 2px solid var(--line-strong); }
+.page-hero{ padding:32px 0 6px; }
+.page-hero h1{ font-size: clamp(1.9rem, 4vw, 2.7rem); }
+.page-hero .lede{ font-size:1.02rem; }
+
 /* ---------- Reset ---------- */
 *,
 *::before,
@@ -225,14 +270,15 @@ html {
 
 body {
   background:
-    radial-gradient(1200px 600px at 85% -10%, rgba(56, 182, 232, 0.07), transparent 60%),
-    radial-gradient(900px 500px at -10% 30%, rgba(125, 215, 255, 0.05), transparent 55%),
+    radial-gradient(1200px 600px at 85% -10%, rgba(56, 182, 232, 0.05), transparent 60%),
+    radial-gradient(900px 500px at -10% 30%, rgba(125, 215, 255, 0.03), transparent 55%),
     var(--bg);
   color: var(--text);
   font-family: var(--font-sans);
-  font-size: 16.5px;
-  line-height: 1.6;
+  font-size: 14.8px;
+  line-height: 1.55;
   min-height: 100vh;
+  letter-spacing: -0.01em;
 }
 
 img,
