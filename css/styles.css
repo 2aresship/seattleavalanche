@@ -2215,3 +2215,46 @@ button {
 .form-shell{max-width:760px;border:1px solid var(--line);border-radius:14px;background:var(--surface);padding:28px}
 .field{margin-top:16px}
 .hint{font-size:.78rem;color:var(--faint);margin-top:6px}
+
+/* ---------- Mobile compat — tighter, no overflow, thumb-friendly ---------- */
+@media (max-width: 720px){
+  .container{ width: min(1080px, calc(100% - 20px)); }
+  .topbar-inner{ flex-wrap:wrap; justify-content:center; gap:8px; text-align:center; }
+  .masthead-inner{ flex-direction:column; gap:10px; padding:16px 0 12px; }
+  .masthead-title a{ font-size: clamp(1.7rem, 8vw, 2.4rem); }
+  .logo-mark{ width:40px; height:32px; }
+  .ticker-label{ padding:8px 10px; font-size:0.62rem; }
+  .ticker-content a{ font-size:0.78rem; }
+  .lib-grid{ grid-template-columns: 1fr; gap:12px; margin-top:14px; }
+  .lib-card{ padding:14px 12px; }
+  .lib-toolbar{ position:static; flex-direction:column; align-items:stretch; gap:10px; padding:12px; }
+  .lib-toolbar input[type="search"]{ max-width:none; min-width:0; }
+  .lib-toolbar select{ width:100%; }
+  .feature-strip{ grid-template-columns:1fr; padding:16px; }
+  .hero-grid{ grid-template-columns:1fr; gap:18px; padding-top:18px; }
+  .latest-grid{ grid-template-columns:1fr; gap:18px; }
+  .headline-row{ grid-template-columns: 88px 1fr; gap:12px; padding:14px 0; }
+  .columns-grid{ grid-template-columns:1fr; gap:18px; }
+  .footer-grid{ grid-template-columns:1fr; gap:22px; padding:28px 0 18px; }
+  .channel-grid{ grid-template-columns:1fr; }
+  .form-shell{ padding:18px 14px; border-radius:10px; }
+  .safety-checklist{ padding:18px 14px; }
+  .file-table{ min-width: 520px; }
+  .file-table-wrap{ -webkit-overflow-scrolling: touch; }
+}
+@media (max-width: 480px){
+  body{ font-size:14.2px; }
+  .page-hero{ padding:22px 0 4px; }
+  .page-hero h1{ font-size: clamp(1.6rem, 8vw, 2.1rem); }
+  .page-hero .lede{ font-size:0.96rem; }
+  .statement{ padding:24px 0 4px; }
+  .statement h1{ font-size: clamp(1.7rem, 8vw, 2.2rem); }
+  .btn{ padding:9px 12px; font-size:0.76rem; }
+  .chip{ font-size:0.56rem; padding:2px 6px; }
+  .lib-section-head{ flex-direction:column; align-items:flex-start; gap:6px; }
+  .lib-section-head h2{ font-size:1.15rem; }
+}
+img,svg,canvas,video{ max-width:100%; height:auto; }
+html, body{ overflow-x:hidden; }
+.file-table-wrap, .lib-grid, .cta-trio, .status-grid, .steps-row{ max-width:100%; }
+input, select, textarea{ font-size:16px; } /* prevent iOS zoom */
